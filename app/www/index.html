@@ -3,313 +3,697 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#191b2a">
+<link rel="icon" href="icon.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 <title>리센느 팬북</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* Layout: 영화 슬레이트(장면 번호판) 모티프. 상단 고정 탭 + 한 열 카드 흐름, 넓은 화면에서 2~3열 */
+/* Layout: 향수 광고처럼 장미·복숭아·라일락 안개가 깔린 배경 위에 반투명 유리 카드가 한 열로 흐름. 폰은 하단 유리 탭바 */
 :root{
-  --bg:#f3f4f8; --surface:#ffffff; --ink:#191b2a; --muted:#5d6177; --line:#dcdfe9;
-  --accent:#d6336c; --accent-soft:#fbe3ec; --mint:#1f9e89; --mint-soft:#dcf3ee;
-  --display:"Do Hyeon","Noto Sans KR",system-ui,sans-serif;
+  --bg:#fcf6f8; --ink:#3b2b3a; --muted:#7c6a7a; --line:rgba(124,92,118,.16);
+  --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.82); --glass-edge:rgba(255,255,255,.9);
+  --rose:#c2416e; --rose-soft:rgba(240,170,195,.32); --sage:#4f8f7f; --sage-soft:rgba(160,215,200,.35);
+  --mist1:#f6bfd2; --mist2:#ffd8c2; --mist3:#d9cdf3; --mist4:#c9eadf;
+  --plum:#3b2b3a; --on-plum:#fbeff4; --on-plum-muted:#d7c2d0;
+  --serif:"Gowun Batang","Noto Serif KR",serif;
+  --latin:"Cormorant Garamond","Gowun Batang",serif;
   --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --shadow:0 10px 30px rgba(120,60,100,.10);
+  --radius:20px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#12131c; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2e3142;
-  --accent:#ff6b9a; --accent-soft:#3a1f2b; --mint:#4fd1b8; --mint-soft:#163330; color-scheme:dark}}
+  --bg:#17121a; --ink:#f3e8ef; --muted:#b9a6b5; --line:rgba(255,220,240,.12);
+  --glass:rgba(40,30,44,.58); --glass-strong:rgba(48,36,52,.82); --glass-edge:rgba(255,220,240,.12);
+  --rose:#ff8fb3; --rose-soft:rgba(255,143,179,.16); --sage:#8fd6c2; --sage-soft:rgba(143,214,194,.14);
+  --mist1:#5a2a44; --mist2:#5a3a2c; --mist3:#3c2f5c; --mist4:#24443c;
+  --plum:#2a1f2c; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#12131c; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2e3142;
-  --accent:#ff6b9a; --accent-soft:#3a1f2b; --mint:#4fd1b8; --mint-soft:#163330; color-scheme:dark}
+  --bg:#17121a; --ink:#f3e8ef; --muted:#b9a6b5; --line:rgba(255,220,240,.12);
+  --glass:rgba(40,30,44,.58); --glass-strong:rgba(48,36,52,.82); --glass-edge:rgba(255,220,240,.12);
+  --rose:#ff8fb3; --rose-soft:rgba(255,143,179,.16); --sage:#8fd6c2; --sage-soft:rgba(143,214,194,.14);
+  --mist1:#5a2a44; --mist2:#5a3a2c; --mist3:#3c2f5c; --mist4:#24443c;
+  --plum:#2a1f2c; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
-.wrap{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header.hero{background:var(--ink);color:var(--bg)}
-header.hero .wrap{padding-block:28px 22px;display:grid;gap:10px}
-.slate{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.06em}
-.slate span{border:1px solid color-mix(in srgb,var(--bg) 35%,transparent);padding:2px 8px;border-radius:3px}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,9vw,72px);line-height:1;margin:4px 0 0;letter-spacing:.01em}
-h1 em{font-style:normal;color:var(--accent)}
-.hero p{margin:0;color:color-mix(in srgb,var(--bg) 78%,transparent);max-width:60ch}
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-nav.tabs a{flex:none;padding:12px 14px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;border-bottom:3px solid transparent}
-nav.tabs a[aria-current="page"]{color:var(--ink);border-color:var(--accent)}
-nav.tabs a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-main .wrap{padding-block:24px 48px;display:grid;gap:28px}
-h2{font-family:var(--display);font-weight:400;font-size:30px;margin:0;text-wrap:balance}
-h3{margin:0;font-size:17px}
-.lede{color:var(--muted);margin:4px 0 0;max-width:65ch}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
-.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.tag.mint{background:var(--mint-soft);color:var(--mint)}
-.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14px;margin:0}
-.kv dt{color:var(--muted)} .kv dd{margin:0}
-.member-head{display:flex;align-items:center;gap:12px}
-.mono-badge{width:48px;height:48px;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-size:24px;background:var(--ink);color:var(--bg);flex:none}
-.photo{position:relative;display:block;aspect-ratio:4/5;max-width:100%;border-radius:8px;overflow:hidden;background:var(--bg);border:1px dashed var(--line);cursor:pointer}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;word-break:keep-all;-webkit-tap-highlight-color:transparent;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.mist{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--bg)}
+.mist i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75}
+.mist i:nth-child(1){width:70vmax;height:70vmax;left:-25vmax;top:-30vmax;background:var(--mist1);animation:drift 26s ease-in-out infinite alternate}
+.mist i:nth-child(2){width:55vmax;height:55vmax;right:-25vmax;top:10vh;background:var(--mist3);animation:drift 32s ease-in-out infinite alternate-reverse}
+.mist i:nth-child(3){width:50vmax;height:50vmax;left:-10vmax;bottom:-25vmax;background:var(--mist2);animation:drift 30s ease-in-out infinite alternate}
+.mist i:nth-child(4){width:35vmax;height:35vmax;right:-5vmax;bottom:5vh;background:var(--mist4);opacity:.55;animation:drift 36s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(4vmax,3vmax) scale(1.08)}}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--rose)}
+h2{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.3;margin:0;text-wrap:balance}
+h3{margin:0;font-size:16px;line-height:1.45}
+.lede{color:var(--muted);margin:6px 0 0;font-size:14px}
+.meta{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.note-en{font-family:var(--latin);font-style:italic;font-size:15px;letter-spacing:.02em;color:var(--rose)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--rose-soft);color:var(--rose);white-space:nowrap}
+.tag.sage{background:var(--sage-soft);color:var(--sage)}
+.glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--radius);box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);padding:18px;min-width:0}
+.stack{display:grid;gap:12px}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+
+/* 헤더 */
+header.top .wrap{padding-block:14px 4px}
+.appbar{display:flex;align-items:center;gap:10px}
+.appbar svg{width:38px;height:38px;flex:none}
+.apptitle{display:grid;line-height:1.15;flex:1;min-width:0}
+.apptitle b{font-family:var(--serif);font-weight:700;font-size:18px}
+.apptitle span{font-family:var(--latin);font-style:italic;font-size:13px;color:var(--muted)}
+.dpill{font-family:var(--serif);font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px;background:var(--glass-strong);border:1px solid var(--glass-edge);color:var(--rose);font-variant-numeric:tabular-nums;box-shadow:var(--shadow)}
+.hero-big{display:none;gap:8px;padding:26px 0 8px;text-align:center;justify-items:center}
+body[data-tab="home"] .hero-big{display:grid}
+.hero-big .note-en{font-size:16px}
+.hero-big h1{font-family:var(--latin);font-style:italic;font-weight:600;font-size:64px;line-height:.95;margin:0;letter-spacing:.01em}
+.hero-big h1 em{color:var(--rose)}
+.hero-big p{margin:0;color:var(--muted);font-size:14px;max-width:34ch}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:4px}
+.chips span{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-edge);color:var(--ink)}
+
+/* 탭 */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-top:10px;background:var(--glass-strong);border-block:1px solid var(--glass-edge);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;display:flex;align-items:center;gap:6px;padding:12px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;border-bottom:2px solid transparent}
+nav.tabs a[aria-current="page"]{color:var(--rose);border-color:var(--rose)}
+nav.tabs svg{width:20px;height:20px;flex:none}
+
+main .wrap{padding-block:20px 40px}
+section{display:grid;gap:14px}
+
+/* 홈 */
+.dday{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+  background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0)),var(--rose-soft)}
+.dnum{font-family:var(--serif);font-weight:700;font-size:46px;line-height:1.05;color:var(--rose);font-variant-numeric:tabular-nums}
+.today{display:grid;gap:6px;text-decoration:none;color:var(--ink);text-align:center;justify-items:center;padding-block:22px}
+.today b{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.35}
+.feature{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:center;padding:14px;border-radius:var(--radius);background:var(--plum);color:var(--on-plum);text-decoration:none;box-shadow:var(--shadow)}
+.feature .eyebrow{color:var(--on-plum-muted)}
+.feature h3{font-family:var(--serif);font-weight:700;font-size:21px;margin:2px 0}
+.feature p{margin:0;font-size:13px;color:var(--on-plum-muted)}
+.feature p b{color:#ff9fbf}
+.cover{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:radial-gradient(circle at 30% 30%,#ffd8c2,#f2a0bd 55%,#b98ad8);display:grid;align-items:end;padding:10px}
+.cover span{position:relative;z-index:1;font-family:var(--latin);font-style:italic;font-weight:600;font-size:24px;color:#fff;line-height:1}
+.cover i{position:absolute;border:1.5px solid rgba(255,255,255,.6);border-radius:50%;left:50%;top:40%;transform:translate(-50%,-50%);aspect-ratio:1}
+.cover i:nth-of-type(1){width:28%}.cover i:nth-of-type(2){width:56%;opacity:.7}.cover i:nth-of-type(3){width:86%;opacity:.4}
+.go{font-size:13px;font-weight:700;color:var(--rose);margin-top:6px;display:inline-block}
+.feature .go{color:#ff9fbf}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sec-head h3{font-family:var(--serif);font-size:18px}
+.sec-head a{font-size:13px;color:var(--muted);text-decoration:none}
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.strip a{display:grid;justify-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:12.5px;font-weight:700}
+.avatar{width:100%;max-width:62px;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:22px;color:var(--rose);
+  background:radial-gradient(circle at 35% 30%,#fff,var(--mist1) 70%);box-shadow:0 0 0 2px var(--glass-edge),0 6px 14px rgba(194,65,110,.18)}
+.avatar.c2{background:radial-gradient(circle at 35% 30%,#fff,var(--mist3) 70%)}
+.avatar.c3{background:radial-gradient(circle at 35% 30%,#fff,var(--mist2) 70%)}
+.avatar.c4{background:radial-gradient(circle at 35% 30%,#fff,var(--mist4) 70%)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.news{list-style:none;margin:0;padding:0;display:grid}
+.news li{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.news li:first-child{border-top:0;padding-top:2px}
+.quick{display:grid;gap:8px;text-decoration:none;color:var(--ink)}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#f2a0bd,var(--rose));width:0;transition:width .3s}
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{display:grid;gap:2px;padding:14px 12px;text-decoration:none;color:var(--ink);text-align:center}
+.stat b{font-family:var(--serif);font-weight:700;font-size:28px;line-height:1.1;color:var(--rose)}
+.stat span{font-size:12px;color:var(--muted)}
+.press{transition:transform .15s}.press:active{transform:scale(.98)}
+
+/* 멤버 */
+.member-list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.member{display:grid;gap:12px}
+.m-top{display:grid;grid-template-columns:92px minmax(0,1fr);gap:14px;align-items:start}
+.photo{position:relative;display:block;width:92px;aspect-ratio:4/5;border-radius:16px;overflow:hidden;cursor:pointer;
+  background:radial-gradient(circle at 35% 25%,#fff,var(--mist1) 80%);box-shadow:inset 0 0 0 1px var(--glass-edge)}
+.photo.c2{background:radial-gradient(circle at 35% 25%,#fff,var(--mist3) 80%)}
+.photo.c3{background:radial-gradient(circle at 35% 25%,#fff,var(--mist2) 80%)}
+.photo.c4{background:radial-gradient(circle at 35% 25%,#fff,var(--mist4) 80%)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
-.photo .ph{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:4px;color:var(--muted);font-size:13px;text-align:center;padding:12px}
-.photo .ph b{font-family:var(--display);font-weight:400;font-size:56px;line-height:1;color:var(--line)}
+.photo .ph{position:absolute;inset:0;display:grid;grid-template-rows:1fr auto;justify-items:center;padding:8px 6px 6px;color:#7c6a7a}
+.photo .ph small{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.photo .bottle{width:100%;height:100%;filter:drop-shadow(0 4px 6px rgba(59,43,58,.15))}
+.avatar .bottle{width:78%;height:78%}
 .photo input{position:absolute;width:1px;height:1px;opacity:0}
-.photo:focus-within{outline:2px solid var(--accent);outline-offset:2px}
-.photo-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.linkbtn{font:inherit;font-size:12.5px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
-.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
-.timeline li{position:relative;padding:0 0 18px 20px}
-.timeline li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
-.timeline li.big::before{background:var(--accent)}
-.timeline .date{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-.tracks{font-size:13.5px;color:var(--muted)}
-.tracks b{color:var(--accent);font-weight:700}
+.photo:focus-within{outline:2px solid var(--rose);outline-offset:2px}
+.m-info{display:grid;gap:6px;min-width:0}
+.m-name{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.m-name h3{font-family:var(--serif);font-weight:700;font-size:24px;line-height:1.1}
+.m-name .en{font-family:var(--latin);font-style:italic;font-size:15px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:0 10px;font-size:13px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.m-note{font-size:13px;color:var(--muted);margin:0}
+.quotes{display:grid;gap:6px}
+.bubble{display:grid;gap:1px;padding:10px 14px;border-radius:16px 16px 16px 4px;background:var(--glass-strong);border:1px solid var(--glass-edge)}
+.bubble b{font-family:var(--serif);font-weight:700;font-size:15px;overflow-wrap:anywhere}
+.bubble span{font-size:12px;color:var(--muted);line-height:1.45}
+.linkbtn{font:inherit;font-size:12px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;justify-self:start}
+
+/* 앨범 */
 .filters{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
-th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em}
-tr:last-child td{border-bottom:0}
-.won{color:var(--mint);font-weight:700} .nom{color:var(--muted)} .pend{color:var(--accent);font-weight:700}
-.bread{display:grid;gap:10px}
-.bread .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.toggle{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
-.toggle[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--surface)}
-.counter{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.counter button{font:inherit;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer}
-.big-num{font-family:var(--display);font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
-.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;flex:1;min-width:120px}
-.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
-.steps{margin:0;padding-left:20px;display:grid;gap:4px}
-.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin:0}
-footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
-footer .wrap{padding-block:18px 28px;display:grid;gap:6px}
-footer a{color:var(--muted)}
-a{color:var(--accent)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chip{border:1px solid var(--glass-edge);background:var(--glass);color:var(--ink);font:inherit;font-size:13px;min-height:36px;padding:6px 14px;border-radius:999px;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.chip[aria-pressed="true"]{background:var(--rose);color:#fff;border-color:var(--rose)}
+.timeline{list-style:none;margin:0;padding:0;border-left:1.5px solid var(--line);margin-left:6px}
+.timeline li{position:relative;padding:0 0 20px 18px;display:grid;gap:2px}
+.timeline li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--rose)}
+.timeline li.big::before{background:var(--rose);box-shadow:0 0 0 4px var(--rose-soft)}
+.timeline h3{font-family:var(--serif);font-size:17px}
+.tracks{font-size:13px;color:var(--muted)}
+.tracks b{color:var(--rose)}
+
+/* CU */
+.goods{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.item{display:grid;gap:6px}
+.item h3{font-family:var(--serif);font-size:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.toggle{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--glass-edge);background:var(--glass-strong);color:var(--ink);min-height:40px;padding:6px 14px;border-radius:12px;cursor:pointer}
+.toggle[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#fff}
+.counter{display:flex;align-items:center;gap:12px}
+.counter button{font:inherit;width:46px;height:46px;border-radius:50%;border:1px solid var(--glass-edge);background:var(--glass-strong);color:var(--rose);font-size:22px;cursor:pointer}
+.big-num{font-family:var(--serif);font-weight:700;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.steps{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+.subhead{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.subhead h3{font-family:var(--serif);font-size:20px}
+
+/* 소통 */
+.offline{margin:0;font-size:13px;color:var(--rose);padding:12px 16px}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:var(--line);gap:4px}
+.seg-btn{font:inherit;font-size:14px;font-weight:700;min-height:40px;border:0;border-radius:11px;background:transparent;color:var(--muted);cursor:pointer}
+.seg-btn[aria-pressed="true"]{background:var(--glass-strong);color:var(--rose);box-shadow:0 2px 8px rgba(120,60,100,.12)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fld{display:grid;gap:4px;min-width:0}
+.fld span{font-size:12px;font-weight:700;color:var(--muted)}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:15px;width:100%;min-height:44px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--glass-strong);color:var(--ink);resize:vertical}
+.fld textarea{min-height:64px}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--rose);outline-offset:0;border-color:transparent}
+.nick{flex:1}
+.submit{font:inherit;font-weight:700;font-size:15px;min-height:44px;padding:0 22px;border:0;border-radius:12px;background:var(--rose);color:#fff;cursor:pointer;align-self:end}
+.submit:disabled{opacity:.5}
+.posts{display:grid;gap:10px}
+.post{display:grid;gap:6px}
+.post.old{opacity:.6}
+.post-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.post-head b{font-size:14px}
+.post-head .meta{margin-left:auto}
+.st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px}
+.st.have{background:var(--sage-soft);color:var(--sage)}
+.st.few{background:rgba(255,190,120,.3);color:#b4651c}
+.st.out{background:var(--line);color:var(--muted)}
+.where{font-family:var(--serif);font-weight:700;font-size:16px}
+.post p{margin:0;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}
+.post .report{justify-self:end}
+.empty{text-align:center;color:var(--muted);font-size:14px;padding:28px 16px}
+body[data-kind="chat"] .stock-only{display:none}
+
+/* 수상 */
+.wins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wins h3{font-family:var(--serif);font-size:18px}
+.awards{list-style:none;margin:0;padding:0}
+.awards li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:12px 0;border-top:1px solid var(--line)}
+.awards li:first-child{border-top:0;padding-top:0}
+.awards .what{font-size:13px;color:var(--muted)}
+.awards .res{grid-row:1 / span 2;grid-column:2;align-self:center}
+.res.won{background:var(--sage-soft);color:var(--sage)}
+.res.nom{background:var(--line);color:var(--muted)}
+.amb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.amb h3{font-family:var(--serif);font-size:18px}
+
+footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:var(--muted);text-align:center}
+
+@media (max-width:719px){
+  nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;border-bottom:0;
+    padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 24px rgba(120,60,100,.08)}
+  nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:0;overflow:visible;padding-left:max(4px,env(safe-area-inset-left,0px));padding-right:max(4px,env(safe-area-inset-right,0px))}
+  nav.tabs a{flex-direction:column;justify-content:center;gap:2px;min-height:58px;padding:6px 0;font-size:10.5px;border-bottom:0;border-top:2px solid transparent;white-space:nowrap}
+  nav.tabs a[aria-current="page"]{border-top-color:var(--rose)}
+  nav.tabs svg{width:23px;height:23px}
+  main .wrap{padding-block:14px 24px}
+  footer .wrap{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .member-list,.goods{grid-template-columns:1fr}
+  .hero-big h1{font-size:54px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
-<header class="hero">
+<div class="mist" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<header class="top">
   <div class="wrap">
-    <div class="slate"><span>SCENE 2024.03.26</span><span>THE MUZE ENT.</span><span>5 MEMBERS</span><span>FANDOM 리마인</span></div>
-    <h1>RE<em>:</em>SCENE<br>리센느 팬북</h1>
-    <p>멤버, 앨범, 수상 기록, CU 콜라보 빵까지 리센느에 대한 정보를 한곳에 모았어요. 팬이 만든 비공식 페이지예요.</p>
+    <div class="appbar">
+      <svg viewBox="0 0 64 64" role="img" aria-label="리센느 팬북 로고">
+        <defs>
+          <linearGradient id="lgBottle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8c2"/><stop offset=".55" stop-color="#f08fb2"/><stop offset="1" stop-color="#b98ad8"/></linearGradient>
+        </defs>
+        <rect x="25" y="4" width="14" height="9" rx="3" fill="#3b2b3a"/>
+        <rect x="28" y="12" width="8" height="5" fill="#3b2b3a"/>
+        <rect x="10" y="17" width="44" height="43" rx="14" fill="url(#lgBottle)"/>
+        <rect x="15" y="21" width="8" height="18" rx="4" fill="#fff" opacity=".45"/>
+        <text x="21" y="49" font-family="Cormorant Garamond, Gowun Batang, serif" font-style="italic" font-weight="600" font-size="27" fill="#fff">R</text>
+        <circle cx="41" cy="37" r="2.6" fill="#fff"/><circle cx="41" cy="46" r="2.6" fill="#fff"/>
+      </svg>
+      <div class="apptitle"><b>리센느 팬북</b><span>the scent of RESCENE</span></div>
+      <span class="dpill" id="dpill">D+</span>
+    </div>
+    <div class="hero-big">
+      <span class="note-en">a fan's scent diary</span>
+      <h1>Re<em>:</em>Scene</h1>
+      <p>멤버, 유행어, 앨범, CU 콜라보, 수상 기록까지 리센느의 향기를 한곳에 모았어요.</p>
+      <div class="chips"><span>2024.03.26 데뷔</span><span>더뮤즈엔터테인먼트</span><span>5인조</span><span>팬덤 리마인</span></div>
+    </div>
   </div>
 </header>
 
-<nav class="tabs" aria-label="섹션">
+<nav class="tabs" aria-label="메뉴">
   <div class="wrap">
-    <a href="#members" data-tab="members">멤버</a>
-    <a href="#music" data-tab="music">디스코그래피</a>
-    <a href="#bread" data-tab="bread">CU 리센느빵</a>
-    <a href="#awards" data-tab="awards">수상·활동</a>
+    <a href="#home" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
+    <a href="#members" data-tab="members"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.5 3.6 5.2"/></svg><span>멤버</span></a>
+    <a href="#music" data-tab="music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3a9 9 0 0 1 9 9"/></svg><span>앨범</span></a>
+    <a href="#cu" data-tab="cu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16l-1.5 11a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/><path d="M8.5 8a3.5 3.5 0 0 1 7 0"/></svg><span>CU 콜라보</span></a>
+    <a href="#talk" data-tab="talk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span>소통</span></a>
+    <a href="#awards" data-tab="awards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></svg><span>수상</span></a>
   </div>
 </nav>
 
-<main>
-<div class="wrap">
+<main><div class="wrap">
 
-<section id="sec-members" data-sec="members">
-  <h2>멤버</h2>
-  <p class="lede">원이, 리브, 미나미, 메이, 제나. 2024년 3월 26일 싱글 <i>Re:Scene</i>의 「UhUh」로 데뷔했어요. 사진 칸을 누르면 갖고 있는 사진을 넣을 수 있어요.</p>
-  <div class="grid" style="margin-top:14px" id="memberGrid"></div>
+<section data-sec="home">
+  <div class="glass dday">
+    <div><span class="note-en">days with Remine</span><div class="dnum" id="dday">D+</div></div>
+    <span class="meta" style="text-align:right">2024.03.26<br>「UhUh」 데뷔</span>
+  </div>
+
+  <a class="glass today press" href="#members">
+    <span class="note-en">today's note</span>
+    <b id="todayQ"></b>
+    <span class="meta" id="todayWho"></span>
+  </a>
+
+  <a class="feature press" href="#music" id="feature"></a>
+
+  <div class="glass stack">
+    <div class="sec-head"><h3>최신 소식</h3><span class="meta" id="updated"></span></div>
+    <ul class="news" id="news"></ul>
+  </div>
+
+  <div class="glass stack">
+    <div class="sec-head"><h3>멤버</h3><a href="#members">전체 보기 ›</a></div>
+    <div class="strip" id="memberStrip"></div>
+  </div>
+
+  <a class="glass quick press" href="#cu">
+    <div class="sec-head"><span class="eyebrow">CU × 리센느 빵·도시락</span><span class="go" style="margin:0">보러 가기 ›</span></div>
+    <h3>빵 포토카드 <span id="homePc">0</span> / 27종</h3>
+    <div class="bar" aria-hidden="true"><i id="homeBar"></i></div>
+  </a>
+
+  <div class="stat-row" id="stats"></div>
 </section>
 
-<section id="sec-music" data-sec="music" hidden>
-  <h2>디스코그래피</h2>
-  <p class="lede">빨간 글씨가 타이틀곡이에요. 종류별로 걸러 볼 수 있어요.</p>
-  <div class="filters" style="margin:14px 0" id="musicFilters"></div>
+<section data-sec="members" hidden>
+  <div><span class="note-en">five notes</span><h2>멤버</h2><p class="lede">멤버마다 향수병 그림을 그렸어요. 색은 각자의 CU 빵 맛에서 따왔어요. 그림을 누르면 갖고 있는 사진으로 바꿀 수 있고, 사진은 이 기기에만 저장돼요.</p></div>
+  <div class="member-list" id="memberList"></div>
+  <div class="subhead"><h3>리센느 공통 밈</h3></div>
+  <div class="quotes" id="groupQuotes"></div>
+  <p class="note">유행어는 기사와 팬 위키를 참고했어요. 팬들이 뽑은 '명대사 월드컵' 결과가 섞여 있어요.</p>
+</section>
+
+<section data-sec="music" hidden>
+  <div><span class="note-en">discography</span><h2>앨범</h2><p class="lede">분홍 글씨가 타이틀곡이에요.</p></div>
+  <div class="filters" id="musicFilters"></div>
   <ol class="timeline" id="musicList"></ol>
 </section>
 
-<section id="sec-bread" data-sec="bread" hidden>
-  <h2>CU × 리센느 빵</h2>
-  <p class="lede">CU 베이커리 브랜드 BAKE 405와 함께 만든 5종이에요. 2026년 9월 17일부터 차례로 나왔고 개당 2,500원이에요. 빵마다 투명 포토카드 27종 중 1장이 랜덤으로 들어 있어요.</p>
-  <div class="grid" style="margin-top:14px" id="breadGrid"></div>
+<section data-sec="cu" hidden>
+  <div><span class="note-en">CU × RESCENE</span><h2>CU 콜라보</h2><p class="lede">CU 전속 모델 리센느와 함께 만든 빵과 도시락이에요. 재고는 포켓CU 앱에서 확인할 수 있어요.</p></div>
 
-  <div class="card" style="margin-top:14px">
-    <h3>내 포토카드 수집</h3>
+  <div class="subhead"><h3>빵 5종</h3><span class="meta">BAKE 405 · 개당 2,500원</span></div>
+  <div class="glass stack">
+    <div class="row"><h3>내 빵 포토카드</h3><span class="meta">27종 중 1장 랜덤</span></div>
     <div class="counter">
       <button type="button" id="pcMinus" aria-label="한 장 빼기">−</button>
-      <div><span class="big-num" id="pcNum">0</span><span class="meta"> / 27종</span></div>
+      <div style="flex:1"><span class="big-num" id="pcNum">0</span><span class="meta"> / 27종</span><div class="bar" style="margin-top:8px" aria-hidden="true"><i id="pcBar"></i></div></div>
       <button type="button" id="pcPlus" aria-label="한 장 더하기">+</button>
-      <div class="bar" aria-hidden="true"><i id="pcBar"></i></div>
     </div>
-    <p class="note">체크 표시와 수집 개수는 이 기기의 브라우저에만 저장돼요.</p>
   </div>
+  <div class="goods" id="breadList"></div>
 
-  <div class="card" style="margin-top:14px">
+  <div class="subhead"><h3>원이 도시락 2종</h3><span class="meta">덕연이 딸 시리즈</span></div>
+  <div class="glass stack">
+    <div class="row"><h3>내 원이 포토카드</h3><span class="meta" id="lunchCardsLabel">15종 중 1장 랜덤</span></div>
+    <div class="counter">
+      <button type="button" id="lcMinus" aria-label="한 장 빼기">−</button>
+      <div style="flex:1"><span class="big-num" id="lcNum">0</span><span class="meta" id="lcMax"> / 15종</span><div class="bar" style="margin-top:8px" aria-hidden="true"><i id="lcBar"></i></div></div>
+      <button type="button" id="lcPlus" aria-label="한 장 더하기">+</button>
+    </div>
+  </div>
+  <div class="goods" id="lunchList"></div>
+
+  <div class="glass stack">
     <h3>재고 찾는 법 (포켓CU)</h3>
     <ol class="steps">
       <li>포켓CU 앱을 열어요.</li>
       <li>아래쪽 <b>재고조회</b> 탭을 눌러요.</li>
-      <li>"리센느"나 빵 이름을 검색해요.</li>
+      <li>"리센느", "덕연이 딸" 또는 상품 이름을 검색해요.</li>
       <li>지도에서 근처 매장별 수량을 확인해요.</li>
     </ol>
-    <p class="note">앱 재고와 실제 매대는 차이가 날 수 있어요. 수량이 1~2개면 출발 전에 매장에 전화해 보세요. 포토카드는 따로 팔지 않고, 겉포장으로는 어떤 카드인지 알 수 없어요.</p>
+    <p class="note">앱 재고와 실제 매대는 차이가 날 수 있어요. 수량이 1~2개면 출발 전에 매장에 전화해 보세요. 도시락은 포켓CU에서 예약 구매도 할 수 있어요.</p>
   </div>
 </section>
 
-<section id="sec-awards" data-sec="awards" hidden>
-  <h2>수상·활동</h2>
-  <p class="lede">2026년 여름 원이의 유튜브 채널을 계기로 「Love Attack」이 역주행하며 첫 음악방송 1위를 했어요.</p>
-  <h3 style="margin-top:16px">음악방송 1위</h3>
-  <div class="grid" style="margin-top:8px">
-    <div class="card"><span class="tag">첫 1위</span><h3>Pretty Girl</h3><span class="meta">2026.07.14 · 더쇼</span></div>
-    <div class="card"><span class="tag">역주행</span><h3>Love Attack</h3><span class="meta">2026.07.26 · 인기가요</span></div>
+<section data-sec="talk" hidden>
+  <div><span class="note-en">share the scent</span><h2>소통</h2><p class="lede">빵이나 도시락이 있는 매장을 제보하고, 리마인끼리 이야기를 나눠요.</p></div>
+  <p class="glass offline" id="talkMode" hidden>아직 서버에 연결되지 않아서 지금 쓰는 글은 내 기기에만 저장돼요. 연결되면 모두에게 보여요.</p>
+
+  <form class="glass stack" id="postForm" autocomplete="off">
+    <div class="seg" role="tablist" aria-label="글 종류">
+      <button type="button" class="seg-btn" data-kind="stock" aria-pressed="true">재고 제보</button>
+      <button type="button" class="seg-btn" data-kind="chat" aria-pressed="false">수다</button>
+    </div>
+    <div class="stock-only grid2">
+      <label class="fld" style="grid-column:1/-1"><span>상품</span><select id="fItem"></select></label>
+      <label class="fld"><span>상태</span><select id="fStatus"><option value="have">있어요</option><option value="few">몇 개 안 남음</option><option value="out">품절</option></select></label>
+      <label class="fld"><span>동네</span><input id="fArea" maxlength="20" placeholder="예: 수원 영통"></label>
+      <label class="fld"><span>매장 이름</span><input id="fStore" maxlength="30" placeholder="예: CU 영통역점"></label>
+    </div>
+    <label class="fld"><span>한마디</span><textarea id="fText" maxlength="200" rows="2" placeholder="예: 메론빵 3개 남았어요!"></textarea></label>
+    <div class="row">
+      <label class="fld nick"><span>닉네임</span><input id="fNick" maxlength="12" placeholder="리마인"></label>
+      <button type="submit" class="submit" id="fSubmit">올리기</button>
+    </div>
+    <p class="note" id="formMsg" role="status">전화번호, 실명, 주소 같은 개인정보는 올리지 마세요. 신고가 3번 쌓인 글은 자동으로 숨겨져요.</p>
+  </form>
+
+  <div class="filters" id="talkFilters">
+    <button type="button" class="chip" data-f="all" aria-pressed="true">전체</button>
+    <button type="button" class="chip" data-f="stock" aria-pressed="false">재고 제보</button>
+    <button type="button" class="chip" data-f="chat" aria-pressed="false">수다</button>
   </div>
-  <h3 style="margin-top:20px">시상식</h3>
-  <div class="tablebox" style="margin-top:8px"><table>
-    <thead><tr><th>연도</th><th>시상식</th><th>부문</th><th>결과</th></tr></thead>
-    <tbody id="awardRows"></tbody>
-  </table></div>
-  <h3 style="margin-top:20px">홍보대사</h3>
-  <div class="grid" style="margin-top:8px" id="ambGrid"></div>
-  <h3 style="margin-top:20px">예능·콘텐츠</h3>
-  <div class="card" style="margin-top:8px"><h3>Re:Creation</h3><span class="meta">2025.06.05 첫 방송 · 주간 웹예능</span></div>
+  <div class="posts" id="posts"></div>
 </section>
 
-</div>
-</main>
+<section data-sec="awards" hidden>
+  <div><span class="note-en">milestones</span><h2>수상·활동</h2><p class="lede">2026년 여름 「Love Attack」이 역주행하며 첫 음악방송 1위를 했어요.</p></div>
+  <div class="wins" id="wins"></div>
+  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3></div><ul class="awards" id="awardList"></ul></div>
+  <div class="subhead"><h3>도시 홍보대사</h3></div>
+  <div class="amb" id="amb"></div>
+</section>
 
-<footer>
-  <div class="wrap">
-    <span>비공식 팬 페이지예요. 소속사 더뮤즈엔터테인먼트, CU와 관계없어요.</span>
-    <span>정보 기준일 2026년 11월 5일. 출처: 위키백과 Rescene 문서, 아이뉴스24·헤럴드경제 등 보도.</span>
-  </div>
-</footer>
+</div></main>
 
+<footer><div class="wrap">
+  <span>비공식 팬 앱이에요. 소속사, CU와 관계없어요.</span>
+  <span>출처: 위키백과, 연합뉴스·아이뉴스24·YTN 스타 등 보도, 나무위키</span>
+</div></footer>
+
+<script type="application/json" id="seed">{
+  "updated": "2026-11-05",
+  "debut": "2024-03-26",
+  "board": {"url": "", "key": ""},
+  "latest": {
+    "label": "미니 4집",
+    "name": "Pulse",
+    "date": "2026.11.03",
+    "title": "With",
+    "tracks": ["Finest Thing", "With", "Inside Out", "Meme", "Dragon"]
+  },
+  "news": [
+    {"date": "2026.11.03", "text": "미니 4집 「Pulse」 발매. 타이틀곡은 「With」"},
+    {"date": "2026.11.02", "text": "CU 원이 도시락 2종 예약 시작. 김치제육 11.10, 간장찜닭 11.17 출시"},
+    {"date": "2026.10.13", "text": "CU 리센느 빵 누적 판매 100만 개 돌파"},
+    {"date": "2026.09.17", "text": "CU × 리센느 빵 5종 순차 출시 시작"},
+    {"date": "2026.07.26", "text": "「Love Attack」 역주행으로 인기가요 1위"},
+    {"date": "2026.07.14", "text": "「Pretty Girl」로 더쇼 첫 1위"}
+  ],
+  "members": [
+    {"n": "원이", "e": "WONI", "role": "리더", "info": [["생일", "2004.05.25 (참고)"]],
+     "note": "거제 출신. 개인 유튜브 채널로 「Love Attack」 역주행을 이끌었어요.",
+     "q": [["안녕하세요원이입니다잘부탁드립니다", "개인 유튜브 채널 이름이자 인사. 줄여서 '안원잘부'"],
+           ["오이쉬에~", "팬들이 뽑은 명대사 월드컵 결승 진출"],
+           ["다시 태어나도 거제에서 태어날 것이다", "고향 사랑 발언"]]},
+    {"n": "리브", "e": "LIV", "role": "", "info": [], "note": "CU 빵: 초코 호떡",
+     "q": [["너도? 나도!", "명대사 월드컵 우승"]]},
+    {"n": "미나미", "e": "MINAMI", "role": "일본 출신", "info": [],
+     "note": "MBC 「방과후 설렘」 파이널 진출. CU 빵: 메론빵",
+     "q": [["거제 야호~!", "원이 채널에서 갸루 콘셉트로 외친 말. 홍보대사 4곳 위촉으로 이어졌어요"]]},
+    {"n": "메이", "e": "MAY", "role": "", "info": [], "note": "CU 빵: 시나몬 롤",
+     "q": [["기회는 그립감이 좋다", "명대사 월드컵 4강"]]},
+    {"n": "제나", "e": "ZENA", "role": "막내", "info": [["생일", "2008.11.27 (참고)"], ["별명", "신라공주"]],
+     "note": "경상도 사투리 콘텐츠로 화제. CU 빵: 딸기 샌드",
+     "q": [["안녕하신교", "제나가 유행어로 밀고 있는 인사"]]}
+  ],
+  "groupQuotes": [
+    ["미음", "'망했다'는 뜻의 멤버들 은어. '미으무', '망했또띠'로 변형돼요"],
+    ["그래 이것도 봐주마", "리센느 콘텐츠를 계속 챙겨보는 팬들의 댓글 밈"],
+    ["리센느노믹스", "리센느 인기가 빵 판매 같은 소비로 이어지는 현상을 부르는 신조어"]
+  ],
+  "music": [
+    {"d": "2024.02.29", "t": "선공개", "k": "single", "name": "YoYo", "tr": []},
+    {"d": "2024.03.26", "t": "싱글 앨범 · 데뷔", "k": "album", "name": "Re:Scene", "tr": ["YoYo", "*UhUh"], "big": 1},
+    {"d": "2024", "t": "콜라보", "k": "other", "name": "Counting Star (The Magic Star × RESCENE)", "tr": []},
+    {"d": "2024.08.27", "t": "미니 1집", "k": "album", "name": "Scenedrome", "tr": ["Lucky You", "*Love Attack", "New World", "Pinball"], "big": 1},
+    {"d": "2025.02.05", "t": "미니 2집", "k": "album", "name": "Glow Up", "tr": ["Crash", "*Glow Up", "Going On", "In My Lotion", "Cotton Candy"], "big": 1},
+    {"d": "2025", "t": "OST", "k": "other", "name": "BamBamBam · 「공작의 첫날밤」", "tr": []},
+    {"d": "2025", "t": "OST", "k": "other", "name": "Love Frequency · 「너를 만나기 위해」", "tr": []},
+    {"d": "2025.07.02", "t": "싱글 앨범", "k": "album", "name": "Dearest", "tr": ["*Deja Vu", "Mood"]},
+    {"d": "2025.11.25", "t": "미니 3집", "k": "album", "name": "Lip Bomb", "tr": ["Heart Drop (11.06 선공개)", "Bloom", "Love Echo", "Hello XO", "MVP"], "big": 1},
+    {"d": "2026.04.08", "t": "디지털 싱글", "k": "single", "name": "Runaway", "tr": []},
+    {"d": "2026.07.08", "t": "디지털 싱글", "k": "single", "name": "Pretty Girl (카라 리메이크)", "tr": []},
+    {"d": "2026", "t": "스페셜 싱글", "k": "single", "name": "Busy Boy", "tr": []},
+    {"d": "2026", "t": "참여곡", "k": "other", "name": "Higher · Music from The Specials", "tr": []},
+    {"d": "2026.11.03", "t": "미니 4집 · 최신", "k": "album", "name": "Pulse", "tr": ["Finest Thing", "*With", "Inside Out", "Meme", "Dragon"], "big": 1}
+  ],
+  "breads": [
+    {"id": "corn", "m": "원이", "name": "옥수수 크림빵", "d": "9월 17일", "desc": "옥수수 쿠키 토핑에 커스터드와 크림"},
+    {"id": "cinna", "m": "메이", "name": "시나몬 롤", "d": "9월 22일", "desc": "커피와 잘 어울리는 계피 향"},
+    {"id": "straw", "m": "제나", "name": "딸기 샌드", "d": "9월 22일", "desc": "상큼한 딸기잼과 부드러운 크림"},
+    {"id": "melon", "m": "미나미", "name": "메론빵", "d": "9월 29일", "desc": "미나미가 고향에서 즐겨 먹던 맛"},
+    {"id": "choco", "m": "리브", "name": "초코 호떡", "d": "9월 30일", "desc": "쫀득한 빵 속 달콤한 초코"}
+  ],
+  "lunches": [
+    {"id": "jeyuk", "m": "원이", "name": "덕연이 딸 김치제육", "d": "11월 10일", "reserve": "포켓CU 예약 11월 2~4일", "desc": "원이가 실제로 즐겨 먹던 집밥 메뉴를 담은 도시락"},
+    {"id": "jjimdak", "m": "원이", "name": "덕연이 딸 간장찜닭", "d": "11월 17일", "reserve": "포켓CU 예약 11월 9~11일", "desc": "원이가 실제로 즐겨 먹던 집밥 메뉴를 담은 도시락"}
+  ],
+  "lunchCards": 15,
+  "wins": [
+    {"song": "Pretty Girl", "date": "2026.07.14", "show": "더쇼", "tag": "첫 1위"},
+    {"song": "Love Attack", "date": "2026.07.26", "show": "인기가요", "tag": "역주행"}
+  ],
+  "awards": [
+    ["2026", "MAMA Awards", "Top 10 팬스 초이스 (여자)", "pend"],
+    ["2026", "멜론뮤직어워드", "Top 10 글로벌 아티스트", "pend"],
+    ["2026", "더팩트 뮤직 어워즈", "올해의 아티스트 (본상), 투데이 초이스", "won"],
+    ["2026", "대한민국 퍼스트브랜드 대상", "라이징 여자 아이돌", "won"],
+    ["2026", "K-World Dream Awards", "베스트 비주얼 콘텐츠, 베스트 팬덤", "won"],
+    ["2026", "SPOTV K-Pop Awards", "글로벌 커넥트, SPOTV 앰버서더", "won"],
+    ["2025", "뉴시스 K-엑스포 문화대상", "한류특별상", "won"],
+    ["2025", "한터뮤직어워즈", "신인상 (여자)", "nom"],
+    ["2024", "Asia Model Awards", "라이징스타상 (가수)", "won"],
+    ["2024", "Asia Artist Awards", "인기상 걸그룹", "nom"]
+  ],
+  "amb": [["거제", "2026.05.23"], ["수원", "2026.06.25"], ["경주", "2026.06.29"], ["고양", "2026.07.03"]]
+}</script>
 <script>
-const members=[
-  {n:"원이",e:"WONI",role:"리더",info:[["생일","2004.05.25 (참고)"]],note:"개인 유튜브 채널로 「Love Attack」 역주행을 이끌었어요."},
-  {n:"리브",e:"LIV",role:"",info:[],note:"CU 빵: 초코 호떡"},
-  {n:"미나미",e:"MINAMI",role:"일본 출신",info:[],note:"MBC 「방과후 설렘」 파이널 진출. CU 빵: 메론빵"},
-  {n:"메이",e:"MAY",role:"",info:[],note:"CU 빵: 시나몬 롤"},
-  {n:"제나",e:"ZENA",role:"막내",info:[["생일","2008.11.27 (참고)"]],note:"CU 빵: 딸기 샌드"}
-];
-const music=[
-  {d:"2024.02.29",t:"선공개",k:"single",name:"YoYo",tr:[]},
-  {d:"2024.03.26",t:"싱글 앨범",k:"album",name:"Re:Scene · 데뷔",tr:["YoYo","*UhUh"],big:1},
-  {d:"2024",t:"콜라보",k:"other",name:"Counting Star (The Magic Star × RESCENE)",tr:[]},
-  {d:"2024.08.27",t:"미니 1집",k:"album",name:"Scenedrome",tr:["Lucky You","*Love Attack","New World","Pinball"],big:1},
-  {d:"2025.02.05",t:"미니 2집",k:"album",name:"Glow Up",tr:["Crash","*Glow Up","Going On","In My Lotion","Cotton Candy"],big:1},
-  {d:"2025",t:"OST",k:"other",name:"BamBamBam · 「공작의 첫날밤」",tr:[]},
-  {d:"2025",t:"OST",k:"other",name:"Love Frequency · 「너를 만나기 위해」",tr:[]},
-  {d:"2025.07.02",t:"싱글 앨범",k:"album",name:"Dearest",tr:["*Deja Vu","Mood"]},
-  {d:"2025.11.25",t:"미니 3집",k:"album",name:"Lip Bomb",tr:["Heart Drop (11.06 선공개)","Bloom","Love Echo","Hello XO","MVP"],big:1},
-  {d:"2026.04.08",t:"디지털 싱글",k:"single",name:"Runaway",tr:[]},
-  {d:"2026.07.08",t:"디지털 싱글",k:"single",name:"Pretty Girl (카라 리메이크)",tr:[]},
-  {d:"2026",t:"스페셜 싱글",k:"single",name:"Busy Boy",tr:[]},
-  {d:"2026",t:"참여곡",k:"other",name:"Higher · Music from The Specials",tr:[]},
-  {d:"2026.11.03",t:"미니 4집 · 최신",k:"album",name:"Pulse",tr:["Finest Thing","*With","Inside Out","Meme","Dragon"],big:1}
-];
-const breads=[
-  {id:"corn",m:"원이",name:"옥수수 크림빵",d:"9월 17일",desc:"옥수수 쿠키 토핑에 커스터드와 크림"},
-  {id:"cinna",m:"메이",name:"시나몬 롤",d:"9월 22일",desc:"커피와 잘 어울리는 계피 향"},
-  {id:"straw",m:"제나",name:"딸기 샌드",d:"9월 22일",desc:"상큼한 딸기잼과 부드러운 크림"},
-  {id:"melon",m:"미나미",name:"메론빵",d:"9월 29일",desc:"미나미가 고향에서 즐겨 먹던 맛"},
-  {id:"choco",m:"리브",name:"초코 호떡",d:"9월 30일",desc:"쫀득한 빵 속 달콤한 초코"}
-];
-const awards=[
-  ["2024","Asia Artist Awards","인기상 걸그룹","nom"],
-  ["2024","Asia Model Awards","라이징스타상 (가수)","won"],
-  ["2025","한터뮤직어워즈","신인상 (여자)","nom"],
-  ["2025","뉴시스 K-엑스포 문화대상","한류특별상","won"],
-  ["2026","더팩트 뮤직 어워즈","올해의 아티스트 (본상), 투데이 초이스","won"],
-  ["2026","대한민국 퍼스트브랜드 대상","라이징 여자 아이돌","won"],
-  ["2026","K-World Dream Awards","베스트 비주얼 콘텐츠, 베스트 팬덤","won"],
-  ["2026","SPOTV K-Pop Awards","글로벌 커넥트, SPOTV 앰버서더","won"],
-  ["2026","MAMA Awards","Top 10 팬스 초이스 (여자)","pend"],
-  ["2026","멜론뮤직어워드","Top 10 글로벌 아티스트","pend"]
-];
-const amb=[["거제","2026.05.23"],["수원","2026.06.25"],["경주","2026.06.29"],["고양","2026.07.03"]];
-const label={won:"수상",nom:"후보",pend:"발표 전"};
+const REMOTE="https://doridori5252-wq.github.io/rescene-fanbook/data.json";
 const $=s=>document.querySelector(s);
-const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const tint=i=>["","c2","c3","c4",""][i%5];
 
-let store={};
-try{store=JSON.parse(localStorage.getItem("rescene-fanbook")||"{}")}catch(e){store={}}
-function save(){try{localStorage.setItem("rescene-fanbook",JSON.stringify(store))}catch(e){}}
+let D=JSON.parse($("#seed").textContent);
+const cached=ls.get("rescene-data",null);
+if(cached&&cached.updated>=D.updated&&cached.members)D=cached;
+let store=ls.get("rescene-fanbook",{}),photos=ls.get("rescene-photos",{});
 
-let photos={};
-try{photos=JSON.parse(localStorage.getItem("rescene-photos")||"{}")}catch(e){photos={}}
-function savePhotos(){try{localStorage.setItem("rescene-photos",JSON.stringify(photos));return true}catch(e){return false}}
-function renderMembers(){
-$("#memberGrid").innerHTML=members.map((m,i)=>`
-  <article class="card">
-    <label class="photo" for="ph-${m.e}">
-      ${photos[m.e]?`<img src="${photos[m.e]}" alt="${m.n} 사진">`:`<span class="ph"><b>${m.n[0]}</b>눌러서 ${m.n} 사진 넣기</span>`}
-      <input type="file" accept="image/*" id="ph-${m.e}" data-ph="${m.e}">
-    </label>
-    ${photos[m.e]?`<div class="photo-actions"><span class="meta">이 기기에만 저장됨</span><button type="button" class="linkbtn" data-rm="${m.e}">사진 지우기</button></div>`:""}
-    <div class="member-head"><div class="mono-badge">${m.n[0]}</div>
-      <div><h3>${m.n} <span class="meta">${m.e}</span></h3>${m.role?`<span class="tag">${m.role}</span>`:""}</div></div>
-    ${m.info.length?`<dl class="kv">${m.info.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`:""}
-    <p class="tracks" style="margin:0">${m.note}</p>
-  </article>`).join("");
+function dplus(){const s=D.debut.split("-").map(Number),d=new Date();
+  return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(s[0],s[1]-1,s[2]))/864e5)+1}
+
+function render(){
+  const n=dplus().toLocaleString("ko-KR");$("#dday").textContent="D+"+n;$("#dpill").textContent="D+"+n;
+  const L=D.latest;
+  $("#feature").innerHTML=`<div class="cover" aria-hidden="true"><span>${esc(L.name)}</span><i></i><i></i><i></i></div>
+    <div style="min-width:0"><span class="eyebrow">최신 앨범 · ${esc(L.date)}</span><h3>${esc(L.label)} ${esc(L.name)}</h3>
+    <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(" · ")}</p><span class="go">전체 앨범 보기 ›</span></div>`;
+  $("#news").innerHTML=D.news.slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span><span>${esc(x.text)}</span></li>`).join("");
+  $("#updated").textContent=D.updated.replace(/-/g,".")+" 업데이트";
+  const all=D.members.flatMap(m=>m.q.map(q=>[q[0],m.n])),d=new Date(),i=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%all.length;
+  $("#todayQ").textContent="“"+all[i][0]+"”";$("#todayWho").textContent=all[i][1];
+  const minis=D.music.filter(x=>/미니/.test(x.t)).length;
+  $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"도시 홍보대사","#awards"]]
+    .map(([v,l,h])=>`<a class="glass stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
+  renderMembers();renderMusic();renderGoods();renderPc();fillItems();
+  $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
+  $("#wins").innerHTML=D.wins.map(w=>`<div class="glass stack" style="gap:4px"><span class="tag" style="justify-self:start">${esc(w.tag)}</span><h3>${esc(w.song)}</h3><span class="meta">${esc(w.date)} · ${esc(w.show)}</span></div>`).join("");
+  const lab={won:"수상",nom:"후보",pend:"발표 전"};
+  $("#awardList").innerHTML=D.awards.map(([y,a,c,r])=>`<li><b style="font-size:14px">${esc(a)} <span class="meta">${esc(y)}</span></b><span class="what">${esc(c)}</span><span class="tag res ${r}">${lab[r]}</span></li>`).join("");
+  $("#amb").innerHTML=D.amb.map(([c,dt])=>`<div class="glass" style="display:grid;gap:2px"><h3>${esc(c)}시</h3><span class="meta">${esc(dt)} 위촉</span></div>`).join("");
 }
-renderMembers();
-$("#memberGrid").addEventListener("change",e=>{
+
+// 멤버별 향수병 일러스트. 색은 각 멤버의 CU 빵 맛에서 따왔어요 (얼굴을 그리지 않은 오리지널 그림)
+const ART={
+  WONI:{a:"#fff4d1",b:"#f3c35e",bg:"#fff8e4",shape:"round",note:"옥수수"},
+  LIV:{a:"#f6dce8",b:"#9a5f78",bg:"#f8eaf0",shape:"tall",note:"초코"},
+  MINAMI:{a:"#eafadf",b:"#7fc79a",bg:"#eef9ef",shape:"hex",note:"메론"},
+  MAY:{a:"#ffe6cc",b:"#d28a55",bg:"#fff1e4",shape:"drop",note:"시나몬"},
+  ZENA:{a:"#ffe3ec",b:"#ec6f98",bg:"#ffeef3",shape:"heart",note:"딸기"}
+};
+const SHAPES={
+  round:'<circle cx="40" cy="62" r="29"/>',
+  tall:'<rect x="19" y="23" width="42" height="71" rx="11"/>',
+  hex:'<path d="M40 22 67 37v41L40 93 13 78V37z"/>',
+  drop:'<path d="M40 22c14 16 28 30 28 46a28 28 0 0 1-56 0c0-16 14-30 28-46z"/>',
+  heart:'<path d="M40 92C12 74 7 50 20 38c8-7 16-5 20 3 4-8 12-10 20-3 13 12 8 36-20 54z"/>'
+};
+let artSeq=0;
+function bottle(m){const a=ART[m.e]||ART.WONI,id="b"+m.e+(++artSeq),s=SHAPES[a.shape];
+  return `<svg viewBox="0 0 80 100" class="bottle" aria-hidden="true">
+  <defs><linearGradient id="g${id}" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="${a.a}"/><stop offset="1" stop-color="${a.b}"/></linearGradient>
+  <clipPath id="c${id}">${s}</clipPath></defs>
+  <rect x="32" y="5" width="16" height="10" rx="3.5" fill="#3b2b3a"/><rect x="36" y="14" width="8" height="9" fill="#3b2b3a"/>
+  <g fill="url(#g${id})">${s}</g>
+  <g clip-path="url(#c${id})"><rect x="0" y="70" width="80" height="30" fill="${a.b}" opacity=".35"/><path d="M0 70q10-4 20 0t20 0 20 0 20 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>
+  <rect x="20" y="32" width="6" height="22" rx="3" fill="#fff" opacity=".55"/></g>
+  <text x="40" y="69" text-anchor="middle" font-family="Gowun Batang, serif" font-weight="700" font-size="22" fill="#fff" stroke="#3b2b3a" stroke-opacity=".18" stroke-width="2" paint-order="stroke">${esc(m.n[0])}</text>
+  <circle cx="66" cy="20" r="2" fill="${a.b}" opacity=".6"/><circle cx="72" cy="30" r="1.3" fill="${a.b}" opacity=".5"/><circle cx="12" cy="24" r="1.6" fill="${a.b}" opacity=".45"/>
+  </svg>`}
+function renderMembers(){
+  $("#memberList").innerHTML=D.members.map((m,i)=>`
+  <article class="glass member">
+    <div class="m-top">
+      <label class="photo" for="ph-${m.e}" style="background:${(ART[m.e]||ART.WONI).bg}">
+        ${photos[m.e]?`<img src="${photos[m.e]}" alt="${esc(m.n)} 사진">`:`<span class="ph">${bottle(m)}<small>${esc((ART[m.e]||ART.WONI).note)} 향</small></span>`}
+        <input type="file" accept="image/*" id="ph-${m.e}" data-ph="${m.e}">
+      </label>
+      <div class="m-info">
+        <div class="m-name"><h3>${esc(m.n)}</h3><span class="en">${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span>${m.role?`<span class="tag">${esc(m.role)}</span>`:""}</div>
+        ${m.info.length?`<dl class="kv">${m.info.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
+        <p class="m-note">${esc(m.note)}</p>
+        ${photos[m.e]?`<button type="button" class="linkbtn" data-rm="${m.e}">사진 지우기</button>`:""}
+      </div>
+    </div>
+    <div class="quotes">${m.q.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("")}</div>
+  </article>`).join("");
+  $("#memberStrip").innerHTML=D.members.map(m=>`<a href="#members"><span class="avatar" style="background:${(ART[m.e]||ART.WONI).bg}">${photos[m.e]?`<img src="${photos[m.e]}" alt="">`:bottle(m)}</span>${esc(m.n)}</a>`).join("");
+}
+$("#memberList").addEventListener("change",e=>{
   const inp=e.target.closest("[data-ph]");if(!inp||!inp.files[0])return;
   const key=inp.dataset.ph,url=URL.createObjectURL(inp.files[0]),img=new Image();
-  img.onload=()=>{
-    const s=Math.min(1,600/Math.max(img.width,img.height)),c=document.createElement("canvas");
-    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);
-    c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
-    photos[key]=c.toDataURL("image/jpeg",0.82);
-    if(!savePhotos()){delete photos[key];savePhotos()}
-    renderMembers();
-  };
+  img.onload=()=>{const s=Math.min(1,480/Math.max(img.width,img.height)),c=document.createElement("canvas");
+    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+    URL.revokeObjectURL(url);photos[key]=c.toDataURL("image/jpeg",.82);
+    if(!ls.set("rescene-photos",photos)){delete photos[key];ls.set("rescene-photos",photos)}renderMembers()};
   img.src=url;
 });
-$("#memberGrid").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];savePhotos();renderMembers()}});
+$("#memberList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];ls.set("rescene-photos",photos);renderMembers()}});
 
-const kinds=[["all","전체"],["album","앨범"],["single","싱글"],["other","OST·콜라보"]];
-let kind="all";
+const kinds=[["all","전체"],["album","앨범"],["single","싱글"],["other","OST·콜라보"]];let kind="all";
 function renderMusic(){
   $("#musicFilters").innerHTML=kinds.map(([k,l])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${k===kind}">${l}</button>`).join("");
-  $("#musicList").innerHTML=music.filter(x=>kind==="all"||x.k===kind).slice().reverse().map(x=>`
-    <li class="${x.big?"big":""}"><span class="date">${x.d} · ${x.t}</span><h3>${esc(x.name)}</h3>
+  $("#musicList").innerHTML=D.music.filter(x=>kind==="all"||x.k===kind).slice().reverse().map(x=>`
+    <li class="${x.big?"big":""}"><span class="meta">${esc(x.d)} · ${esc(x.t)}</span><h3>${esc(x.name)}</h3>
     ${x.tr.length?`<div class="tracks">${x.tr.map(t=>t[0]==="*"?`<b>${esc(t.slice(1))}</b>`:esc(t)).join(" · ")}</div>`:""}</li>`).join("");
 }
 $("#musicFilters").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b){kind=b.dataset.k;renderMusic()}});
-renderMusic();
 
-function renderBread(){
-  $("#breadGrid").innerHTML=breads.map(b=>{const on=!!(store.ate&&store.ate[b.id]);return`
-  <article class="card bread">
-    <div class="row"><span class="tag mint">${b.m}</span><span class="meta">${b.d} 출시</span></div>
-    <h3>${b.name}</h3><p class="tracks" style="margin:0">${b.desc}</p>
-    <div class="row"><span class="meta">2,500원</span>
-    <button type="button" class="toggle" data-b="${b.id}" aria-pressed="${on}">${on?"✓ 먹어봤어요":"먹어봤어요"}</button></div>
-  </article>`}).join("");
+function goodCard(b,label){const on=!!(store.ate&&store.ate[b.id]);return`
+  <article class="glass item">
+    <div class="row"><span class="tag sage">${esc(b.m)}</span><span class="meta">${esc(b.d)} 출시</span></div>
+    <h3>${esc(b.name)}</h3><p class="m-note">${esc(b.desc)}</p>
+    <div class="row"><span class="meta">${esc(b.reserve||"2,500원")}</span><button type="button" class="toggle" data-b="${b.id}" aria-pressed="${on}">${on?"✓ "+label:label}</button></div>
+  </article>`}
+function renderGoods(){
+  $("#breadList").innerHTML=D.breads.map(b=>goodCard(b,"먹어봤어요")).join("");
+  $("#lunchList").innerHTML=(D.lunches||[]).map(b=>goodCard(b,"먹어봤어요")).join("");
 }
-$("#breadGrid").addEventListener("click",e=>{const t=e.target.closest("[data-b]");if(!t)return;store.ate=store.ate||{};store.ate[t.dataset.b]=!store.ate[t.dataset.b];save();renderBread()});
-renderBread();
+document.querySelector('[data-sec="cu"]').addEventListener("click",e=>{const t=e.target.closest("[data-b]");if(!t)return;store.ate=store.ate||{};store.ate[t.dataset.b]=!store.ate[t.dataset.b];ls.set("rescene-fanbook",store);renderGoods()});
+function renderPc(){const n=store.pc||0,w=(n/27*100)+"%",max=D.lunchCards||15,l=Math.min(store.lc||0,max);
+  $("#pcNum").textContent=n;$("#pcBar").style.width=w;$("#homePc").textContent=n;$("#homeBar").style.width=w;
+  $("#lcNum").textContent=l;$("#lcBar").style.width=(l/max*100)+"%";$("#lcMax").textContent=" / "+max+"종";$("#lunchCardsLabel").textContent=max+"종 중 1장 랜덤"}
+const bump=(k,dv,max)=>{store[k]=Math.max(0,Math.min(max,(store[k]||0)+dv));ls.set("rescene-fanbook",store);renderPc()};
+$("#pcPlus").onclick=()=>bump("pc",1,27);$("#pcMinus").onclick=()=>bump("pc",-1,27);
+$("#lcPlus").onclick=()=>bump("lc",1,D.lunchCards||15);$("#lcMinus").onclick=()=>bump("lc",-1,D.lunchCards||15);
 
-function renderPc(){const n=store.pc||0;$("#pcNum").textContent=n;$("#pcBar").style.width=(n/27*100)+"%"}
-$("#pcPlus").onclick=()=>{store.pc=Math.min(27,(store.pc||0)+1);save();renderPc()};
-$("#pcMinus").onclick=()=>{store.pc=Math.max(0,(store.pc||0)-1);save();renderPc()};
-renderPc();
+// ---- 소통창 ----
+// 서버(Supabase) 주소와 공개 키는 data.json 의 board 에 넣어요. 비어 있으면 글이 이 기기에만 저장돼요.
+const TALK={posts:[],filter:"all",kind:"stock",timer:null};
+const STATUS={have:"있어요",few:"몇 개 안 남음",out:"품절"};
+const sb=()=>{const b=D.board||{};return b.url&&b.key?b:null};
+async function sbFetch(path,opt={}){const b=sb();
+  const r=await fetch(b.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opt,headers:{apikey:b.key,Authorization:"Bearer "+b.key,"Content-Type":"application/json",...(opt.headers||{})}});
+  if(!r.ok)throw new Error(String(r.status));const t=await r.text();return t?JSON.parse(t):null}
+function ago(iso){const s=(Date.now()-new Date(iso).getTime())/1000;
+  if(s<60)return"방금";if(s<3600)return Math.floor(s/60)+"분 전";if(s<86400)return Math.floor(s/3600)+"시간 전";return Math.floor(s/86400)+"일 전"}
+function fillItems(){const opts=[...D.breads.map(b=>[b.name,b.m+" 빵"]),...(D.lunches||[]).map(b=>[b.name,"원이 도시락"])];
+  $("#fItem").innerHTML=opts.map(([n,g])=>`<option value="${esc(n)}">${esc(n)} (${esc(g)})</option>`).join("")}
+async function loadPosts(){
+  if(!sb()){$("#talkMode").hidden=false;TALK.posts=ls.get("rescene-posts",[]);renderPosts();return}
+  $("#talkMode").hidden=true;
+  try{TALK.posts=await sbFetch("posts?select=id,kind,item,status,area,store,body,nick,created_at&order=created_at.desc&limit=100")||[]}
+  catch(e){$("#formMsg").textContent="글을 불러오지 못했어요. 인터넷 연결을 확인하고 잠시 뒤에 다시 열어 주세요."}
+  renderPosts()}
+function renderPosts(){const hidden=ls.get("rescene-reported",[]);
+  const list=TALK.posts.filter(p=>!hidden.includes(p.id)&&(TALK.filter==="all"||p.kind===TALK.filter));
+  $("#posts").innerHTML=list.length?list.map(p=>{const old=p.kind==="stock"&&Date.now()-new Date(p.created_at)>864e5;return`
+  <article class="glass post ${old?"old":""}">
+    <div class="post-head">${p.kind==="stock"?`<span class="st ${esc(p.status)}">${STATUS[p.status]||""}</span>`:`<span class="tag">수다</span>`}<b>${esc(p.nick||"리마인")}</b><span class="meta">${ago(p.created_at)}${old?" · 오래된 제보":""}</span></div>
+    ${p.kind==="stock"?`<div class="where">${esc(p.item||"")}</div><span class="meta">${esc([p.area,p.store].filter(Boolean).join(" · "))}</span>`:""}
+    ${p.body?`<p>${esc(p.body)}</p>`:""}
+    <button type="button" class="linkbtn report" data-report="${esc(p.id)}">신고</button>
+  </article>`}).join(""):`<div class="glass empty">아직 글이 없어요. 첫 제보를 남겨 주세요!</div>`}
+function setKind(k){TALK.kind=k;document.body.dataset.kind=k;document.querySelectorAll(".seg-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kind===k))}
+document.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("[data-kind]");if(b)setKind(b.dataset.kind)});
+$("#talkFilters").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;TALK.filter=b.dataset.f;
+  document.querySelectorAll("#talkFilters .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));renderPosts()});
+$("#fNick").value=ls.get("rescene-nick","");
+$("#postForm").addEventListener("submit",async e=>{e.preventDefault();const msg=$("#formMsg");
+  const p={kind:TALK.kind,nick:$("#fNick").value.trim().slice(0,12)||"리마인",body:$("#fText").value.trim().slice(0,200)};
+  if(p.kind==="stock"){Object.assign(p,{item:$("#fItem").value,status:$("#fStatus").value,area:$("#fArea").value.trim().slice(0,20),store:$("#fStore").value.trim().slice(0,30)});
+    if(!p.area&&!p.store){msg.textContent="동네나 매장 이름 중 하나는 적어 주세요.";return}}
+  else if(!p.body){msg.textContent="한마디를 적어 주세요.";return}
+  if(/01[016789][\s.-]?\d{3,4}[\s.-]?\d{4}/.test(p.body+p.store+p.area+p.nick)){msg.textContent="전화번호처럼 보이는 내용은 올릴 수 없어요. 지우고 다시 올려 주세요.";return}
+  const last=ls.get("rescene-lastpost",0);if(Date.now()-last<30000){msg.textContent="글은 30초에 한 번만 올릴 수 있어요. 잠시 뒤에 다시 올려 주세요.";return}
+  $("#fSubmit").disabled=true;ls.set("rescene-nick",p.nick);
+  try{
+    if(sb()){await sbFetch("posts",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(p)})}
+    else{const local=ls.get("rescene-posts",[]);local.unshift({...p,id:"l"+Date.now(),created_at:new Date().toISOString()});ls.set("rescene-posts",local.slice(0,100))}
+    ls.set("rescene-lastpost",Date.now());$("#fText").value="";msg.textContent=sb()?"올렸어요. 모두에게 보여요.":"올렸어요. 지금은 이 기기에만 저장돼요.";await loadPosts();
+  }catch(err){msg.textContent="올리지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요."}
+  $("#fSubmit").disabled=false});
+$("#posts").addEventListener("click",async e=>{const b=e.target.closest("[data-report]");if(!b)return;const id=b.dataset.report;
+  const h=ls.get("rescene-reported",[]);if(!h.includes(id)){h.push(id);ls.set("rescene-reported",h)}
+  if(sb()&&!id.startsWith("l")){try{await sbFetch("rpc/report_post",{method:"POST",body:JSON.stringify({pid:id})})}catch(err){}}
+  renderPosts()});
+setKind("stock");fillItems();
 
-$("#awardRows").innerHTML=awards.map(([y,a,c,r])=>`<tr><td class="meta">${y}</td><td>${a}</td><td>${c}</td><td class="${r}">${label[r]}</td></tr>`).join("");
-$("#ambGrid").innerHTML=amb.map(([c,d])=>`<div class="card"><h3>${c}시 홍보대사</h3><span class="meta">${d} 위촉</span></div>`).join("");
-
-const tabs=["members","music","bread","awards"];
-function route(){
-  const h=location.hash.slice(1);const cur=tabs.includes(h)?h:"members";
+const tabs=["home","members","music","cu","talk","awards"];
+function route(){let h=location.hash.slice(1);if(h==="bread")h="cu";const cur=tabs.includes(h)?h:"home";document.body.dataset.tab=cur;
   document.querySelectorAll("[data-sec]").forEach(s=>s.hidden=s.dataset.sec!==cur);
   document.querySelectorAll("[data-tab]").forEach(a=>a.dataset.tab===cur?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-}
+  clearInterval(TALK.timer);if(cur==="talk"){loadPosts();TALK.timer=setInterval(()=>{if(!document.hidden)loadPosts()},30000)}}
 addEventListener("hashchange",()=>{route();scrollTo({top:0})});
-route();
+
+render();route();
+
+// 최신 정보 자동 갱신: 앱을 열 때마다 GitHub에 올라간 data.json을 확인해요
+(async()=>{try{
+  const ctl=new AbortController();setTimeout(()=>ctl.abort(),6000);
+  const r=await fetch(REMOTE+"?t="+Date.now(),{signal:ctl.signal,cache:"no-store"});if(!r.ok)return;
+  const fresh=await r.json();
+  if(fresh&&fresh.updated&&fresh.members&&fresh.updated>=D.updated){D=fresh;ls.set("rescene-data",fresh);render()}
+}catch(e){}})();
 </script>
 
 </body>
