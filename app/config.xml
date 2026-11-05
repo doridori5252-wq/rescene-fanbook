@@ -9,6 +9,8 @@
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <allow-intent href="intent:*" />
+    <allow-intent href="market:*" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="BackgroundColor" value="#ff191b2a" />
     <preference name="AndroidWindowSplashScreenBackground" value="#ff191b2a" />

@@ -1,11 +1,9 @@
 <title>리센느 팬북</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
 /* Layout: 향수 광고처럼 장미·복숭아·라일락 안개가 깔린 배경 위에 반투명 유리 카드가 한 열로 흐름. 폰은 하단 유리 탭바 */
 :root{
-  --bg:#fcf6f8; --ink:#3b2b3a; --muted:#7c6a7a; --line:rgba(124,92,118,.16);
+  --bg:#fcf6f8; --ink:#3b2b3a; --muted:#66545f; --line:rgba(124,92,118,.16);
   --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.82); --glass-edge:rgba(255,255,255,.9);
   --rose:#c2416e; --rose-soft:rgba(240,170,195,.32); --sage:#4f8f7f; --sage-soft:rgba(160,215,200,.35);
   --mist1:#f6bfd2; --mist2:#ffd8c2; --mist3:#d9cdf3; --mist4:#c9eadf;
@@ -207,6 +205,13 @@ section{display:grid;gap:14px}
 .post .report{justify-self:end}
 .empty{text-align:center;color:var(--muted);font-size:14px;padding:28px 16px}
 body[data-kind="chat"] .stock-only{display:none}
+.pcu{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);padding:14px 16px}
+.pcu b{display:block;font-size:15px}
+.pcu-ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#6c2bd9;color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em}
+.signup-only{display:none}
+#authBox[data-mode="signup"] .signup-only{display:grid}
+body.authed .nick{visibility:hidden}
+.mine{font-size:11px;color:var(--rose);font-weight:700}
 
 /* 수상 */
 .wins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -221,7 +226,25 @@ body[data-kind="chat"] .stock-only{display:none}
 .amb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .amb h3{font-family:var(--serif);font-size:18px}
 
-footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:var(--muted);text-align:center}
+footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:var(--muted);text-align:center}
+.legal{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
+.legal a{color:var(--ink);font-size:12.5px;padding:6px 2px}
+.doc p,.doc li{font-size:14px;margin:0}
+.doc h3{font-family:var(--serif);font-size:17px;margin-top:6px}
+.doc-list{margin:0;padding-left:20px;display:grid;gap:4px}
+.consent{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--glass-strong);border:1px solid var(--line)}
+.chk{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;cursor:pointer}
+.chk input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--rose);flex:none}
+.chk a{font-size:12.5px;margin-left:auto;white-space:nowrap}
+.chk.all{font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.danger{color:#b4233c}
+.skip{position:absolute;left:12px;top:-60px;z-index:50;background:var(--rose);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700}
+.skip:focus{top:12px}
+.consent-bar{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;max-width:560px;margin:0 auto;padding:14px;border-radius:16px;background:var(--glass-strong);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-edge);box-shadow:var(--shadow);display:grid;gap:10px;font-size:13.5px}
+.consent-bar p{margin:0}
+.consent-bar .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.consent-bar button{font:inherit;font-weight:700;font-size:14px;min-height:44px;border-radius:12px;border:1px solid var(--rose);background:transparent;color:var(--rose);cursor:pointer}
+@media (min-width:721px){.consent-bar{bottom:16px}}
 
 @media (max-width:719px){
   nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;border-bottom:0;
@@ -238,6 +261,11 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
+<a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">본문으로 바로 가기</a>
+<div class="consent-bar" id="consentBar" role="region" aria-label="글꼴 불러오기 안내" hidden>
+  <p>이 앱은 <b>추적용 쿠키를 쓰지 않아요.</b> 다만 예쁜 글꼴을 Google 글꼴 서버에서 불러오면 기기의 IP 주소가 Google에 전달될 수 있어요. 기본 글꼴을 골라도 모든 기능을 똑같이 쓸 수 있어요. <a href="#privacy">자세히</a></p>
+  <div class="btns"><button type="button" data-font="yes">글꼴 불러오기</button><button type="button" data-font="no">기본 글꼴 쓰기</button></div>
+</div>
 <div class="mist" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <header class="top">
@@ -277,7 +305,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
   </div>
 </nav>
 
-<main><div class="wrap">
+<main id="main" tabindex="-1"><div class="wrap">
 
 <section data-sec="home">
   <div class="glass dday">
@@ -315,6 +343,8 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
 <section data-sec="members" hidden>
   <div><span class="note-en">five notes</span><h2>멤버</h2><p class="lede">멤버마다 향수병 그림을 그렸어요. 색은 각자의 CU 빵 맛에서 따왔어요. 그림을 누르면 갖고 있는 사진으로 바꿀 수 있고, 사진은 이 기기에만 저장돼요.</p></div>
   <div class="member-list" id="memberList"></div>
+  <div class="subhead"><h3>지금 뜨는 유행어</h3></div>
+  <div class="quotes" id="trendQuotes"></div>
   <div class="subhead"><h3>리센느 공통 밈</h3></div>
   <div class="quotes" id="groupQuotes"></div>
   <p class="note">유행어는 기사와 팬 위키를 참고했어요. 팬들이 뽑은 '명대사 월드컵' 결과가 섞여 있어요.</p>
@@ -360,12 +390,50 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
       <li>지도에서 근처 매장별 수량을 확인해요.</li>
     </ol>
     <p class="note">앱 재고와 실제 매대는 차이가 날 수 있어요. 수량이 1~2개면 출발 전에 매장에 전화해 보세요. 도시락은 포켓CU에서 예약 구매도 할 수 있어요.</p>
+    <a class="submit" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership" style="display:grid;place-items:center;text-decoration:none">포켓CU 열기</a>
+    <a class="go" href="#talk" style="margin:0">다른 팬들의 재고 제보 보기 ›</a>
   </div>
 </section>
 
 <section data-sec="talk" hidden>
   <div><span class="note-en">share the scent</span><h2>소통</h2><p class="lede">빵이나 도시락이 있는 매장을 제보하고, 리마인끼리 이야기를 나눠요.</p></div>
-  <p class="glass offline" id="talkMode" hidden>아직 서버에 연결되지 않아서 지금 쓰는 글은 내 기기에만 저장돼요. 연결되면 모두에게 보여요.</p>
+  <p class="glass offline" id="talkMode" hidden>아직 서버에 연결되지 않아서 지금 쓰는 글은 내 기기에만 저장돼요. 연결되면 모두에게 보이고 회원가입도 할 수 있어요.</p>
+
+  <a class="glass pcu press" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership">
+    <span class="pcu-ico" aria-hidden="true">CU</span>
+    <span><b>포켓CU에서 공식 재고 보기</b><span class="meta">제보를 보고, 정확한 수량은 포켓CU 재고조회로 확인해요</span></span>
+    <span class="go" style="margin:0">열기 ›</span>
+  </a>
+
+  <div class="glass stack" id="authBox" hidden>
+    <div id="authOut">
+      <div class="seg" id="authSeg">
+        <button type="button" class="seg-btn" data-auth="login" aria-pressed="true">로그인</button>
+        <button type="button" class="seg-btn" data-auth="signup" aria-pressed="false">회원가입</button>
+      </div>
+      <form class="stack" id="authForm" style="margin-top:12px" autocomplete="on">
+        <label class="fld"><span>이메일</span><input id="aEmail" type="email" autocomplete="email" required placeholder="me@example.com"></label>
+        <label class="fld"><span>비밀번호</span><input id="aPass" type="password" autocomplete="current-password" minlength="6" required placeholder="6자 이상"></label>
+        <label class="fld signup-only"><span>닉네임</span><input id="aNick" maxlength="12" placeholder="리마인"></label>
+        <fieldset class="consent signup-only" id="consent" style="margin:0">
+          <legend class="meta" style="padding:0 4px">약관 동의 (필수만 있어요)</legend>
+          <label class="chk all"><input type="checkbox" id="cAll"> 아래 내용에 모두 동의해요</label>
+          <label class="chk"><input type="checkbox" class="cReq" id="cAge"> [필수] 만 14세 이상이에요</label>
+          <label class="chk"><input type="checkbox" class="cReq" id="cTerms"> [필수] 이용약관에 동의해요 <a href="#terms" target="_self">보기</a></label>
+          <label class="chk"><input type="checkbox" class="cReq" id="cPriv"> [필수] 개인정보 수집·이용(이메일, 닉네임)에 동의해요 <a href="#privacy" target="_self">보기</a></label>
+          <p class="meta" style="margin:0">광고·홍보 메일은 보내지 않아서 따로 동의받지 않아요. 만 14세 미만은 가입할 수 없어요.</p>
+        </fieldset>
+        <button type="submit" class="submit" id="aSubmit">로그인</button>
+        <p class="note" id="authMsg" role="status">글을 쓰려면 로그인해 주세요. 읽기는 누구나 할 수 있어요.</p>
+      </form>
+    </div>
+    <div class="row" id="authIn" hidden>
+      <span><b id="meNick"></b>님, 반가워요</span>
+      <button type="button" class="linkbtn" id="logout">로그아웃</button>
+      <button type="button" class="linkbtn danger" id="withdraw">회원 탈퇴</button>
+    </div>
+    <p class="note" id="withdrawMsg" role="status" hidden></p>
+  </div>
 
   <form class="glass stack" id="postForm" autocomplete="off">
     <div class="seg" role="tablist" aria-label="글 종류">
@@ -376,7 +444,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
       <label class="fld" style="grid-column:1/-1"><span>상품</span><select id="fItem"></select></label>
       <label class="fld"><span>상태</span><select id="fStatus"><option value="have">있어요</option><option value="few">몇 개 안 남음</option><option value="out">품절</option></select></label>
       <label class="fld"><span>동네</span><input id="fArea" maxlength="20" placeholder="예: 수원 영통"></label>
-      <label class="fld"><span>매장 이름</span><input id="fStore" maxlength="30" placeholder="예: CU 영통역점"></label>
+      <label class="fld" style="grid-column:1/-1"><span>매장 이름</span><input id="fStore" maxlength="30" placeholder="예: CU 영통역점"></label>
     </div>
     <label class="fld"><span>한마디</span><textarea id="fText" maxlength="200" rows="2" placeholder="예: 메론빵 3개 남았어요!"></textarea></label>
     <div class="row">
@@ -386,10 +454,17 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
     <p class="note" id="formMsg" role="status">전화번호, 실명, 주소 같은 개인정보는 올리지 마세요. 신고가 3번 쌓인 글은 자동으로 숨겨져요.</p>
   </form>
 
-  <div class="filters" id="talkFilters">
-    <button type="button" class="chip" data-f="all" aria-pressed="true">전체</button>
-    <button type="button" class="chip" data-f="stock" aria-pressed="false">재고 제보</button>
-    <button type="button" class="chip" data-f="chat" aria-pressed="false">수다</button>
+  <div class="glass stack" style="padding:14px">
+    <div class="grid2">
+      <label class="fld"><span>동네·매장 검색</span><input id="qArea" type="search" maxlength="20" placeholder="예: 영통"></label>
+      <label class="fld"><span>상품</span><select id="qItem"><option value="">모든 상품</option></select></label>
+    </div>
+    <div class="filters" id="talkFilters">
+      <button type="button" class="chip" data-f="all" aria-pressed="true">전체</button>
+      <button type="button" class="chip" data-f="stock" aria-pressed="false">재고 제보</button>
+      <button type="button" class="chip" data-f="have" aria-pressed="false">지금 있는 곳만</button>
+      <button type="button" class="chip" data-f="chat" aria-pressed="false">수다</button>
+    </div>
   </div>
   <div class="posts" id="posts"></div>
 </section>
@@ -402,11 +477,88 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:4px;font-size:12px;color:va
   <div class="amb" id="amb"></div>
 </section>
 
+<section data-sec="privacy" hidden class="doc">
+  <div><span class="note-en">privacy</span><h2>개인정보처리방침</h2><p class="meta">시행일 2026년 11월 5일</p></div>
+  <div class="glass stack">
+    <h3>1. 받는 정보와 쓰는 곳</h3>
+    <p>회원가입할 때 <b>이메일, 비밀번호, 닉네임</b>만 받아요. 이메일과 비밀번호는 로그인에, 닉네임은 소통창 글에 표시하는 데만 써요. 이름, 전화번호, 주소, 위치 정보는 받지 않아요. 비밀번호는 암호화되어 저장되고 운영자도 볼 수 없어요.</p>
+    <p>소통창에 쓴 글(상품, 상태, 동네, 매장 이름, 내용, 작성 시각)은 다른 이용자에게 공개돼요. 회원가입을 하지 않아도 앱의 모든 정보를 볼 수 있어요.</p>
+    <h3>2. 보관 기간과 파기</h3>
+    <p>회원 정보는 탈퇴할 때까지 보관하고, 탈퇴하면 계정과 내가 쓴 글을 바로 지워요. 소통창 글은 7일이 지나면 화면에서 보이지 않게 돼요.</p>
+    <h3>3. 맡기는 곳 (처리 위탁·국외 이전)</h3>
+    <ul class="doc-list">
+      <li><b>Supabase Inc.</b> (미국): 회원 정보와 소통창 글 보관. 서버는 AWS 서울 리전(ap-northeast-2)에 있어요. 탈퇴할 때까지 보관해요.</li>
+      <li><b>GitHub Pages</b> (GitHub Inc., 미국): 앱의 최신 정보 파일 제공. 개인정보는 보내지 않아요.</li>
+      <li><b>Google Fonts</b> (Google LLC, 미국): 글꼴을 불러올 때 기기의 IP 주소가 전달될 수 있어요.</li>
+    </ul>
+    <p>이 밖의 다른 곳에 개인정보를 넘기거나 팔지 않아요. 광고나 분석 도구도 쓰지 않아요.</p>
+    <h3>4. 기기에 저장하는 것 (쿠키 대신)</h3>
+    <p>추적용 쿠키는 쓰지 않아요. 로그인 상태, 포토카드 수집 수, 직접 넣은 멤버 사진, 닉네임, 글꼴 선택은 이 기기의 브라우저 저장소에만 저장되고 서버로 보내지 않아요(로그인 정보는 로그인할 때만 서버와 주고받아요). 앱을 지우거나 브라우저 데이터를 지우면 함께 사라져요.</p>
+    <p>Google 글꼴은 처음 열 때 묻고, 허락한 경우에만 불러와요. 언제든 바꿀 수 있어요. <span class="meta" id="fontState"></span></p>
+    <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="chip" data-font="yes">글꼴 불러오기</button><button type="button" class="chip" data-font="no">기본 글꼴 쓰기</button></div>
+    <h3>5. 만 14세 미만</h3>
+    <p>만 14세 미만은 회원가입을 할 수 없어요. 가입할 때 만 14세 이상인지 확인해요. 만 14세 미만이 가입한 사실을 알게 되면 계정을 바로 지워요.</p>
+    <h3>6. 내 권리와 삭제 요청</h3>
+    <p>언제든지 소통 탭의 <b>회원 탈퇴</b> 버튼으로 계정과 글을 직접 지울 수 있어요. 내 정보를 보거나 고치고 싶을 때, 또는 탈퇴가 잘 안 될 때는 아래 문의처로 요청해 주세요. 7일 안에 처리할게요.</p>
+    <h3>7. 이메일</h3>
+    <p>가입 인증과 비밀번호 재설정 메일만 보내요. 광고나 홍보 메일은 보내지 않아요.</p>
+    <h3>8. 개인정보 보호책임자와 문의처</h3>
+    <p>운영자: 리센느 팬북 운영자 (개인, 비영리)<br>문의: <a href="https://github.com/doridori5252-wq/rescene-fanbook/issues" target="_blank" rel="noopener">GitHub 문의 게시판</a><br>개인정보 침해 신고는 개인정보침해신고센터(국번 없이 118, privacy.kisa.or.kr)에도 할 수 있어요.</p>
+  </div>
+</section>
+
+<section data-sec="terms" hidden class="doc">
+  <div><span class="note-en">terms</span><h2>이용약관</h2><p class="meta">시행일 2026년 11월 5일</p></div>
+  <div class="glass stack">
+    <h3>1. 서비스 소개</h3>
+    <p>리센느 팬북은 팬이 만든 <b>비공식·무료</b> 앱이에요. 더뮤즈엔터테인먼트, 리센느, BGF리테일(CU)과 관계가 없어요. 유료 결제, 구독, 광고, 숨겨진 요금이 없어요.</p>
+    <h3>2. 정보의 정확성</h3>
+    <p>앨범, 수상, 출시일 같은 정보는 기사와 공개 자료를 모아 정리했고, 출처는 '운영자·출처' 페이지에 있어요. '참고'라고 적힌 정보는 공식 확인이 안 된 내용이에요. 재고는 팬 제보라서 실제와 다를 수 있으니, 정확한 수량은 포켓CU에서 확인해 주세요.</p>
+    <h3>3. 소통창 이용 규칙</h3>
+    <ul class="doc-list">
+      <li>전화번호, 실명, 주소 같은 개인정보를 올리지 마세요.</li>
+      <li>욕설, 비방, 거짓 제보, 광고, 되팔이(웃돈 판매) 글은 금지예요.</li>
+      <li>멤버와 다른 팬을 존중해 주세요.</li>
+      <li>신고가 3번 쌓인 글은 자동으로 숨겨지고, 규칙을 계속 어기면 계정을 지울 수 있어요.</li>
+    </ul>
+    <h3>4. 글의 권리</h3>
+    <p>내가 쓴 글의 권리는 나에게 있어요. 앱 안에서 다른 이용자에게 보여주는 용도로만 쓰여요. 내 글은 언제든 직접 지울 수 있어요.</p>
+    <h3>5. 서비스 변경과 중단</h3>
+    <p>개인이 운영하는 앱이라 미리 알리고 기능을 바꾸거나 서비스를 멈출 수 있어요. 서비스를 멈추면 회원 정보는 모두 지워요.</p>
+    <h3>6. 문의</h3>
+    <p><a href="https://github.com/doridori5252-wq/rescene-fanbook/issues" target="_blank" rel="noopener">GitHub 문의 게시판</a>으로 알려 주세요.</p>
+  </div>
+</section>
+
+<section data-sec="about" hidden class="doc">
+  <div><span class="note-en">about</span><h2>운영자·출처</h2></div>
+  <div class="glass stack">
+    <h3>운영자 정보</h3>
+    <p>개인 팬이 비영리로 운영해요. 사업자가 아니고, 판매나 수익 활동을 하지 않아요.<br>문의: <a href="https://github.com/doridori5252-wq/rescene-fanbook/issues" target="_blank" rel="noopener">GitHub 문의 게시판</a></p>
+    <h3>정보 출처</h3>
+    <ul class="doc-list">
+      <li>위키백과 'Rescene' 문서 (멤버, 앨범, 수상, 홍보대사)</li>
+      <li>연합뉴스, 아이뉴스24, 헤럴드경제 보도 (CU 빵·도시락)</li>
+      <li>YTN 스타, 다음 뉴스 보도 (거제 야호 밈)</li>
+      <li>나무위키 'RESCENE/여담' (멤버 명대사, 별명)</li>
+      <li>헤럴드경제, 스포츠경향, 더팩트 보도 (야호 밈 확산, BTS 참여)</li>
+    </ul>
+    <h3>이미지와 글꼴</h3>
+    <ul class="doc-list">
+      <li>로고, 앱 아이콘, 멤버 향수병 그림은 이 앱을 위해 새로 그린 그림이에요. 공식 사진이나 로고는 쓰지 않았어요.</li>
+      <li>글꼴: 고운바탕, Noto Sans KR, Cormorant Garamond (모두 SIL Open Font License, 무료 사용 가능)</li>
+      <li>직접 넣은 멤버 사진은 각자 기기에만 저장되고 배포되지 않아요.</li>
+    </ul>
+    <h3>앱 정보</h3>
+    <p>리센느 팬북 1.0 · 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
+  </div>
+</section>
+
 </div></main>
 
 <footer><div class="wrap">
+  <nav class="legal" aria-label="약관과 정보"><a href="#privacy"><b>개인정보처리방침</b></a><a href="#terms">이용약관</a><a href="#about">운영자·출처</a></nav>
   <span>비공식 팬 앱이에요. 소속사, CU와 관계없어요.</span>
-  <span>출처: 위키백과, 연합뉴스·아이뉴스24·YTN 스타 등 보도, 나무위키</span>
 </div></footer>
 
 <script type="application/json" id="seed">__SEED__</script>
@@ -439,6 +591,7 @@ function render(){
   $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"도시 홍보대사","#awards"]]
     .map(([v,l,h])=>`<a class="glass stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
   renderMembers();renderMusic();renderGoods();renderPc();fillItems();
+  $("#trendQuotes").innerHTML=(D.trends||[]).map(([t,s,d])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}${d?` · ${esc(d)}`:""}</span></div>`).join("");
   $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
   $("#wins").innerHTML=D.wins.map(w=>`<div class="glass stack" style="gap:4px"><span class="tag" style="justify-self:start">${esc(w.tag)}</span><h3>${esc(w.song)}</h3><span class="meta">${esc(w.date)} · ${esc(w.show)}</span></div>`).join("");
   const lab={won:"수상",nom:"후보",pend:"발표 전"};
@@ -535,35 +688,90 @@ $("#lcPlus").onclick=()=>bump("lc",1,D.lunchCards||15);$("#lcMinus").onclick=()=
 const TALK={posts:[],filter:"all",kind:"stock",timer:null};
 const STATUS={have:"있어요",few:"몇 개 안 남음",out:"품절"};
 const sb=()=>{const b=D.board||{};return b.url&&b.key?b:null};
-async function sbFetch(path,opt={}){const b=sb();
-  const r=await fetch(b.url.replace(/\/$/,"")+"/rest/v1/"+path,{...opt,headers:{apikey:b.key,Authorization:"Bearer "+b.key,"Content-Type":"application/json",...(opt.headers||{})}});
-  if(!r.ok)throw new Error(String(r.status));const t=await r.text();return t?JSON.parse(t):null}
+let session=ls.get("rescene-session",null);
+async function sbRaw(path,opt={},token){const b=sb(),rest=path.startsWith("/rest/");
+  const schema=rest?{"Accept-Profile":"fanbook","Content-Profile":"fanbook"}:{};
+  const r=await fetch(b.url.replace(/\/$/,"")+path,{...opt,headers:{apikey:b.key,Authorization:"Bearer "+(token||b.key),"Content-Type":"application/json",...schema,...(opt.headers||{})}});
+  const t=await r.text();const j=t?JSON.parse(t):null;if(!r.ok){const e=new Error((j&&(j.msg||j.error_description||j.message))||String(r.status));e.status=r.status;throw e}return j}
+async function token(){if(!session)return null;
+  if(session.expires_at*1000-Date.now()<60000){try{
+    const s=await sbRaw("/auth/v1/token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:session.refresh_token})});
+    setSession(s)}catch(e){setSession(null);return null}}
+  return session&&session.access_token}
+const sbFetch=async(path,opt={})=>sbRaw("/rest/v1/"+path,opt,await token());
+function setSession(s){session=s&&s.access_token?{access_token:s.access_token,refresh_token:s.refresh_token,expires_at:s.expires_at||Math.floor(Date.now()/1000)+(s.expires_in||3600),user:s.user}:null;
+  ls.set("rescene-session",session);renderAuth()}
+const myNick=()=>session&&session.user&&((session.user.user_metadata||{}).nick||"리마인");
+function renderAuth(){const on=!!sb();$("#authBox").hidden=!on;document.body.classList.toggle("authed",!!session);
+  $("#authOut").hidden=!!session;$("#authIn").hidden=!session;if(session)$("#meNick").textContent=myNick()}
+function setAuthMode(m){$("#authBox").dataset.mode=m;document.querySelectorAll("#authSeg .seg-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.auth===m));
+  $("#aSubmit").textContent=m==="signup"?"가입하기":"로그인";$("#aPass").autocomplete=m==="signup"?"new-password":"current-password"}
+$("#authSeg").addEventListener("click",e=>{const b=e.target.closest("[data-auth]");if(b)setAuthMode(b.dataset.auth)});
+$("#authForm").addEventListener("submit",async e=>{e.preventDefault();const msg=$("#authMsg"),mode=$("#authBox").dataset.mode||"login";
+  const email=$("#aEmail").value.trim(),password=$("#aPass").value;$("#aSubmit").disabled=true;
+  try{
+    if(mode==="signup"){const nick=$("#aNick").value.trim().slice(0,12)||"리마인";
+      if(![...document.querySelectorAll(".cReq")].every(c=>c.checked)){msg.textContent="필수 항목 3개에 모두 체크해야 가입할 수 있어요.";$("#aSubmit").disabled=false;return}
+      const r=await sbRaw("/auth/v1/signup",{method:"POST",body:JSON.stringify({email,password,data:{nick,agreed_at:new Date().toISOString(),terms:"2026-11-05",age14:true}})});
+      if(r&&r.access_token){setSession(r);msg.textContent="가입했어요. 바로 글을 쓸 수 있어요."}
+      else{msg.textContent="가입 신청이 됐어요. 메일함에서 인증 링크를 누른 뒤 로그인해 주세요.";setAuthMode("login")}}
+    else{setSession(await sbRaw("/auth/v1/token?grant_type=password",{method:"POST",body:JSON.stringify({email,password})}));msg.textContent=""}
+    $("#aPass").value="";
+  }catch(err){const m=String(err.message||"");
+    msg.textContent=/Invalid login/i.test(m)?"이메일이나 비밀번호가 맞지 않아요. 다시 확인해 주세요."
+      :/not confirmed/i.test(m)?"아직 메일 인증 전이에요. 메일함에서 인증 링크를 눌러 주세요."
+      :/already registered/i.test(m)?"이미 가입된 이메일이에요. 로그인해 주세요."
+      :/Password/i.test(m)?"비밀번호는 6자 이상으로 정해 주세요."
+      :"연결이 잘 안 돼요. 인터넷을 확인하고 다시 눌러 주세요."}
+  $("#aSubmit").disabled=false;loadPosts()});
+$("#logout").addEventListener("click",async()=>{try{await sbRaw("/auth/v1/logout",{method:"POST"},session&&session.access_token)}catch(e){}setSession(null);loadPosts()});
+$("#cAll").addEventListener("change",e=>document.querySelectorAll(".cReq").forEach(c=>c.checked=e.target.checked));
+$("#consent").addEventListener("change",e=>{if(e.target.classList.contains("cReq"))$("#cAll").checked=[...document.querySelectorAll(".cReq")].every(c=>c.checked)});
+// 회원 탈퇴: 계정과 내가 쓴 글을 서버에서 바로 지워요
+$("#withdraw").addEventListener("click",async e=>{const b=e.target,m=$("#withdrawMsg");
+  if(b.dataset.confirm!=="1"){b.dataset.confirm="1";b.textContent="한 번 더 누르면 탈퇴돼요";m.hidden=false;m.textContent="탈퇴하면 계정과 내가 쓴 글이 모두 지워지고 되돌릴 수 없어요.";return}
+  b.disabled=true;
+  try{await sbFetch("rpc/delete_me",{method:"POST",body:"{}"});setSession(null);ls.set("rescene-nick","");m.textContent="탈퇴했어요. 계정과 글을 모두 지웠어요.";await loadPosts()}
+  catch(err){m.textContent="탈퇴하지 못했어요. 다시 로그인한 뒤 해 보거나, 운영자·출처 페이지의 문의처로 삭제를 요청해 주세요."}
+  b.disabled=false;b.dataset.confirm="";b.textContent="회원 탈퇴"});
+// 포켓CU 열기: 안드로이드는 앱을 바로 열고(없으면 스토어), 아이폰은 앱스토어로
+(function(){const ua=navigator.userAgent,play="https://play.google.com/store/apps/details?id=com.bgfcu.membership";
+  const href=/Android/i.test(ua)?"intent://#Intent;package=com.bgfcu.membership;S.browser_fallback_url="+encodeURIComponent(play)+";end"
+    :/iPhone|iPad|iPod/i.test(ua)?"https://apps.apple.com/kr/app/id573144133":play;
+  document.querySelectorAll("[data-pcu]").forEach(a=>{a.href=href;a.target="_blank";a.rel="noopener"})})();
 function ago(iso){const s=(Date.now()-new Date(iso).getTime())/1000;
   if(s<60)return"방금";if(s<3600)return Math.floor(s/60)+"분 전";if(s<86400)return Math.floor(s/3600)+"시간 전";return Math.floor(s/86400)+"일 전"}
 function fillItems(){const opts=[...D.breads.map(b=>[b.name,b.m+" 빵"]),...(D.lunches||[]).map(b=>[b.name,"원이 도시락"])];
-  $("#fItem").innerHTML=opts.map(([n,g])=>`<option value="${esc(n)}">${esc(n)} (${esc(g)})</option>`).join("")}
-async function loadPosts(){
+  $("#fItem").innerHTML=opts.map(([n,g])=>`<option value="${esc(n)}">${esc(n)} (${esc(g)})</option>`).join("");
+  const q=$("#qItem").value;$("#qItem").innerHTML=`<option value="">모든 상품</option>`+opts.map(([n])=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");$("#qItem").value=q}
+async function loadPosts(){renderAuth();
   if(!sb()){$("#talkMode").hidden=false;TALK.posts=ls.get("rescene-posts",[]);renderPosts();return}
   $("#talkMode").hidden=true;
-  try{TALK.posts=await sbFetch("posts?select=id,kind,item,status,area,store,body,nick,created_at&order=created_at.desc&limit=100")||[]}
+  try{TALK.posts=await sbFetch("posts?select=id,kind,item,status,area,store,body,nick,created_at,user_id&order=created_at.desc&limit=200")||[]}
   catch(e){$("#formMsg").textContent="글을 불러오지 못했어요. 인터넷 연결을 확인하고 잠시 뒤에 다시 열어 주세요."}
   renderPosts()}
-function renderPosts(){const hidden=ls.get("rescene-reported",[]);
-  const list=TALK.posts.filter(p=>!hidden.includes(p.id)&&(TALK.filter==="all"||p.kind===TALK.filter));
+function renderPosts(){const hidden=ls.get("rescene-reported",[]),q=$("#qArea").value.trim(),qi=$("#qItem").value,f=TALK.filter;
+  const me=session&&session.user&&session.user.id;
+  const list=TALK.posts.filter(p=>!hidden.includes(p.id)
+    &&(f==="all"||(f==="have"?p.kind==="stock"&&p.status!=="out":p.kind===f))
+    &&(!qi||p.item===qi)
+    &&(!q||[p.area,p.store,p.item,p.body].join(" ").includes(q)));
   $("#posts").innerHTML=list.length?list.map(p=>{const old=p.kind==="stock"&&Date.now()-new Date(p.created_at)>864e5;return`
   <article class="glass post ${old?"old":""}">
     <div class="post-head">${p.kind==="stock"?`<span class="st ${esc(p.status)}">${STATUS[p.status]||""}</span>`:`<span class="tag">수다</span>`}<b>${esc(p.nick||"리마인")}</b><span class="meta">${ago(p.created_at)}${old?" · 오래된 제보":""}</span></div>
     ${p.kind==="stock"?`<div class="where">${esc(p.item||"")}</div><span class="meta">${esc([p.area,p.store].filter(Boolean).join(" · "))}</span>`:""}
     ${p.body?`<p>${esc(p.body)}</p>`:""}
-    <button type="button" class="linkbtn report" data-report="${esc(p.id)}">신고</button>
-  </article>`}).join(""):`<div class="glass empty">아직 글이 없어요. 첫 제보를 남겨 주세요!</div>`}
-function setKind(k){TALK.kind=k;document.body.dataset.kind=k;document.querySelectorAll(".seg-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kind===k))}
-document.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("[data-kind]");if(b)setKind(b.dataset.kind)});
+    ${me&&p.user_id===me?`<button type="button" class="linkbtn report" data-del="${esc(p.id)}">내 글 지우기</button>`:`<button type="button" class="linkbtn report" data-report="${esc(p.id)}">신고</button>`}
+  </article>`}).join(""):`<div class="glass empty">${q||qi?"조건에 맞는 글이 없어요. 검색어를 바꿔 보세요.":"아직 글이 없어요. 첫 제보를 남겨 주세요!"}</div>`}
+$("#qArea").addEventListener("input",renderPosts);$("#qItem").addEventListener("change",renderPosts);
+function setKind(k){TALK.kind=k;document.body.dataset.kind=k;document.querySelectorAll("#postForm .seg-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kind===k))}
+document.querySelector("#postForm .seg").addEventListener("click",e=>{const b=e.target.closest("[data-kind]");if(b)setKind(b.dataset.kind)});
 $("#talkFilters").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;TALK.filter=b.dataset.f;
   document.querySelectorAll("#talkFilters .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));renderPosts()});
 $("#fNick").value=ls.get("rescene-nick","");
 $("#postForm").addEventListener("submit",async e=>{e.preventDefault();const msg=$("#formMsg");
-  const p={kind:TALK.kind,nick:$("#fNick").value.trim().slice(0,12)||"리마인",body:$("#fText").value.trim().slice(0,200)};
+  if(sb()&&!session){msg.textContent="글을 쓰려면 위에서 로그인하거나 회원가입해 주세요.";$("#authBox").scrollIntoView({behavior:"smooth",block:"center"});return}
+  const p={kind:TALK.kind,nick:(session?myNick():$("#fNick").value.trim()).slice(0,12)||"리마인",body:$("#fText").value.trim().slice(0,200)};
   if(p.kind==="stock"){Object.assign(p,{item:$("#fItem").value,status:$("#fStatus").value,area:$("#fArea").value.trim().slice(0,20),store:$("#fStore").value.trim().slice(0,30)});
     if(!p.area&&!p.store){msg.textContent="동네나 매장 이름 중 하나는 적어 주세요.";return}}
   else if(!p.body){msg.textContent="한마디를 적어 주세요.";return}
@@ -576,13 +784,27 @@ $("#postForm").addEventListener("submit",async e=>{e.preventDefault();const msg=
     ls.set("rescene-lastpost",Date.now());$("#fText").value="";msg.textContent=sb()?"올렸어요. 모두에게 보여요.":"올렸어요. 지금은 이 기기에만 저장돼요.";await loadPosts();
   }catch(err){msg.textContent="올리지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요."}
   $("#fSubmit").disabled=false});
-$("#posts").addEventListener("click",async e=>{const b=e.target.closest("[data-report]");if(!b)return;const id=b.dataset.report;
+$("#posts").addEventListener("click",async e=>{
+  const d=e.target.closest("[data-del]");
+  if(d){if(d.dataset.confirm!=="1"){d.dataset.confirm="1";d.textContent="한 번 더 누르면 지워져요";return}
+    try{await sbFetch("posts?id=eq."+encodeURIComponent(d.dataset.del),{method:"DELETE"});await loadPosts()}catch(err){$("#formMsg").textContent="지우지 못했어요. 다시 로그인한 뒤 해 주세요."}return}
+  const b=e.target.closest("[data-report]");if(!b)return;const id=b.dataset.report;
   const h=ls.get("rescene-reported",[]);if(!h.includes(id)){h.push(id);ls.set("rescene-reported",h)}
   if(sb()&&!id.startsWith("l")){try{await sbFetch("rpc/report_post",{method:"POST",body:JSON.stringify({pid:id})})}catch(err){}}
   renderPosts()});
-setKind("stock");fillItems();
+setKind("stock");setAuthMode("login");fillItems();renderAuth();
 
-const tabs=["home","members","music","cu","talk","awards"];
+// 글꼴: 고른 뒤에만 Google 글꼴을 불러와요 (고르기 전과 '기본 글꼴'은 기기 글꼴)
+function loadFonts(){if(document.getElementById("gfont"))return;const l=document.createElement("link");l.id="gfont";l.rel="stylesheet";
+  l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap";document.head.appendChild(l)}
+const fontPref=ls.get("rescene-fonts",null);
+if(fontPref==="yes")loadFonts();else if(fontPref===null)$("#consentBar").hidden=false;
+$("#fontState").textContent=fontPref==="yes"?"지금: Google 글꼴 사용 중":"지금: 기본 글꼴 사용 중";
+document.addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(!b)return;const v=b.dataset.font;ls.set("rescene-fonts",v);
+  $("#consentBar").hidden=true;if(v==="yes")loadFonts();else{const g=document.getElementById("gfont");if(g)g.remove()}
+  const s=$("#fontState");if(s)s.textContent=v==="yes"?"지금: Google 글꼴 사용 중":"지금: 기본 글꼴 사용 중"});
+
+const tabs=["home","members","music","cu","talk","awards","privacy","terms","about"];
 function route(){let h=location.hash.slice(1);if(h==="bread")h="cu";const cur=tabs.includes(h)?h:"home";document.body.dataset.tab=cur;
   document.querySelectorAll("[data-sec]").forEach(s=>s.hidden=s.dataset.sec!==cur);
   document.querySelectorAll("[data-tab]").forEach(a=>a.dataset.tab===cur?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
