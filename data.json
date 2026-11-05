@@ -1,7 +1,7 @@
 {
   "updated": "2026-11-05",
   "debut": "2024-03-26",
-  "board": {"url": "", "key": ""},
+  "board": {"url": "https://vdomvyobzkzdzbzspsvl.supabase.co", "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkb212eW9iemt6ZHpienNwc3ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2NTkyNDYsImV4cCI6MjEwOTIzNTI0Nn0.JQbHHhghCI7_LY3aHhv030r-DKBlB7dz10OPdeW8Wc4"},
   "latest": {
     "label": "미니 4집",
     "name": "Pulse",

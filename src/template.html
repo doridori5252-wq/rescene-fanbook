@@ -712,7 +712,7 @@ $("#authForm").addEventListener("submit",async e=>{e.preventDefault();const msg=
   try{
     if(mode==="signup"){const nick=$("#aNick").value.trim().slice(0,12)||"리마인";
       if(![...document.querySelectorAll(".cReq")].every(c=>c.checked)){msg.textContent="필수 항목 3개에 모두 체크해야 가입할 수 있어요.";$("#aSubmit").disabled=false;return}
-      const r=await sbRaw("/auth/v1/signup",{method:"POST",body:JSON.stringify({email,password,data:{nick,agreed_at:new Date().toISOString(),terms:"2026-11-05",age14:true}})});
+      const r=await sbRaw("/auth/v1/signup?redirect_to="+encodeURIComponent("https://doridori5252-wq.github.io/rescene-fanbook/#talk"),{method:"POST",body:JSON.stringify({email,password,data:{app:"fanbook",nick,agreed_at:new Date().toISOString(),terms:"2026-11-05",age14:true}})});
       if(r&&r.access_token){setSession(r);msg.textContent="가입했어요. 바로 글을 쓸 수 있어요."}
       else{msg.textContent="가입 신청이 됐어요. 메일함에서 인증 링크를 누른 뒤 로그인해 주세요.";setAuthMode("login")}}
     else{setSession(await sbRaw("/auth/v1/token?grant_type=password",{method:"POST",body:JSON.stringify({email,password})}));msg.textContent=""}

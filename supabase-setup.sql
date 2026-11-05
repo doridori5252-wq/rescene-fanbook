@@ -52,7 +52,8 @@ returns void language plpgsql security definer set search_path = public as $$
 begin
   if auth.uid() is null then raise exception 'not logged in'; end if;
   delete from fanbook.posts where user_id = auth.uid();
-  delete from auth.users where id = auth.uid();
+  -- 같은 프로젝트를 쓰는 다른 앱 계정은 지우지 않아요: 팬북에서 가입한 계정만 삭제
+  delete from auth.users where id = auth.uid() and raw_user_meta_data->>'app' = 'fanbook';
 end;
 $$;
 revoke all on function fanbook.delete_me() from public, anon;
