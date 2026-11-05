@@ -1,0 +1,62 @@
+# R: 팬노트 아이폰 앱 빌드 (Codemagic 의 맥에서 실행). 윈도우 PC 에서는 아이폰 앱을 만들 수 없어 이 설정을 쓴다.
+# 순서와 준비물은 app/아이폰_앱스토어_등록.md 참고.
+# 빌드가 끝나면 TestFlight 에 자동으로 올라간다. 심사 제출은 App Store Connect 에서 직접 누른다
+workflows:
+  ios-release:
+    name: "R: 팬노트 iOS (TestFlight)"
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    working_directory: app
+    integrations:
+      # Codemagic › Team settings › Integrations › Developer Portal 에 등록한 API 키 이름 (사주 앱과 같은 키를 써도 됨)
+      app_store_connect: Saju App Store Key
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.psm.rescenefanbook
+      node: 22
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: 준비물 설치
+        script: |
+          npm ci
+          npm install --no-audit --no-fund -D cordova-ios@8.1.1
+          npm install -g cordova@13
+      - name: 빌드 번호 붙이기 (앱스토어는 올릴 때마다 번호가 달라야 함)
+        script: |
+          sed -i '' "s/<widget id=\"com.psm.rescenefanbook\"/<widget ios-CFBundleVersion=\"$BUILD_NUMBER\" id=\"com.psm.rescenefanbook\"/" config.xml
+          grep -o 'ios-CFBundleVersion="[0-9]*"' config.xml
+      - name: 아이폰 플랫폼 추가
+        script: |
+          cordova platform add ios --nosave --no-telemetry
+      - name: 서명 설정
+        script: |
+          xcode-project use-profiles
+      - name: ipa 만들기
+        script: |
+          package_type=$(defaults read ~/export_options.plist method)
+          identity=$(defaults read ~/export_options.plist signingCertificate)
+          team=$(defaults read ~/export_options.plist teamID)
+          profile=$(find "$HOME/Library/MobileDevice/Provisioning Profiles" -name "*.mobileprovision" | head -1)
+          profile_uuid=$(grep UUID -A1 -a "$profile" | grep -io "[-A-F0-9]\{36\}")
+          cat > build.json <<EOF
+          {
+            "ios": {
+              "release": {
+                "codeSignIdentity": "$identity",
+                "developmentTeam": "$team",
+                "packageType": "$package_type",
+                "provisioningProfile": "$profile_uuid"
+              }
+            }
+          }
+          EOF
+          cordova build ios --release --device --buildConfig=build.json
+    artifacts:
+      - app/platforms/ios/build/**/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

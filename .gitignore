@@ -3,3 +3,4 @@ app/platforms/
 app/plugins/
 *.apk
 dist-body.html
+*.aab

@@ -1,26 +1,65 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.psm.rescenefanbook" version="1.0.0"
         xmlns="http://www.w3.org/ns/widgets"
-        xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>리센느 팬북</name>
-    <description>리센느 멤버, 앨범, CU 콜라보 빵, 수상 기록을 모은 비공식 팬 앱</description>
-    <author email="doridori5252@gmail.com">PSM</author>
+        xmlns:cdv="http://cordova.apache.org/ns/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>R: 팬노트</name>
+    <description>리센느 멤버, 앨범, CU 콜라보 빵, 수상 기록을 모은 비공식 팬 앱 (소속사와 관계없음)</description>
+    <author email="doridori5252@gmail.com">온담미디어 (Ondam Media)</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-intent href="intent:*" />
-    <allow-intent href="market:*" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="BackgroundColor" value="#ff191b2a" />
-    <preference name="AndroidWindowSplashScreenBackground" value="#ff191b2a" />
     <preference name="Orientation" value="portrait" />
     <platform name="android">
+        <allow-intent href="intent:*" />
+        <allow-intent href="market:*" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#ff191b2a" />
         <icon src="res/icon.png" />
         <preference name="android-minSdkVersion" value="24" />
-        <preference name="android-targetSdkVersion" value="34" />
-        <preference name="android-compileSdkVersion" value="34" />
-        <preference name="android-buildToolsVersion" value="34.0.0" />
+        <!-- targetSdk 는 cordova-android 15 기본값(36)을 따른다. 구글 플레이 신규 앱 요건 -->
         <preference name="AndroidXEnabled" value="true" />
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+        </config-file>
+        <!-- 안드로이드 16 + targetSdk 36: 예측형 뒤로가기를 끄고 Cordova 뒤로가기 키를 그대로 받는다 -->
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:enableOnBackInvokedCallback="false" />
+        </edit-config>
+    </platform>
+    <!-- 아이폰 (cordova-ios). 윈도우에서는 만들 수 없어 Codemagic 의 맥에서 빌드한다 → 아이폰_앱스토어_등록.md -->
+    <platform name="ios">
+        <preference name="Scheme" value="app" />
+        <preference name="Hostname" value="localhost" />
+        <preference name="target-device" value="handset" />
+        <preference name="BackgroundColor" value="#191b2a" />
+        <preference name="SplashScreenBackgroundColor" value="#191b2a" />
+        <!-- 암호화 기능을 쓰지 않으므로 수출 규정 신고 대상 아님 -->
+        <edit-config target="ITSAppUsesNonExemptEncryption" file="*-Info.plist" mode="merge">
+            <false />
+        </edit-config>
+        <privacy-manifest>
+            <key>NSPrivacyTracking</key>
+            <false/>
+            <key>NSPrivacyTrackingDomains</key>
+            <array/>
+            <key>NSPrivacyCollectedDataTypes</key>
+            <array/>
+            <key>NSPrivacyAccessedAPITypes</key>
+            <array>
+                <dict>
+                    <key>NSPrivacyAccessedAPIType</key>
+                    <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+                    <key>NSPrivacyAccessedAPITypeReasons</key>
+                    <array>
+                        <string>CA92.1</string>
+                    </array>
+                </dict>
+            </array>
+        </privacy-manifest>
+        <!-- 애플 규정: 투명 없는 1024 아이콘 하나면 Xcode 가 나머지 크기를 만든다 -->
+        <icon src="res/ios/icon-1024.png" width="1024" height="1024" />
     </platform>
 </widget>

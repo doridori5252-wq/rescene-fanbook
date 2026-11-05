@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title 리센느팬북 - APK 빌드
+title R팬노트 - APK 빌드
 echo ============================================
-echo   리센느 팬북 - APK 빌드
+echo   R: 팬노트 - APK 빌드
 echo ============================================
 echo.
 
@@ -24,7 +24,7 @@ if not exist "%JAVA_HOME%\bin\java.exe" (
 
 echo [1/3] 안드로이드 플랫폼 준비...
 if not exist "platforms\android" (
-  call npx cordova platform add android@13
+  call npx cordova platform add android@15
   if errorlevel 1 ( echo [실패] 플랫폼 추가 중 오류. & pause & exit /b 1 )
 ) else (
   echo       이미 추가되어 있습니다.
@@ -43,10 +43,10 @@ if errorlevel 1 ( echo. & echo [실패] 빌드 중 오류가 발생했습니다.
 
 set "APK=platforms\android\app\build\outputs\apk\debug\app-debug.apk"
 if exist "%APK%" (
-  copy /Y "%APK%" "%USERPROFILE%\Desktop\리센느팬북.apk" >nul
+  copy /Y "%APK%" "%USERPROFILE%\Desktop\R팬노트.apk" >nul
   echo.
   echo ============================================
-  echo [성공] 바탕화면에 리센느팬북.apk 가 만들어졌습니다!
+  echo [성공] 바탕화면에 R팬노트.apk 가 만들어졌습니다!
   echo ============================================
   echo.
   echo  휴대폰에 USB 로 연결한 뒤 아래 명령으로 바로 설치할 수도 있습니다:
