@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>리센느 팬북</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 영화 슬레이트(장면 번호판) 모티프. 상단 고정 탭 + 한 열 카드 흐름, 넓은 화면에서 2~3열 */
+:root{
+  --bg:#f3f4f8; --surface:#ffffff; --ink:#191b2a; --muted:#5d6177; --line:#dcdfe9;
+  --accent:#d6336c; --accent-soft:#fbe3ec; --mint:#1f9e89; --mint-soft:#dcf3ee;
+  --display:"Do Hyeon","Noto Sans KR",system-ui,sans-serif;
+  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12131c; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2e3142;
+  --accent:#ff6b9a; --accent-soft:#3a1f2b; --mint:#4fd1b8; --mint-soft:#163330; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12131c; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2e3142;
+  --accent:#ff6b9a; --accent-soft:#3a1f2b; --mint:#4fd1b8; --mint-soft:#163330; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+.wrap{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.hero{background:var(--ink);color:var(--bg)}
+header.hero .wrap{padding-block:28px 22px;display:grid;gap:10px}
+.slate{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.06em}
+.slate span{border:1px solid color-mix(in srgb,var(--bg) 35%,transparent);padding:2px 8px;border-radius:3px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,9vw,72px);line-height:1;margin:4px 0 0;letter-spacing:.01em}
+h1 em{font-style:normal;color:var(--accent)}
+.hero p{margin:0;color:color-mix(in srgb,var(--bg) 78%,transparent);max-width:60ch}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;padding:12px 14px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;border-bottom:3px solid transparent}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main .wrap{padding-block:24px 48px;display:grid;gap:28px}
+h2{font-family:var(--display);font-weight:400;font-size:30px;margin:0;text-wrap:balance}
+h3{margin:0;font-size:17px}
+.lede{color:var(--muted);margin:4px 0 0;max-width:65ch}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.tag.mint{background:var(--mint-soft);color:var(--mint)}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.member-head{display:flex;align-items:center;gap:12px}
+.mono-badge{width:48px;height:48px;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-size:24px;background:var(--ink);color:var(--bg);flex:none}
+.photo{position:relative;display:block;aspect-ratio:4/5;max-width:100%;border-radius:8px;overflow:hidden;background:var(--bg);border:1px dashed var(--line);cursor:pointer}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .ph{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:4px;color:var(--muted);font-size:13px;text-align:center;padding:12px}
+.photo .ph b{font-family:var(--display);font-weight:400;font-size:56px;line-height:1;color:var(--line)}
+.photo input{position:absolute;width:1px;height:1px;opacity:0}
+.photo:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.photo-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.linkbtn{font:inherit;font-size:12.5px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline li{position:relative;padding:0 0 18px 20px}
+.timeline li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.timeline li.big::before{background:var(--accent)}
+.timeline .date{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.tracks{font-size:13.5px;color:var(--muted)}
+.tracks b{color:var(--accent);font-weight:700}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+.won{color:var(--mint);font-weight:700} .nom{color:var(--muted)} .pend{color:var(--accent);font-weight:700}
+.bread{display:grid;gap:10px}
+.bread .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.toggle{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.toggle[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--surface)}
+.counter{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.counter button{font:inherit;width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer}
+.big-num{font-family:var(--display);font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.steps{margin:0;padding-left:20px;display:grid;gap:4px}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin:0}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+footer .wrap{padding-block:18px 28px;display:grid;gap:6px}
+footer a{color:var(--muted)}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="slate"><span>SCENE 2024.03.26</span><span>THE MUZE ENT.</span><span>5 MEMBERS</span><span>FANDOM 리마인</span></div>
+    <h1>RE<em>:</em>SCENE<br>리센느 팬북</h1>
+    <p>멤버, 앨범, 수상 기록, CU 콜라보 빵까지 리센느에 대한 정보를 한곳에 모았어요. 팬이 만든 비공식 페이지예요.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="섹션">
+  <div class="wrap">
+    <a href="#members" data-tab="members">멤버</a>
+    <a href="#music" data-tab="music">디스코그래피</a>
+    <a href="#bread" data-tab="bread">CU 리센느빵</a>
+    <a href="#awards" data-tab="awards">수상·활동</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<section id="sec-members" data-sec="members">
+  <h2>멤버</h2>
+  <p class="lede">원이, 리브, 미나미, 메이, 제나. 2024년 3월 26일 싱글 <i>Re:Scene</i>의 「UhUh」로 데뷔했어요. 사진 칸을 누르면 갖고 있는 사진을 넣을 수 있어요.</p>
+  <div class="grid" style="margin-top:14px" id="memberGrid"></div>
+</section>
+
+<section id="sec-music" data-sec="music" hidden>
+  <h2>디스코그래피</h2>
+  <p class="lede">빨간 글씨가 타이틀곡이에요. 종류별로 걸러 볼 수 있어요.</p>
+  <div class="filters" style="margin:14px 0" id="musicFilters"></div>
+  <ol class="timeline" id="musicList"></ol>
+</section>
+
+<section id="sec-bread" data-sec="bread" hidden>
+  <h2>CU × 리센느 빵</h2>
+  <p class="lede">CU 베이커리 브랜드 BAKE 405와 함께 만든 5종이에요. 2026년 9월 17일부터 차례로 나왔고 개당 2,500원이에요. 빵마다 투명 포토카드 27종 중 1장이 랜덤으로 들어 있어요.</p>
+  <div class="grid" style="margin-top:14px" id="breadGrid"></div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>내 포토카드 수집</h3>
+    <div class="counter">
+      <button type="button" id="pcMinus" aria-label="한 장 빼기">−</button>
+      <div><span class="big-num" id="pcNum">0</span><span class="meta"> / 27종</span></div>
+      <button type="button" id="pcPlus" aria-label="한 장 더하기">+</button>
+      <div class="bar" aria-hidden="true"><i id="pcBar"></i></div>
+    </div>
+    <p class="note">체크 표시와 수집 개수는 이 기기의 브라우저에만 저장돼요.</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>재고 찾는 법 (포켓CU)</h3>
+    <ol class="steps">
+      <li>포켓CU 앱을 열어요.</li>
+      <li>아래쪽 <b>재고조회</b> 탭을 눌러요.</li>
+      <li>"리센느"나 빵 이름을 검색해요.</li>
+      <li>지도에서 근처 매장별 수량을 확인해요.</li>
+    </ol>
+    <p class="note">앱 재고와 실제 매대는 차이가 날 수 있어요. 수량이 1~2개면 출발 전에 매장에 전화해 보세요. 포토카드는 따로 팔지 않고, 겉포장으로는 어떤 카드인지 알 수 없어요.</p>
+  </div>
+</section>
+
+<section id="sec-awards" data-sec="awards" hidden>
+  <h2>수상·활동</h2>
+  <p class="lede">2026년 여름 원이의 유튜브 채널을 계기로 「Love Attack」이 역주행하며 첫 음악방송 1위를 했어요.</p>
+  <h3 style="margin-top:16px">음악방송 1위</h3>
+  <div class="grid" style="margin-top:8px">
+    <div class="card"><span class="tag">첫 1위</span><h3>Pretty Girl</h3><span class="meta">2026.07.14 · 더쇼</span></div>
+    <div class="card"><span class="tag">역주행</span><h3>Love Attack</h3><span class="meta">2026.07.26 · 인기가요</span></div>
+  </div>
+  <h3 style="margin-top:20px">시상식</h3>
+  <div class="tablebox" style="margin-top:8px"><table>
+    <thead><tr><th>연도</th><th>시상식</th><th>부문</th><th>결과</th></tr></thead>
+    <tbody id="awardRows"></tbody>
+  </table></div>
+  <h3 style="margin-top:20px">홍보대사</h3>
+  <div class="grid" style="margin-top:8px" id="ambGrid"></div>
+  <h3 style="margin-top:20px">예능·콘텐츠</h3>
+  <div class="card" style="margin-top:8px"><h3>Re:Creation</h3><span class="meta">2025.06.05 첫 방송 · 주간 웹예능</span></div>
+</section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>비공식 팬 페이지예요. 소속사 더뮤즈엔터테인먼트, CU와 관계없어요.</span>
+    <span>정보 기준일 2026년 11월 5일. 출처: 위키백과 Rescene 문서, 아이뉴스24·헤럴드경제 등 보도.</span>
+  </div>
+</footer>
+
+<script>
+const members=[
+  {n:"원이",e:"WONI",role:"리더",info:[["생일","2004.05.25 (참고)"]],note:"개인 유튜브 채널로 「Love Attack」 역주행을 이끌었어요."},
+  {n:"리브",e:"LIV",role:"",info:[],note:"CU 빵: 초코 호떡"},
+  {n:"미나미",e:"MINAMI",role:"일본 출신",info:[],note:"MBC 「방과후 설렘」 파이널 진출. CU 빵: 메론빵"},
+  {n:"메이",e:"MAY",role:"",info:[],note:"CU 빵: 시나몬 롤"},
+  {n:"제나",e:"ZENA",role:"막내",info:[["생일","2008.11.27 (참고)"]],note:"CU 빵: 딸기 샌드"}
+];
+const music=[
+  {d:"2024.02.29",t:"선공개",k:"single",name:"YoYo",tr:[]},
+  {d:"2024.03.26",t:"싱글 앨범",k:"album",name:"Re:Scene · 데뷔",tr:["YoYo","*UhUh"],big:1},
+  {d:"2024",t:"콜라보",k:"other",name:"Counting Star (The Magic Star × RESCENE)",tr:[]},
+  {d:"2024.08.27",t:"미니 1집",k:"album",name:"Scenedrome",tr:["Lucky You","*Love Attack","New World","Pinball"],big:1},
+  {d:"2025.02.05",t:"미니 2집",k:"album",name:"Glow Up",tr:["Crash","*Glow Up","Going On","In My Lotion","Cotton Candy"],big:1},
+  {d:"2025",t:"OST",k:"other",name:"BamBamBam · 「공작의 첫날밤」",tr:[]},
+  {d:"2025",t:"OST",k:"other",name:"Love Frequency · 「너를 만나기 위해」",tr:[]},
+  {d:"2025.07.02",t:"싱글 앨범",k:"album",name:"Dearest",tr:["*Deja Vu","Mood"]},
+  {d:"2025.11.25",t:"미니 3집",k:"album",name:"Lip Bomb",tr:["Heart Drop (11.06 선공개)","Bloom","Love Echo","Hello XO","MVP"],big:1},
+  {d:"2026.04.08",t:"디지털 싱글",k:"single",name:"Runaway",tr:[]},
+  {d:"2026.07.08",t:"디지털 싱글",k:"single",name:"Pretty Girl (카라 리메이크)",tr:[]},
+  {d:"2026",t:"스페셜 싱글",k:"single",name:"Busy Boy",tr:[]},
+  {d:"2026",t:"참여곡",k:"other",name:"Higher · Music from The Specials",tr:[]},
+  {d:"2026.11.03",t:"미니 4집 · 최신",k:"album",name:"Pulse",tr:["Finest Thing","*With","Inside Out","Meme","Dragon"],big:1}
+];
+const breads=[
+  {id:"corn",m:"원이",name:"옥수수 크림빵",d:"9월 17일",desc:"옥수수 쿠키 토핑에 커스터드와 크림"},
+  {id:"cinna",m:"메이",name:"시나몬 롤",d:"9월 22일",desc:"커피와 잘 어울리는 계피 향"},
+  {id:"straw",m:"제나",name:"딸기 샌드",d:"9월 22일",desc:"상큼한 딸기잼과 부드러운 크림"},
+  {id:"melon",m:"미나미",name:"메론빵",d:"9월 29일",desc:"미나미가 고향에서 즐겨 먹던 맛"},
+  {id:"choco",m:"리브",name:"초코 호떡",d:"9월 30일",desc:"쫀득한 빵 속 달콤한 초코"}
+];
+const awards=[
+  ["2024","Asia Artist Awards","인기상 걸그룹","nom"],
+  ["2024","Asia Model Awards","라이징스타상 (가수)","won"],
+  ["2025","한터뮤직어워즈","신인상 (여자)","nom"],
+  ["2025","뉴시스 K-엑스포 문화대상","한류특별상","won"],
+  ["2026","더팩트 뮤직 어워즈","올해의 아티스트 (본상), 투데이 초이스","won"],
+  ["2026","대한민국 퍼스트브랜드 대상","라이징 여자 아이돌","won"],
+  ["2026","K-World Dream Awards","베스트 비주얼 콘텐츠, 베스트 팬덤","won"],
+  ["2026","SPOTV K-Pop Awards","글로벌 커넥트, SPOTV 앰버서더","won"],
+  ["2026","MAMA Awards","Top 10 팬스 초이스 (여자)","pend"],
+  ["2026","멜론뮤직어워드","Top 10 글로벌 아티스트","pend"]
+];
+const amb=[["거제","2026.05.23"],["수원","2026.06.25"],["경주","2026.06.29"],["고양","2026.07.03"]];
+const label={won:"수상",nom:"후보",pend:"발표 전"};
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let store={};
+try{store=JSON.parse(localStorage.getItem("rescene-fanbook")||"{}")}catch(e){store={}}
+function save(){try{localStorage.setItem("rescene-fanbook",JSON.stringify(store))}catch(e){}}
+
+let photos={};
+try{photos=JSON.parse(localStorage.getItem("rescene-photos")||"{}")}catch(e){photos={}}
+function savePhotos(){try{localStorage.setItem("rescene-photos",JSON.stringify(photos));return true}catch(e){return false}}
+function renderMembers(){
+$("#memberGrid").innerHTML=members.map((m,i)=>`
+  <article class="card">
+    <label class="photo" for="ph-${m.e}">
+      ${photos[m.e]?`<img src="${photos[m.e]}" alt="${m.n} 사진">`:`<span class="ph"><b>${m.n[0]}</b>눌러서 ${m.n} 사진 넣기</span>`}
+      <input type="file" accept="image/*" id="ph-${m.e}" data-ph="${m.e}">
+    </label>
+    ${photos[m.e]?`<div class="photo-actions"><span class="meta">이 기기에만 저장됨</span><button type="button" class="linkbtn" data-rm="${m.e}">사진 지우기</button></div>`:""}
+    <div class="member-head"><div class="mono-badge">${m.n[0]}</div>
+      <div><h3>${m.n} <span class="meta">${m.e}</span></h3>${m.role?`<span class="tag">${m.role}</span>`:""}</div></div>
+    ${m.info.length?`<dl class="kv">${m.info.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`:""}
+    <p class="tracks" style="margin:0">${m.note}</p>
+  </article>`).join("");
+}
+renderMembers();
+$("#memberGrid").addEventListener("change",e=>{
+  const inp=e.target.closest("[data-ph]");if(!inp||!inp.files[0])return;
+  const key=inp.dataset.ph,url=URL.createObjectURL(inp.files[0]),img=new Image();
+  img.onload=()=>{
+    const s=Math.min(1,600/Math.max(img.width,img.height)),c=document.createElement("canvas");
+    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);
+    c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+    photos[key]=c.toDataURL("image/jpeg",0.82);
+    if(!savePhotos()){delete photos[key];savePhotos()}
+    renderMembers();
+  };
+  img.src=url;
+});
+$("#memberGrid").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];savePhotos();renderMembers()}});
+
+const kinds=[["all","전체"],["album","앨범"],["single","싱글"],["other","OST·콜라보"]];
+let kind="all";
+function renderMusic(){
+  $("#musicFilters").innerHTML=kinds.map(([k,l])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${k===kind}">${l}</button>`).join("");
+  $("#musicList").innerHTML=music.filter(x=>kind==="all"||x.k===kind).slice().reverse().map(x=>`
+    <li class="${x.big?"big":""}"><span class="date">${x.d} · ${x.t}</span><h3>${esc(x.name)}</h3>
+    ${x.tr.length?`<div class="tracks">${x.tr.map(t=>t[0]==="*"?`<b>${esc(t.slice(1))}</b>`:esc(t)).join(" · ")}</div>`:""}</li>`).join("");
+}
+$("#musicFilters").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b){kind=b.dataset.k;renderMusic()}});
+renderMusic();
+
+function renderBread(){
+  $("#breadGrid").innerHTML=breads.map(b=>{const on=!!(store.ate&&store.ate[b.id]);return`
+  <article class="card bread">
+    <div class="row"><span class="tag mint">${b.m}</span><span class="meta">${b.d} 출시</span></div>
+    <h3>${b.name}</h3><p class="tracks" style="margin:0">${b.desc}</p>
+    <div class="row"><span class="meta">2,500원</span>
+    <button type="button" class="toggle" data-b="${b.id}" aria-pressed="${on}">${on?"✓ 먹어봤어요":"먹어봤어요"}</button></div>
+  </article>`}).join("");
+}
+$("#breadGrid").addEventListener("click",e=>{const t=e.target.closest("[data-b]");if(!t)return;store.ate=store.ate||{};store.ate[t.dataset.b]=!store.ate[t.dataset.b];save();renderBread()});
+renderBread();
+
+function renderPc(){const n=store.pc||0;$("#pcNum").textContent=n;$("#pcBar").style.width=(n/27*100)+"%"}
+$("#pcPlus").onclick=()=>{store.pc=Math.min(27,(store.pc||0)+1);save();renderPc()};
+$("#pcMinus").onclick=()=>{store.pc=Math.max(0,(store.pc||0)-1);save();renderPc()};
+renderPc();
+
+$("#awardRows").innerHTML=awards.map(([y,a,c,r])=>`<tr><td class="meta">${y}</td><td>${a}</td><td>${c}</td><td class="${r}">${label[r]}</td></tr>`).join("");
+$("#ambGrid").innerHTML=amb.map(([c,d])=>`<div class="card"><h3>${c}시 홍보대사</h3><span class="meta">${d} 위촉</span></div>`).join("");
+
+const tabs=["members","music","bread","awards"];
+function route(){
+  const h=location.hash.slice(1);const cur=tabs.includes(h)?h:"members";
+  document.querySelectorAll("[data-sec]").forEach(s=>s.hidden=s.dataset.sec!==cur);
+  document.querySelectorAll("[data-tab]").forEach(a=>a.dataset.tab===cur?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+}
+addEventListener("hashchange",()=>{route();scrollTo({top:0})});
+route();
+</script>
+
+</body>
+</html>

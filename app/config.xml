@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.psm.rescenefanbook" version="1.0.0"
+        xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>리센느 팬북</name>
+    <description>리센느 멤버, 앨범, CU 콜라보 빵, 수상 기록을 모은 비공식 팬 앱</description>
+    <author email="doridori5252@gmail.com">PSM</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="BackgroundColor" value="#ff191b2a" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#ff191b2a" />
+    <preference name="Orientation" value="portrait" />
+    <platform name="android">
+        <preference name="android-minSdkVersion" value="24" />
+        <preference name="android-targetSdkVersion" value="34" />
+        <preference name="android-compileSdkVersion" value="34" />
+        <preference name="android-buildToolsVersion" value="34.0.0" />
+        <preference name="AndroidXEnabled" value="true" />
+    </platform>
+</widget>

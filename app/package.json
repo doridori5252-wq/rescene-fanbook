@@ -1,0 +1,8 @@
+{
+  "name": "rescene-fanbook",
+  "displayName": "리센느 팬북",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": { "cordova": "^12.0.0", "cordova-android": "^13.0.0" },
+  "cordova": { "platforms": ["android"], "plugins": {} }
+}
