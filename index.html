@@ -92,7 +92,9 @@ section{display:grid;gap:14px}
   background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0)),var(--rose-soft)}
 .dnum{font-family:var(--serif);font-weight:700;font-size:46px;line-height:1.05;color:var(--rose);font-variant-numeric:tabular-nums}
 .today{display:grid;gap:6px;text-decoration:none;color:var(--ink);text-align:center;justify-items:center;padding-block:22px}
-.today b{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.35}
+.today{min-width:0}
+.today b{font-family:var(--serif);font-weight:700;font-size:clamp(17px,5vw,22px);line-height:1.45;max-width:100%;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
+.today b.long{font-size:clamp(15px,4.2vw,18px)}
 .feature{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:center;padding:14px;border-radius:var(--radius);background:var(--plum);color:var(--on-plum);text-decoration:none;box-shadow:var(--shadow)}
 .feature .eyebrow{color:var(--on-plum-muted)}
 .feature h3{font-family:var(--serif);font-weight:700;font-size:21px;margin:2px 0}
@@ -683,7 +685,7 @@ function render(){
   $("#news").innerHTML=D.news.slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span><span>${esc(x.text)}</span></li>`).join("");
   $("#updated").textContent=D.updated.replace(/-/g,".")+" 업데이트";
   const all=D.members.flatMap(m=>m.q.map(q=>[q[0],m.n])),d=new Date(),i=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%all.length;
-  $("#todayQ").textContent="“"+all[i][0]+"”";$("#todayWho").textContent=all[i][1];
+  $("#todayQ").textContent="“"+all[i][0]+"”";$("#todayQ").classList.toggle("long",all[i][0].length>24);$("#todayWho").textContent=all[i][1];
   const minis=D.music.filter(x=>/미니/.test(x.t)).length;
   $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"도시 홍보대사","#awards"]]
     .map(([v,l,h])=>`<a class="glass stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
