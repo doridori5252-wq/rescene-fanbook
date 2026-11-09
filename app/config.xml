@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.psm.rescenefanbook" version="1.0.0"
+<widget id="com.psm.rescenefanbook" version="1.0.2"
         xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
@@ -11,12 +11,17 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="BackgroundColor" value="#ff191b2a" />
+    <preference name="BackgroundColor" value="#fffcf6f8" />
     <preference name="Orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="intent:*" />
         <allow-intent href="market:*" />
-        <preference name="AndroidWindowSplashScreenBackground" value="#ff191b2a" />
+        <!-- 시작 화면에 마크(아이콘)가 안 보이게: 투명 그림 + 앱 첫 화면과 같은 배경색, 바로 닫기 -->
+        <preference name="AndroidWindowSplashScreenBackground" value="#fcf6f8" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/splash-blank.png" />
+        <preference name="AutoHideSplashScreen" value="true" />
+        <preference name="SplashScreenDelay" value="0" />
+        <preference name="FadeSplashScreenDuration" value="0" />
         <icon src="res/icon.png" />
         <preference name="android-minSdkVersion" value="24" />
         <!-- targetSdk 는 cordova-android 15 기본값(36)을 따른다. 구글 플레이 신규 앱 요건 -->
@@ -34,8 +39,8 @@
         <preference name="Scheme" value="app" />
         <preference name="Hostname" value="localhost" />
         <preference name="target-device" value="handset" />
-        <preference name="BackgroundColor" value="#191b2a" />
-        <preference name="SplashScreenBackgroundColor" value="#191b2a" />
+        <preference name="BackgroundColor" value="#fcf6f8" />
+        <preference name="SplashScreenBackgroundColor" value="#fcf6f8" />
         <!-- 암호화 기능을 쓰지 않으므로 수출 규정 신고 대상 아님 -->
         <edit-config target="ITSAppUsesNonExemptEncryption" file="*-Info.plist" mode="merge">
             <false />

@@ -14,12 +14,8 @@
   --shadow:0 10px 30px rgba(120,60,100,.10);
   --radius:20px;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#17121a; --ink:#f3e8ef; --muted:#b9a6b5; --line:rgba(255,220,240,.12);
-  --glass:rgba(40,30,44,.58); --glass-strong:rgba(48,36,52,.82); --glass-edge:rgba(255,220,240,.12);
-  --rose:#ff8fb3; --rose-soft:rgba(255,143,179,.16); --sage:#8fd6c2; --sage-soft:rgba(143,214,194,.14);
-  --mist1:#5a2a44; --mist2:#5a3a2c; --mist3:#3c2f5c; --mist4:#24443c;
-  --plum:#2a1f2c; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark}}
+/* 폰이 다크 모드여도 늘 밝은 화면으로 (2026-11-08 요청) */
+:root{color-scheme:light}
 :root[data-theme="dark"]{
   --bg:#17121a; --ink:#f3e8ef; --muted:#b9a6b5; --line:rgba(255,220,240,.12);
   --glass:rgba(40,30,44,.58); --glass-strong:rgba(48,36,52,.82); --glass-edge:rgba(255,220,240,.12);
