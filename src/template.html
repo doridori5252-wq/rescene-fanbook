@@ -1,18 +1,21 @@
 <title>R: 팬노트</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: 향수 광고처럼 장미·복숭아·라일락 안개가 깔린 배경 위에 반투명 유리 카드가 한 열로 흐름. 폰은 하단 유리 탭바 */
+/* 1.1 새 디자인 「조향 아틀리에」 (2026-11-17): 진주빛 바닥 위 흰 라벨 카드, 잉크색 글자.
+   기억에 남는 한 가지 = 첫 화면 선반 위 다섯 향수병과, 멤버 다섯 색을 이은 '시향지 띠'. 나머지는 차분하게. */
 :root{
-  --bg:#fcf6f8; --ink:#3b2b3a; --muted:#66545f; --line:rgba(124,92,118,.16);
-  --glass:rgba(255,255,255,.62); --glass-strong:rgba(255,255,255,.82); --glass-edge:rgba(255,255,255,.9);
-  --rose:#c2416e; --rose-soft:rgba(240,170,195,.32); --sage:#4f8f7f; --sage-soft:rgba(160,215,200,.35);
-  --mist1:#f6bfd2; --mist2:#ffd8c2; --mist3:#d9cdf3; --mist4:#c9eadf;
-  --plum:#3b2b3a; --on-plum:#fbeff4; --on-plum-muted:#d7c2d0;
+  --bg:#f4f1f6; --ink:#2a2236; --muted:#665d72; --line:rgba(42,34,54,.12);
+  --glass:#ffffff; --glass-strong:#ffffff; --glass-edge:rgba(42,34,54,.10);
+  --rose:#b8285e; --rose-soft:rgba(200,51,106,.10); --sage:#2f7a68; --sage-soft:rgba(47,122,104,.12);
+  --mist1:#f7d3df; --mist2:#ffe2cf; --mist3:#e4dcf5; --mist4:#d6efe5;
+  --plum:#2a2236; --on-plum:#f7f2fa; --on-plum-muted:#c9bfd4;
+  --c-woni:#f3c35e; --c-liv:#9a5f78; --c-minami:#7fc79a; --c-may:#d28a55; --c-zena:#ec6f98;
+  --strip:linear-gradient(90deg,var(--c-woni) 0 20%,var(--c-liv) 20% 40%,var(--c-minami) 40% 60%,var(--c-may) 60% 80%,var(--c-zena) 80%);
   --serif:"Gowun Batang","Noto Serif KR",serif;
   --latin:"Cormorant Garamond","Gowun Batang",serif;
   --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --shadow:0 10px 30px rgba(120,60,100,.10);
-  --radius:20px;
+  --shadow:0 1px 2px rgba(42,34,54,.05),0 6px 18px rgba(42,34,54,.06);
+  --radius:18px;
 }
 /* 폰이 다크 모드여도 늘 밝은 화면으로 (2026-11-08 요청) */
 :root{color-scheme:light}
@@ -26,13 +29,9 @@
 html{-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;word-break:keep-all;-webkit-tap-highlight-color:transparent;min-height:100%}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.mist{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--bg)}
-.mist i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75}
-.mist i:nth-child(1){width:70vmax;height:70vmax;left:-25vmax;top:-30vmax;background:var(--mist1);animation:drift 26s ease-in-out infinite alternate}
-.mist i:nth-child(2){width:55vmax;height:55vmax;right:-25vmax;top:10vh;background:var(--mist3);animation:drift 32s ease-in-out infinite alternate-reverse}
-.mist i:nth-child(3){width:50vmax;height:50vmax;left:-10vmax;bottom:-25vmax;background:var(--mist2);animation:drift 30s ease-in-out infinite alternate}
-.mist i:nth-child(4){width:35vmax;height:35vmax;right:-5vmax;bottom:5vh;background:var(--mist4);opacity:.55;animation:drift 36s ease-in-out infinite alternate-reverse}
-@keyframes drift{to{transform:translate(4vmax,3vmax) scale(1.08)}}
+/* 시향지 띠: 화면 맨 위에 다섯 멤버 색 */
+.mist{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:4px;z-index:11;background:var(--strip);pointer-events:none}
+.mist i{display:none}
 .wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 a{color:var(--rose)}
 h2{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.3;margin:0;text-wrap:balance}
@@ -43,8 +42,7 @@ h3{margin:0;font-size:16px;line-height:1.45}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
 .tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--rose-soft);color:var(--rose);white-space:nowrap}
 .tag.sage{background:var(--sage-soft);color:var(--sage)}
-.glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--radius);box-shadow:var(--shadow);
-  -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);padding:18px;min-width:0}
+.glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;min-width:0}
 .stack{display:grid;gap:12px}
 .note{font-size:12.5px;color:var(--muted);margin:0}
 :focus-visible{outline:2px solid var(--rose);outline-offset:2px}
@@ -60,6 +58,14 @@ header.top .wrap{padding-block:14px 4px}
 .hero-big{display:none;gap:8px;padding:26px 0 8px;text-align:center;justify-items:center}
 body[data-tab="home"] .hero-big{display:grid}
 .hero-big .note-en{font-size:16px}
+/* 선반 위 다섯 향수병 (누르면 그 멤버로) */
+.shelf{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;gap:4px;width:min(100%,420px);margin:2px auto 0;padding:0 6px;
+  border-bottom:3px solid var(--ink);position:relative}
+.shelf::after{content:"";position:absolute;left:6%;right:6%;bottom:-9px;height:6px;border-radius:0 0 6px 6px;background:rgba(42,34,54,.10)}
+.shelf a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:var(--ink);font-size:12px;font-weight:700;padding-bottom:4px}
+.shelf a .bottle{width:100%;max-width:64px;height:auto;transition:transform .2s}
+.shelf a:nth-child(2) .bottle,.shelf a:nth-child(4) .bottle{max-width:56px}
+.shelf a:active .bottle{transform:translateY(-4px)}
 .hero-big h1{font-family:var(--latin);font-style:italic;font-weight:600;font-size:64px;line-height:.95;margin:0;letter-spacing:.01em}
 .hero-big h1 em{color:var(--rose)}
 .hero-big p{margin:0;color:var(--muted);font-size:14px;max-width:34ch}
@@ -224,6 +230,36 @@ body.authed .nick{visibility:hidden}
 .amb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .amb h3{font-family:var(--serif);font-size:18px}
 
+/* ---- 1.1 디자인 다듬기 ---- */
+.dday{background:var(--glass);position:relative;overflow:hidden;padding-left:24px}
+.dday::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--c-woni) 0 20%,var(--c-liv) 20% 40%,var(--c-minami) 40% 60%,var(--c-may) 60% 80%,var(--c-zena) 80%)}
+.today{border-style:dashed;border-color:rgba(42,34,54,.22)}
+.today .note-en{color:var(--muted)}
+.today small{font-size:11.5px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
+.chip{-webkit-backdrop-filter:none;backdrop-filter:none}
+.submit{background:var(--ink)}
+.toggle[aria-pressed="true"]{background:var(--sage);border-color:var(--sage)}
+.seg-btn[aria-pressed="true"]{color:var(--ink);box-shadow:0 1px 4px rgba(42,34,54,.14)}
+h2{letter-spacing:-.01em}
+section > div:first-child h2{display:flex;align-items:center;gap:12px}
+section > div:first-child h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.avatar,.photo{box-shadow:inset 0 0 0 1px var(--glass-edge)}
+.bubble{background:var(--bg);border-color:transparent}
+.consent-bar{-webkit-backdrop-filter:none;backdrop-filter:none}
+.photo .add{position:absolute;right:6px;bottom:6px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:17px;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.m-actions{display:flex;flex-wrap:wrap;gap:6px 14px}
+
+/* 수상: 해마다 묶고 최신 해만 펼침 */
+.year-h{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px;font-family:var(--serif);font-weight:700;font-size:17px}
+.year-h:first-child{margin-top:0}
+.year-h .meta{font-family:var(--body);font-weight:400}
+details.older{border-top:1px solid var(--line);margin-top:8px;padding-top:6px}
+details.older summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(--muted);padding:8px 0;list-style-position:inside}
+.res.pend{background:rgba(243,195,94,.22);color:#8a5a00}
+.src{font-size:12px;color:var(--muted);margin:10px 0 0}
+
+/* 배경화면 만들기 */
 footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:var(--muted);text-align:center}
 .legal{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
 .legal a{color:var(--ink);font-size:12.5px;padding:6px 2px}
@@ -245,18 +281,112 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
 @media (min-width:721px){.consent-bar{bottom:16px}}
 
 @media (max-width:719px){
-  nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;border-bottom:0;
-    padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 24px rgba(120,60,100,.08)}
-  nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:0;overflow:visible;padding-left:max(4px,env(safe-area-inset-left,0px));padding-right:max(4px,env(safe-area-inset-right,0px))}
-  nav.tabs a{flex-direction:column;justify-content:center;gap:2px;min-height:58px;padding:6px 0;font-size:10.5px;border-bottom:0;border-top:2px solid transparent;white-space:nowrap}
-  nav.tabs a[aria-current="page"]{border-top-color:var(--rose)}
+  /* 폰: 잉크색 떠 있는 아래 메뉴 */
+  nav.tabs{position:fixed;top:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:10px;right:10px;margin:0;border:0;border-radius:22px;
+    background:var(--ink);box-shadow:0 12px 30px rgba(42,34,54,.35);overflow:hidden}
+  nav.tabs::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--strip)}
+  nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:0;overflow:visible;padding:0 4px}
+  nav.tabs a{flex-direction:column;justify-content:center;gap:2px;min-height:60px;padding:6px 0;font-size:10.5px;border-bottom:0;white-space:nowrap;color:#b9aec6}
+  nav.tabs a[aria-current="page"]{color:#fff}
+  nav.tabs a[aria-current="page"] svg{background:rgba(255,255,255,.14);border-radius:10px;padding:3px;width:32px;height:28px}
   nav.tabs svg{width:23px;height:23px}
+  .consent-bar{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
   main .wrap{padding-block:14px 24px}
-  footer .wrap{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  footer .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   .member-list,.goods{grid-template-columns:1fr}
   .hero-big h1{font-size:54px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ==== 1.1 「포토북」 디자인 (2026-11-17) ====
+   흰 종이 위에 사진이 먼저 보이게. 글꼴은 고딕 하나, 강조색은 분홍 하나.
+   그림자·그러데이션·색 띠·기울임 영문 장식은 쓰지 않는다. */
+:root{
+  --bg:#ffffff; --ink:#141414; --muted:#6e6e6e; --line:#ececec;
+  --glass:#f5f4f2; --glass-strong:#ffffff; --glass-edge:transparent;
+  --rose:#e2336b; --rose-soft:#ffe9f0; --sage:#1f7a5c; --sage-soft:#e3f4ec;
+  --plum:#141414; --on-plum:#ffffff; --on-plum-muted:#b5b5b5;
+  --serif:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --latin:var(--serif); --body:var(--serif);
+  --shadow:none; --radius:14px;
+}
+body{font-size:15px;letter-spacing:-.01em}
+.mist,.note-en,.apptitle span{display:none}
+h2{font-size:28px;font-weight:800;letter-spacing:-.03em}
+section > div:first-child h2{display:block}
+section > div:first-child h2::after{display:none}
+.glass{box-shadow:none;border:0}
+.apptitle b{font-size:17px;font-weight:800}
+.dpill{background:var(--ink);color:#fff;border:0;box-shadow:none;font-weight:700}
+
+/* 첫 화면: 멤버 사진 줄 (옆으로 넘김) */
+.hero-big{text-align:left;justify-items:stretch;padding:18px 0 4px;gap:10px}
+.hero-big h1{font-family:var(--body);font-style:normal;font-weight:800;font-size:30px;letter-spacing:-.03em;line-height:1.2}
+.hero-big p{max-width:none}
+.chips{justify-content:flex-start}
+.chips span{background:var(--glass);border:0;font-size:12.5px}
+.photo-row{display:grid;grid-auto-flow:column;grid-auto-columns:min(40vw,168px);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  margin:0 -16px;padding:2px 16px 6px;scroll-padding-inline:16px;scrollbar-width:none}
+.photo-row::-webkit-scrollbar{display:none}
+.pcard{display:grid;gap:2px;scroll-snap-align:start;text-decoration:none;color:var(--ink)}
+.pcard img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;border-radius:12px;background:var(--glass);display:block;margin-bottom:6px}
+.pcard b{font-size:15px;font-weight:800}
+.pcard span{font-size:12px;color:var(--muted)}
+
+/* 홈 카드 */
+.dday{background:var(--ink);color:#fff;padding-left:18px}
+.dday::before{display:none}
+.dday .meta{color:#bdbdbd}
+.dnum{color:#fff;font-weight:800;letter-spacing:-.03em}
+.today{border:0;background:var(--glass)}
+.today b{font-weight:700}
+.feature{background:var(--glass);color:var(--ink);box-shadow:none}
+.feature .eyebrow,.feature p{color:var(--muted)}
+.feature p b,.feature .go{color:var(--rose)}
+.feature h3{font-weight:800}
+.cover{background:var(--ink)}
+.cover i{display:none}
+.cover span{font-style:normal;font-weight:800;font-size:18px}
+.sec-head h3,.subhead h3{font-weight:800}
+.avatar{background:var(--glass)!important;box-shadow:none}
+.avatar img{object-position:50% 18%}
+.stat b{color:var(--ink);font-weight:800}
+.bar i{background:var(--rose)}
+.bubble{background:var(--glass)}
+
+/* 멤버 */
+.m-top{grid-template-columns:116px minmax(0,1fr)}
+.photo{width:116px;aspect-ratio:3/4;border-radius:12px;background:var(--glass)!important;box-shadow:none}
+.photo img{object-position:50% 18%}
+.m-name h3{font-weight:800}
+.m-name .en{font-style:normal;font-size:13px}
+.member{border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:18px 0}
+.member-list{gap:0}
+
+/* 앨범·수상 */
+.timeline li::before{border-color:var(--ink)}
+.timeline li.big::before{background:var(--rose);border-color:var(--rose);box-shadow:none}
+.timeline h3,.wins h3,.amb h3,.item h3,.where,.year-h{font-weight:800}
+.chip{background:#fff;border:1px solid var(--line)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.submit{background:var(--ink)}
+.seg{background:var(--glass)}
+.fld input,.fld select,.fld textarea{background:#fff;border-color:#dcdcdc}
+.consent{background:var(--glass);border:0}
+.consent-bar{background:#fff;border:1px solid var(--line);box-shadow:0 -2px 0 var(--ink)}
+
+/* 폰 아래 메뉴: 흰 바탕에 위쪽 선 한 줄 (떠 있지 않음) */
+@media (max-width:719px){
+  nav.tabs{left:0;right:0;bottom:0;border-radius:0;background:#fff;border-top:1px solid var(--line);box-shadow:none;
+    padding-bottom:env(safe-area-inset-bottom,0px)}
+  nav.tabs::before{display:none}
+  nav.tabs a{color:#9b9b9b;min-height:58px}
+  nav.tabs a[aria-current="page"]{color:var(--ink);font-weight:800}
+  nav.tabs a[aria-current="page"] svg{background:none;padding:0;width:23px;height:23px;stroke-width:2.4}
+  .consent-bar{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+  footer .wrap{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  .hero-big h1{font-size:28px}
+}
 </style>
 
 <a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">본문으로 바로 가기</a>
@@ -284,8 +414,8 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
       <span class="dpill" id="dpill">D+</span>
     </div>
     <div class="hero-big">
-      <span class="note-en">a fan's scent diary</span>
-      <h1>Re<em>:</em>Scene</h1>
+      <h1>RESCENE</h1>
+      <div class="photo-row" id="photoRow" aria-label="멤버"></div>
       <p>멤버, 유행어, 앨범, CU 콜라보, 수상 기록까지 리센느의 향기를 한곳에 모았어요.</p>
       <div class="chips"><span>2024.03.26 데뷔</span><span>더뮤즈엔터테인먼트</span><span>5인조</span><span>팬덤 리마인</span></div>
     </div>
@@ -315,6 +445,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
     <span class="note-en">today's note</span>
     <b id="todayQ"></b>
     <span class="meta" id="todayWho"></span>
+    <small>앱을 켤 때마다 다른 한마디가 나와요</small>
   </a>
 
   <a class="feature press" href="#music" id="feature"></a>
@@ -329,6 +460,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
     <div class="strip" id="memberStrip"></div>
   </div>
 
+
   <a class="glass quick press" href="#cu">
     <div class="sec-head"><span class="eyebrow">CU × 리센느 빵·도시락</span><span class="go" style="margin:0">보러 가기 ›</span></div>
     <h3>빵 포토카드 <span id="homePc">0</span> / 27종</h3>
@@ -339,7 +471,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
 </section>
 
 <section data-sec="members" hidden>
-  <div><span class="note-en">five notes</span><h2>멤버</h2><p class="lede">멤버마다 향수병 그림을 그렸어요. 색은 각자의 CU 빵 맛에서 따왔어요. 그림을 누르면 갖고 있는 사진으로 바꿀 수 있고, 사진은 이 기기에만 저장돼요.</p></div>
+  <div><span class="note-en">five notes</span><h2>멤버</h2><p class="lede">사진은 위키미디어 공용에 자유 이용으로 올라온 사진(K-POPIT, CC BY 4.0)이에요. 사진을 누르면 내 폰의 사진으로 바꿀 수 있고, 바꾼 사진은 이 기기에만 저장돼요.</p></div>
   <div class="member-list" id="memberList"></div>
   <div class="subhead"><h3>지금 뜨는 유행어</h3></div>
   <div class="quotes" id="trendQuotes"></div>
@@ -468,10 +600,10 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
 </section>
 
 <section data-sec="awards" hidden>
-  <div><span class="note-en">milestones</span><h2>수상·활동</h2><p class="lede">2026년 여름 「Love Attack」이 역주행하며 첫 음악방송 1위를 했어요.</p></div>
+  <div><span class="note-en">milestones</span><h2>수상·활동</h2><p class="lede" id="awLede"></p></div>
   <div class="wins" id="wins"></div>
-  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3></div><ul class="awards" id="awardList"></ul></div>
-  <div class="subhead"><h3>도시 홍보대사</h3></div>
+  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3><span class="meta" id="awUpdated"></span></div><div id="awardList"></div><p class="src" id="awSrc"></p></div>
+  <div class="subhead"><h3>홍보대사</h3></div>
   <div class="amb" id="amb"></div>
 </section>
 
@@ -543,12 +675,20 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:va
     </ul>
     <h3>이미지와 글꼴</h3>
     <ul class="doc-list">
-      <li>로고, 앱 아이콘, 멤버 향수병 그림은 이 앱을 위해 새로 그린 그림이에요. 공식 사진이나 로고는 쓰지 않았어요.</li>
-      <li>글꼴: 고운바탕, Noto Sans KR, Cormorant Garamond (모두 SIL Open Font License, 무료 사용 가능)</li>
+      <li>로고와 앱 아이콘은 이 앱을 위해 새로 그린 그림이에요. 공식 로고는 쓰지 않았어요.</li>
+      <li>멤버 사진: K-POPIT 촬영, <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" target="_blank" rel="noopener">CC BY 4.0</a>, 위키미디어 공용
+        (<a href="https://commons.wikimedia.org/wiki/File:Woni_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">원이</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:Liv_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">리브</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:Minami_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">미나미</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:May_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">메이</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:Zena_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">제나</a>).
+        크기만 줄였고 다른 수정은 하지 않았어요.</li>
+      <li>글꼴: Noto Sans KR (SIL Open Font License, 무료 사용 가능)</li>
       <li>직접 넣은 멤버 사진은 각자 기기에만 저장되고 배포되지 않아요.</li>
+      <li>수상 기록은 위키백과 영어판 'Rescene' 문서(CC BY-SA 4.0)를 매일 확인해 한국어로 옮겨 정리해요.</li>
     </ul>
     <h3>앱 정보</h3>
-    <p>R: 팬노트 1.0 · 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
+    <p>R: 팬노트 1.1 · 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
   </div>
 </section>
 
@@ -566,6 +706,9 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
 const tint=i=>["","c2","c3","c4",""][i%5];
+const LAUNCH_PICK=Math.random();
+// 멤버 기본 사진: 위키미디어 공용, K-POPIT 촬영, CC BY 4.0 (출처는 운영자·출처 페이지)
+const photoOf=m=>photos[m.e]||"img/"+m.e.toLowerCase()+".jpg";
 
 let D=JSON.parse($("#seed").textContent);
 const cached=ls.get("rescene-data",null);
@@ -581,20 +724,38 @@ function render(){
   $("#feature").innerHTML=`<div class="cover" aria-hidden="true"><span>${esc(L.name)}</span><i></i><i></i><i></i></div>
     <div style="min-width:0"><span class="eyebrow">최신 앨범 · ${esc(L.date)}</span><h3>${esc(L.label)} ${esc(L.name)}</h3>
     <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(" · ")}</p><span class="go">전체 앨범 보기 ›</span></div>`;
-  $("#news").innerHTML=D.news.slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span><span>${esc(x.text)}</span></li>`).join("");
+  const byDate=(a,b)=>String(b.date).localeCompare(String(a.date));
+  $("#news").innerHTML=D.news.slice().sort(byDate).slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span><span>${esc(x.text)}</span></li>`).join("");
   $("#updated").textContent=D.updated.replace(/-/g,".")+" 업데이트";
-  const all=D.members.flatMap(m=>m.q.map(q=>[q[0],m.n])),d=new Date(),i=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%all.length;
+  // 오늘의 한마디: 앱을 켤 때마다 새로 뽑아요 (같은 실행 안에서는 그대로)
+  const all=D.members.flatMap(m=>m.q.map(q=>[q[0],m.n])),i=Math.floor(LAUNCH_PICK*all.length)%all.length;
   $("#todayQ").textContent="“"+all[i][0]+"”";$("#todayQ").classList.toggle("long",all[i][0].length>24);$("#todayWho").textContent=all[i][1];
   const minis=D.music.filter(x=>/미니/.test(x.t)).length;
-  $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"도시 홍보대사","#awards"]]
+  $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"홍보대사","#awards"]]
     .map(([v,l,h])=>`<a class="glass stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
   renderMembers();renderMusic();renderGoods();renderPc();fillItems();
   $("#trendQuotes").innerHTML=(D.trends||[]).map(([t,s,d])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}${d?` · ${esc(d)}`:""}</span></div>`).join("");
   $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
-  $("#wins").innerHTML=D.wins.map(w=>`<div class="glass stack" style="gap:4px"><span class="tag" style="justify-self:start">${esc(w.tag)}</span><h3>${esc(w.song)}</h3><span class="meta">${esc(w.date)} · ${esc(w.show)}</span></div>`).join("");
-  const lab={won:"수상",nom:"후보",pend:"발표 전"};
-  $("#awardList").innerHTML=D.awards.map(([y,a,c,r])=>`<li><b style="font-size:14px">${esc(a)} <span class="meta">${esc(y)}</span></b><span class="what">${esc(c)}</span><span class="tag res ${r}">${lab[r]}</span></li>`).join("");
-  $("#amb").innerHTML=D.amb.map(([c,dt])=>`<div class="glass" style="display:grid;gap:2px"><h3>${esc(c)}시</h3><span class="meta">${esc(dt)} 위촉</span></div>`).join("");
+  renderAwards();
+  $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pcard"><img src="${photoOf(m)}" alt="${esc(m.n)}" loading="lazy"><b>${esc(m.n)}</b><span>${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span></a>`).join("");
+  $("#amb").innerHTML=D.amb.map(([c,dt])=>`<div class="glass" style="display:grid;gap:2px"><h3>${esc(c)}</h3><span class="meta">${esc(dt)} 위촉</span></div>`).join("");
+}
+
+// 수상: 언제나 최신이 맨 위. 가장 최근 해만 펼치고 지난 해는 접어 둬요.
+function renderAwards(){
+  const wins=D.wins.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  $("#wins").innerHTML=wins.map(w=>`<div class="glass stack" style="gap:4px"><span class="tag" style="justify-self:start">${esc(w.tag)}</span><h3>${esc(w.song)}</h3><span class="meta">${esc(w.date)} · ${esc(w.show)}</span></div>`).join("");
+  const w0=wins[0];
+  $("#awLede").textContent=w0?`가장 최근 1위: ${w0.date.replace(/-/g,".")} ${w0.show} 「${w0.song}」. 음악방송 1위 ${wins.length}번.`:"";
+  const lab={won:"수상",nom:"후보",pend:"발표 전"},ord={pend:0,won:1,nom:2};
+  const aw=D.awards.slice().sort((a,b)=>(+b[0])-(+a[0])||(ord[a[3]]??3)-(ord[b[3]]??3));
+  const years=[...new Set(aw.map(a=>String(a[0])))];
+  const li=([y,a,c,r])=>`<li><b style="font-size:14px">${esc(a)}</b><span class="what">${esc(c)}</span><span class="tag res ${esc(r)}">${lab[r]||""}</span></li>`;
+  const block=y=>{const rows=aw.filter(a=>String(a[0])===y),won=rows.filter(a=>a[3]==="won").length;
+    return `<div class="year-h">${esc(y)}년 <span class="meta">시상식 ${rows.length}곳${won?` · 수상 ${won}곳`:""}</span></div><ul class="awards">${rows.map(li).join("")}</ul>`};
+  $("#awardList").innerHTML=years.length?block(years[0])+(years.length>1?`<details class="older"><summary>지난 기록 보기 (${years.slice(1).join(", ")}년)</summary>${years.slice(1).map(block).join("")}</details>`:""):"";
+  $("#awUpdated").textContent=D.updated.replace(/-/g,".")+" 기준";
+  $("#awSrc").textContent=D.awardsSource?"출처: "+D.awardsSource+". 매일 자동으로 확인해 새 기록을 넣어요.":"";
 }
 
 // 멤버별 향수병 일러스트. 색은 각 멤버의 CU 빵 맛에서 따왔어요 (얼굴을 그리지 않은 오리지널 그림)
@@ -629,27 +790,30 @@ function renderMembers(){
   <article class="glass member">
     <div class="m-top">
       <label class="photo" for="ph-${m.e}" style="background:${(ART[m.e]||ART.WONI).bg}">
-        ${photos[m.e]?`<img src="${photos[m.e]}" alt="${esc(m.n)} 사진">`:`<span class="ph">${bottle(m)}<small>${esc((ART[m.e]||ART.WONI).note)} 향</small></span>`}
+        <img src="${photoOf(m)}" alt="${esc(m.n)} 사진" loading="lazy">
         <input type="file" accept="image/*" id="ph-${m.e}" data-ph="${m.e}">
       </label>
       <div class="m-info">
         <div class="m-name"><h3>${esc(m.n)}</h3><span class="en">${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span>${m.role?`<span class="tag">${esc(m.role)}</span>`:""}</div>
         ${m.info.length?`<dl class="kv">${m.info.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
         <p class="m-note">${esc(m.note)}</p>
-        ${photos[m.e]?`<button type="button" class="linkbtn" data-rm="${m.e}">사진 지우기</button>`:""}
+        <div class="m-actions">${photos[m.e]?`<button type="button" class="linkbtn" data-rm="${m.e}">원래 사진으로</button>`:`<label class="linkbtn" for="ph-${m.e}">내 사진으로 바꾸기</label>`}</div>
       </div>
     </div>
     <div class="quotes">${m.q.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("")}</div>
   </article>`).join("");
-  $("#memberStrip").innerHTML=D.members.map(m=>`<a href="#members"><span class="avatar" style="background:${(ART[m.e]||ART.WONI).bg}">${photos[m.e]?`<img src="${photos[m.e]}" alt="">`:bottle(m)}</span>${esc(m.n)}</a>`).join("");
+  $("#memberStrip").innerHTML=D.members.map(m=>`<a href="#members"><span class="avatar" style="background:${(ART[m.e]||ART.WONI).bg}"><img src="${photoOf(m)}" alt="" loading="lazy"></span>${esc(m.n)}</a>`).join("");
 }
 $("#memberList").addEventListener("change",e=>{
   const inp=e.target.closest("[data-ph]");if(!inp||!inp.files[0])return;
   const key=inp.dataset.ph,url=URL.createObjectURL(inp.files[0]),img=new Image();
-  img.onload=()=>{const s=Math.min(1,480/Math.max(img.width,img.height)),c=document.createElement("canvas");
-    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-    URL.revokeObjectURL(url);photos[key]=c.toDataURL("image/jpeg",.82);
-    if(!ls.set("rescene-photos",photos)){delete photos[key];ls.set("rescene-photos",photos)}renderMembers()};
+  // 배경화면에도 쓰도록 긴 변 1280px까지 저장 (저장소가 꽉 차면 더 작게 다시 시도)
+  const shrink=(max,q)=>{const s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");
+    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",q)};
+  img.onload=()=>{URL.revokeObjectURL(url);photos[key]=shrink(1280,.85);
+    if(!ls.set("rescene-photos",photos)){photos[key]=shrink(640,.8);
+      if(!ls.set("rescene-photos",photos)){delete photos[key];ls.set("rescene-photos",photos);alert("기기 저장 공간이 부족해서 사진을 넣지 못했어요. 다른 멤버 사진을 하나 지우고 다시 해 보세요.")}}
+    renderMembers()};
   img.src=url;
 });
 $("#memberList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];ls.set("rescene-photos",photos);renderMembers()}});
@@ -794,7 +958,7 @@ setKind("stock");setAuthMode("login");fillItems();renderAuth();
 
 // 글꼴: 고른 뒤에만 Google 글꼴을 불러와요 (고르기 전과 '기본 글꼴'은 기기 글꼴)
 function loadFonts(){if(document.getElementById("gfont"))return;const l=document.createElement("link");l.id="gfont";l.rel="stylesheet";
-  l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap";document.head.appendChild(l)}
+  l.href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap";document.head.appendChild(l)}
 const fontPref=ls.get("rescene-fonts",null);
 if(fontPref==="yes")loadFonts();else if(fontPref===null)$("#consentBar").hidden=false;
 $("#fontState").textContent=fontPref==="yes"?"지금: Google 글꼴 사용 중":"지금: 기본 글꼴 사용 중";
@@ -811,11 +975,16 @@ addEventListener("hashchange",()=>{route();scrollTo({top:0})});
 
 render();route();
 
-// 최신 정보 자동 갱신: 앱을 열 때마다 GitHub에 올라간 data.json을 확인해요
-(async()=>{try{
+// 최신 정보 자동 갱신: 앱을 열 때마다, 그리고 잠깐 나갔다 돌아올 때(10분 지나면) GitHub의 data.json을 확인해요.
+// data.json은 깃허브 액션이 매일 위키백과 수상 기록을 확인해 고쳐 둬요.
+let lastSync=0;
+async function syncData(){lastSync=Date.now();try{
   const ctl=new AbortController();setTimeout(()=>ctl.abort(),6000);
   const r=await fetch(REMOTE+"?t="+Date.now(),{signal:ctl.signal,cache:"no-store"});if(!r.ok)return;
   const fresh=await r.json();
-  if(fresh&&fresh.updated&&fresh.members&&fresh.updated>=D.updated){D=fresh;ls.set("rescene-data",fresh);render()}
-}catch(e){}})();
+  if(fresh&&fresh.updated&&fresh.members&&fresh.updated>=D.updated&&JSON.stringify(fresh)!==JSON.stringify(D)){D=fresh;ls.set("rescene-data",fresh);render()}
+}catch(e){}}
+syncData();
+const resync=()=>{if(!document.hidden&&Date.now()-lastSync>6e5)syncData()};
+document.addEventListener("visibilitychange",resync);document.addEventListener("resume",resync);
 </script>

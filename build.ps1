@@ -13,7 +13,7 @@ $head = @"
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#fcf6f8">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="ICON">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -26,6 +26,8 @@ New-Item -ItemType Directory -Force "$root\app\www" | Out-Null
 [IO.File]::WriteAllText("$root\app\www\index.html", $head.Replace("ICON","icon.png") + $body + $tail, $u)
 Copy-Item "$root\app\res\icon.png" "$root\app\www\icon.png" -Force
 Copy-Item "$root\data.json" "$root\app\www\data.json" -Force
+New-Item -ItemType Directory -Force "$root\app\www\img" | Out-Null
+Copy-Item "$root\img\*.jpg" "$root\app\www\img\" -Force
 # 미리보기·게시용 (문서 틀 없이 본문만)
 [IO.File]::WriteAllText("$root\dist-body.html", $body, $u)
 Write-Output "built"
