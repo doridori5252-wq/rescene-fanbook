@@ -1,5 +1,6 @@
 """data.json 자동 최신화 — 깃허브 액션이 매일 돌린다 (손으로: py -3 tools/update_data.py)
 
+0) 음악방송 1위: 한국어 위키백과 「리센느」 문서의 가요 프로그램 1위 표를 읽어 새 1위만 보탠다.
 1) 수상 내역: 영어 위키백과 'Rescene' 문서의 Accolades 표(CC BY-SA 4.0)를 읽어 시상식·해별로 묶는다.
    - 위키 문서가 이미 앱에 있는 상을 빠뜨려도 지우지 않는다(합친다). 결과(수상/후보/발표 전)는 위키 쪽을 따른다.
 2) 정렬: 수상 내역·소식은 언제나 최신이 맨 위.
@@ -98,6 +99,40 @@ def group(rows):
     return awards
 
 
+KOWIKI = 'https://ko.wikipedia.org/w/index.php?title=%EB%A6%AC%EC%84%BC%EB%8A%90&action=raw'
+SHOW = {'더 쇼': '더쇼', '쇼! 음악중심': '음악중심', 'SBS 인기가요': '인기가요', '쇼 챔피언': '쇼챔피언',
+        '엠카운트다운': '엠카운트다운', 'M! 카운트다운': '엠카운트다운', '뮤직뱅크': '뮤직뱅크', '쇼! 챔피언': '쇼챔피언'}
+
+
+def parse_wins(wikitext):
+    """한국어 위키백과 '가요 프로그램 1위' 표 → [{song,date,show,tag}]"""
+    m = re.search(r'===\s*가요 프로그램 1위\s*===(.*?)\n\|\}', wikitext, re.S)
+    if not m:
+        return []
+    out, year, song = [], None, None
+    for line in m.group(1).split('\n'):
+        y = re.match(r'!\s*(\d{4})년', line)
+        if y:
+            year = y.group(1); continue
+        s = re.match(r"\*\s*'''(.+?)'''", line)
+        if s:
+            song = s.group(1).strip(); continue
+        w = re.match(r'\*\*\s*\[\[(\d+)월 (\d+)일\]\].*?《\[\[(?:[^|\]]*\|)?([^\]]+)\]\]》\s*(.*)', line)
+        if w and year and song:
+            mo, da, show, rest = w.groups()
+            note = re.search(r'\(([^)]*)\)', rest)
+            tag = note.group(1) if note else ('챔피언 송' if '챔피언' in rest else '1위')
+            out.append({'song': song, 'date': f'{year}.{int(mo):02d}.{int(da):02d}', 'show': SHOW.get(show, show), 'tag': tag})
+    return out
+
+
+def merge_wins(old, new):
+    by = {(w['date'], w['show']): w for w in old}
+    for w in new:
+        by.setdefault((w['date'], w['show']), w)   # 이미 있는 건 앱에서 붙인 꼬리표(첫 1위·역주행)를 지킨다
+    return sorted(by.values(), key=lambda w: w['date'], reverse=True)
+
+
 ORDER = {'pend': 0, 'won': 1, 'nom': 2}
 
 
@@ -116,6 +151,12 @@ def main():
     data['awards'] = merge(data.get('awards', []), group(parse_awards(wikitext)))
     data['awardsSource'] = '위키백과 영어판 「Rescene」 문서 (CC BY-SA 4.0)'
     data['news'] = sorted(data.get('news', []), key=lambda x: x['date'], reverse=True)
+    try:
+        req = urllib.request.Request(KOWIKI, headers={'User-Agent': UA})
+        kotext = urllib.request.urlopen(req, timeout=30).read().decode('utf-8')
+        data['wins'] = merge_wins(data.get('wins', []), parse_wins(kotext))
+    except Exception as e:                       # 한국어 문서를 못 읽어도 수상 내역 갱신은 계속
+        print('음악방송 1위 갱신 건너뜀:', e)
     data['wins'] = sorted(data.get('wins', []), key=lambda x: x['date'], reverse=True)
     after = json.dumps(data, ensure_ascii=False, sort_keys=True)
     if after != before:
