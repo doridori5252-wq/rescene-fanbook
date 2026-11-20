@@ -133,6 +133,39 @@ def merge_wins(old, new):
     return sorted(by.values(), key=lambda w: w['date'], reverse=True)
 
 
+YT_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCtKtCiaWRz-d3EZn2xd1mdA'   # 공식 채널
+YT_KEEP = 3          # 소식에 남길 새 영상 수
+YT_DAYS = 14         # 이보다 오래된 영상은 소식에서 뺀다
+
+
+def parse_videos(xml_text, today):
+    """공식 유튜브 채널 RSS → 최근 영상 소식 [{date,text,url,src}]"""
+    import xml.etree.ElementTree as ET
+    ns = {'a': 'http://www.w3.org/2005/Atom', 'yt': 'http://www.youtube.com/xml/schemas/2015'}
+    out = []
+    for e in ET.fromstring(xml_text).findall('a:entry', ns):
+        vid = (e.findtext('yt:videoId', '', ns) or '').strip()
+        title = re.sub(r'\s+', ' ', e.findtext('a:title', '', ns) or '').strip()
+        pub = (e.findtext('a:published', '', ns) or '')[:10]
+        if not re.fullmatch(r'[\w-]{6,20}', vid) or not title or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', pub):
+            continue
+        day = datetime.strptime(pub, '%Y-%m-%d').date()
+        if (today - day).days > YT_DAYS:
+            continue
+        if len(title) > 60:
+            title = title[:59] + '…'
+        out.append({'date': pub.replace('-', '.'), 'text': '새 영상 · ' + title,
+                    'url': 'https://www.youtube.com/watch?v=' + vid, 'src': 'yt'})
+    out.sort(key=lambda x: x['date'], reverse=True)
+    return out[:YT_KEEP]
+
+
+def merge_news(old, videos):
+    """손으로 넣은 소식은 그대로 두고, 유튜브 소식은 최신 것으로 바꾼다"""
+    kept = [n for n in old if n.get('src') != 'yt']
+    return sorted(kept + videos, key=lambda x: x['date'], reverse=True)
+
+
 ORDER = {'pend': 0, 'won': 1, 'nom': 2}
 
 
@@ -151,6 +184,13 @@ def main():
     data['awards'] = merge(data.get('awards', []), group(parse_awards(wikitext)))
     data['awardsSource'] = '위키백과 영어판 「Rescene」 문서 (CC BY-SA 4.0)'
     data['news'] = sorted(data.get('news', []), key=lambda x: x['date'], reverse=True)
+    try:                                         # 공식 유튜브 새 영상 → 소식 (못 읽으면 그대로)
+        req = urllib.request.Request(YT_FEED, headers={'User-Agent': UA})
+        feed = urllib.request.urlopen(req, timeout=30).read().decode('utf-8')
+        today = datetime.now(timezone(timedelta(hours=9))).date()
+        data['news'] = merge_news(data['news'], parse_videos(feed, today))
+    except Exception as e:
+        print('유튜브 소식 갱신 건너뜀:', e)
     try:
         req = urllib.request.Request(KOWIKI, headers={'User-Agent': UA})
         kotext = urllib.request.urlopen(req, timeout=30).read().decode('utf-8')

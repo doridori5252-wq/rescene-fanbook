@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17",
+  "updated": "2026-11-21",
   "debut": "2024-03-26",
   "board": {
     "url": "https://vdomvyobzkzdzbzspsvl.supabase.co",
@@ -19,6 +19,24 @@
     ]
   },
   "news": [
+    {
+      "date": "2026.11.20",
+      "text": "새 영상 · 나를 부르는 echo🔊 ꒰ 𝐖𝐢𝐭𝐡 ꒱ #산 선배님@ATEEZofficial",
+      "url": "https://www.youtube.com/watch?v=UbWJPh1gEz0",
+      "src": "yt"
+    },
+    {
+      "date": "2026.11.19",
+      "text": "새 영상 · 더 활짝 피어나 🌺ㅣRESCENE (리센느) ‘PULSE’ Dance Practice Behind",
+      "url": "https://www.youtube.com/watch?v=uimf1XEv_Ow",
+      "src": "yt"
+    },
+    {
+      "date": "2026.11.19",
+      "text": "새 영상 · Love 💔",
+      "url": "https://www.youtube.com/watch?v=LmQgbEkJe_g",
+      "src": "yt"
+    },
     {
       "date": "2026.11.15",
       "text": "「With」 인기가요 1위. 컴백 첫 주 음악방송 4관왕"

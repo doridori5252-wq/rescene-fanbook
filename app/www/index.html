@@ -708,7 +708,7 @@ section > div:first-child h2::after{display:none}
 </div></footer>
 
 <script type="application/json" id="seed">{
-  "updated": "2026-11-17",
+  "updated": "2026-11-21",
   "debut": "2024-03-26",
   "board": {
     "url": "https://vdomvyobzkzdzbzspsvl.supabase.co",
@@ -728,6 +728,24 @@ section > div:first-child h2::after{display:none}
     ]
   },
   "news": [
+    {
+      "date": "2026.11.20",
+      "text": "새 영상 · 나를 부르는 echo🔊 ꒰ 𝐖𝐢𝐭𝐡 ꒱ #산 선배님@ATEEZofficial",
+      "url": "https://www.youtube.com/watch?v=UbWJPh1gEz0",
+      "src": "yt"
+    },
+    {
+      "date": "2026.11.19",
+      "text": "새 영상 · 더 활짝 피어나 🌺ㅣRESCENE (리센느) ‘PULSE’ Dance Practice Behind",
+      "url": "https://www.youtube.com/watch?v=uimf1XEv_Ow",
+      "src": "yt"
+    },
+    {
+      "date": "2026.11.19",
+      "text": "새 영상 · Love 💔",
+      "url": "https://www.youtube.com/watch?v=LmQgbEkJe_g",
+      "src": "yt"
+    },
     {
       "date": "2026.11.15",
       "text": "「With」 인기가요 1위. 컴백 첫 주 음악방송 4관왕"
@@ -1313,7 +1331,9 @@ function render(){
     <div style="min-width:0"><span class="eyebrow">최신 앨범 · ${esc(L.date)}</span><h3>${esc(L.label)} ${esc(L.name)}</h3>
     <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(" · ")}</p><span class="go">전체 앨범 보기 ›</span></div>`;
   const byDate=(a,b)=>String(b.date).localeCompare(String(a.date));
-  $("#news").innerHTML=D.news.slice().sort(byDate).slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span><span>${esc(x.text)}</span></li>`).join("");
+  // 소식: 손으로 넣은 것 + 공식 유튜브 새 영상(매일 자동). 유튜브 주소만 링크로 연다
+  const yt=u=>typeof u==="string"&&/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{6,20}$/.test(u);
+  $("#news").innerHTML=D.news.slice().sort(byDate).slice(0,6).map(x=>`<li><span class="meta">${esc(x.date)}</span>${yt(x.url)?`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.text)}</a>`:`<span>${esc(x.text)}</span>`}</li>`).join("");
   $("#updated").textContent=D.updated.replace(/-/g,".")+" 업데이트";
   // 오늘의 한마디: 앱을 켤 때마다 새로 뽑아요 (같은 실행 안에서는 그대로)
   const all=D.members.flatMap(m=>m.q.map(q=>[q[0],m.n])),i=Math.floor(LAUNCH_PICK*all.length)%all.length;

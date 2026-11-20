@@ -4,3 +4,4 @@ app/plugins/
 *.apk
 dist-body.html
 *.aab
+__pycache__/
