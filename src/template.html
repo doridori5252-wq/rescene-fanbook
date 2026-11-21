@@ -259,6 +259,31 @@ details.older summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(
 .res.pend{background:rgba(243,195,94,.22);color:#8a5a00}
 .src{font-size:12px;color:var(--muted);margin:10px 0 0}
 
+/* 리센느 이야기 (서사) */
+.story{list-style:none;margin:0;padding:0 0 0 4px;position:relative}
+.story::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--c-woni),var(--c-liv),var(--c-minami),var(--c-may),var(--c-zena));border-radius:2px;opacity:.55}
+.story li{position:relative;padding:0 0 18px 30px}
+.story li:last-child{padding-bottom:0}
+.story li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ink)}
+.story li:last-child::before{background:var(--ink)}
+.story .when{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.story h3{font-family:var(--serif);font-size:17px;margin:2px 0 4px}
+.story p{margin:0;font-size:14px;line-height:1.65}
+
+/* 음악방송 1위 기록표 (곡별로 묶음) */
+.wb-song + .wb-song{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.wb-song h3{display:flex;align-items:baseline;gap:8px;font-family:var(--serif);font-size:18px;margin:0 0 6px}
+.wb-song h3 .meta{font-family:var(--body);font-weight:400}
+.wb-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.wb-list li{display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:8px;font-size:13.5px}
+.wb-list time{color:var(--muted);font-variant-numeric:tabular-nums}
+.wb-list .tag{font-size:11px;padding:2px 8px}
+
+.amb-list{list-style:none;margin:0;padding:0}
+.amb-list li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.amb-list li:first-child{border-top:0}
+.amb-list b{font-size:15px}
+
 /* 배경화면 만들기 */
 footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:var(--muted);text-align:center}
 .legal{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
@@ -414,7 +439,7 @@ section > div:first-child h2::after{display:none}
     <div class="hero-big">
       <h1>RESCENE</h1>
       <div class="photo-row" id="photoRow" aria-label="멤버"></div>
-      <p>멤버, 유행어, 앨범, CU 콜라보, 수상 기록까지 리센느의 향기를 한곳에 모았어요.</p>
+      <p>멤버, 유행어, 앨범, CU 콜라보, 수상 기록과 데뷔부터 지금까지의 이야기까지 리센느의 향기를 한곳에 모았어요.</p>
       <div class="chips"><span>2024.03.26 데뷔</span><span>더뮤즈엔터테인먼트</span><span>5인조</span><span>팬덤 리마인</span></div>
     </div>
   </div>
@@ -599,10 +624,10 @@ section > div:first-child h2::after{display:none}
 
 <section data-sec="awards" hidden>
   <div><span class="note-en">milestones</span><h2>수상·활동</h2><p class="lede" id="awLede"></p></div>
-  <div class="wins" id="wins"></div>
+  <div class="glass" id="storyBox" hidden><div class="sec-head" style="margin-bottom:12px"><h3>리센느 이야기</h3><span class="meta">데뷔부터 지금까지</span></div><ol class="story" id="story"></ol></div>
+  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>음악방송 1위</h3><span class="meta" id="winCount"></span></div><div id="wins"></div></div>
   <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3><span class="meta" id="awUpdated"></span></div><div id="awardList"></div><p class="src" id="awSrc"></p></div>
-  <div class="subhead"><h3>홍보대사</h3></div>
-  <div class="amb" id="amb"></div>
+  <div class="glass"><div class="sec-head" style="margin-bottom:6px"><h3>홍보대사</h3></div><div id="amb"></div></div>
 </section>
 
 <section data-sec="privacy" hidden class="doc">
@@ -738,13 +763,19 @@ function render(){
   $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
   renderAwards();
   $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pcard"><img src="${photoOf(m)}" alt="${esc(m.n)}" loading="lazy"><b>${esc(m.n)}</b><span>${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span></a>`).join("");
-  $("#amb").innerHTML=D.amb.map(([c,dt])=>`<div class="glass" style="display:grid;gap:2px"><h3>${esc(c)}</h3><span class="meta">${esc(dt)} 위촉</span></div>`).join("");
+  $("#amb").innerHTML=`<ul class="amb-list">${D.amb.map(([c,dt])=>`<li><b>${esc(c)}</b><span class="meta">${esc(dt)} 위촉</span></li>`).join("")}</ul>`;
 }
 
 // 수상: 언제나 최신이 맨 위. 가장 최근 해만 펼치고 지난 해는 접어 둬요.
 function renderAwards(){
   const wins=D.wins.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-  $("#wins").innerHTML=wins.map(w=>`<div class="glass stack" style="gap:4px"><span class="tag" style="justify-self:start">${esc(w.tag)}</span><h3>${esc(w.song)}</h3><span class="meta">${esc(w.date)} · ${esc(w.show)}</span></div>`).join("");
+  // 곡별로 묶어 한 장에 (가장 최근에 1위한 곡이 위)
+  const bySong=[];wins.forEach(w=>{let g=bySong.find(x=>x.song===w.song);if(!g)bySong.push(g={song:w.song,list:[]});g.list.push(w)});
+  $("#wins").innerHTML=bySong.map(g=>`<div class="wb-song"><h3>${esc(g.song)} <span class="meta">${g.list.length}번</span></h3><ol class="wb-list">${g.list.map(w=>`<li><time>${esc(w.date)}</time><span>${esc(w.show)}</span>${w.tag&&w.tag!=="1위"?`<span class="tag">${esc(w.tag)}</span>`:"<span></span>"}</li>`).join("")}</ol></div>`).join("");
+  $("#winCount").textContent=wins.length?`모두 ${wins.length}번`:"";
+  const st=Array.isArray(D.story)?D.story:[];
+  $("#storyBox").hidden=!st.length;
+  $("#story").innerHTML=st.map(c=>`<li><span class="when">${esc(c.when)}</span><h3>${esc(c.h)}</h3><p>${esc(c.t)}</p></li>`).join("");
   const w0=wins[0];
   $("#awLede").textContent=w0?`가장 최근 1위: ${w0.date.replace(/-/g,".")} ${w0.show} 「${w0.song}」. 음악방송 1위 ${wins.length}번.`:"";
   const lab={won:"수상",nom:"후보",pend:"발표 전"},ord={pend:0,won:1,nom:2};
