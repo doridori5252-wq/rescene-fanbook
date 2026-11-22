@@ -1,446 +1,298 @@
 <title>R: 팬노트</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* 1.1 새 디자인 「조향 아틀리에」 (2026-11-17): 진주빛 바닥 위 흰 라벨 카드, 잉크색 글자.
-   기억에 남는 한 가지 = 첫 화면 선반 위 다섯 향수병과, 멤버 다섯 색을 이은 '시향지 띠'. 나머지는 차분하게. */
+/* Hallmark · theme: custom 색인 노트 (by request: 완전히 새로) · signature: 표지 오른쪽 멤버 색 색인 탭 · surface: tinted paper */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: S, 사진이 9:16 공식 프로필이 아니라 공항·쇼케이스 컷; 3:4로 잘라 얼굴 위주로 맞춤 */
+/* 1.2 새 디자인 「색인 노트」 (2026-11-22): 링 노트 한 권. 시원한 종이색 바닥에 흰 낱장, 남색 잉크 글씨, 볼펜 파랑 하나만 강조.
+   기억에 남는 한 가지 = 첫 화면 노트 오른쪽에 꽂힌 다섯 멤버 색 색인 탭. 나머지는 줄 노트처럼 조용하게. */
 :root{
-  --bg:#f4f1f6; --ink:#2a2236; --muted:#665d72; --line:rgba(42,34,54,.12);
-  --glass:#ffffff; --glass-strong:#ffffff; --glass-edge:rgba(42,34,54,.10);
-  --rose:#b8285e; --rose-soft:rgba(200,51,106,.10); --sage:#2f7a68; --sage-soft:rgba(47,122,104,.12);
-  --mist1:#f7d3df; --mist2:#ffe2cf; --mist3:#e4dcf5; --mist4:#d6efe5;
-  --plum:#2a2236; --on-plum:#f7f2fa; --on-plum-muted:#c9bfd4;
-  --c-woni:#f3c35e; --c-liv:#9a5f78; --c-minami:#7fc79a; --c-may:#d28a55; --c-zena:#ec6f98;
-  --strip:linear-gradient(90deg,var(--c-woni) 0 20%,var(--c-liv) 20% 40%,var(--c-minami) 40% 60%,var(--c-may) 60% 80%,var(--c-zena) 80%);
-  --serif:"Gowun Batang","Noto Serif KR",serif;
-  --latin:"Cormorant Garamond","Gowun Batang",serif;
-  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --shadow:0 1px 2px rgba(42,34,54,.05),0 6px 18px rgba(42,34,54,.06);
-  --radius:18px;
+  --paper:#eef1f6; --sheet:#fcfdff; --ink:#18203a; --muted:#596178; --faint:#8a91a3; --rule:#dde2eb;
+  --pen:#2b46c9; --pen-hover:#2239a8; --pen-soft:#e8ecfb; --on-pen:#fbfcff; --on-navy-link:#a9b8ff;
+  --shade-1:rgba(24,32,58,.06); --shade-2:rgba(24,32,58,.14); --shade-3:rgba(24,32,58,.18); --shade-4:rgba(24,32,58,.22); --shade-5:rgba(24,32,58,.28);
+  --groove-a:#2b3558; --groove-b:#232c4a; --field-edge:#cfd5e1; --cu:#6c2bd9; --on-tab:#fbfcff; --disabled:#c9cfdb; --on-disabled:#454c61;
+  --ok:#1d7a58; --ok-soft:#e1f2ea; --warn:#8a5200; --warn-soft:#fbeed6; --danger:#b4233c;
+  --navy:#18203a; --on-navy:#fbfcff; --on-navy-muted:#b8bfd3;
+  --c-woni:#f0b93a; --c-liv:#8f5a72; --c-minami:#5fb882; --c-may:#d07f45; --c-zena:#e8628f;
+  --font:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --r-sheet:6px; --r-ctl:10px; --r-pill:999px;
+  --lift:0 1px 0 var(--shade-1),0 8px 24px -12px var(--shade-3);
+  color-scheme:light;
 }
-/* 폰이 다크 모드여도 늘 밝은 화면으로 (2026-11-08 요청) */
-:root{color-scheme:light}
-:root[data-theme="dark"]{
-  --bg:#17121a; --ink:#f3e8ef; --muted:#b9a6b5; --line:rgba(255,220,240,.12);
-  --glass:rgba(40,30,44,.58); --glass-strong:rgba(48,36,52,.82); --glass-edge:rgba(255,220,240,.12);
-  --rose:#ff8fb3; --rose-soft:rgba(255,143,179,.16); --sage:#8fd6c2; --sage-soft:rgba(143,214,194,.14);
-  --mist1:#5a2a44; --mist2:#5a3a2c; --mist3:#3c2f5c; --mist4:#24443c;
-  --plum:#2a1f2c; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;word-break:keep-all;-webkit-tap-highlight-color:transparent;min-height:100%}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-/* 시향지 띠: 화면 맨 위에 다섯 멤버 색 */
-.mist{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:4px;z-index:11;background:var(--strip);pointer-events:none}
-.mist i{display:none}
-.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-a{color:var(--rose)}
-h2{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.3;margin:0;text-wrap:balance}
-h3{margin:0;font-size:16px;line-height:1.45}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.65;word-break:keep-all;overflow-x:clip;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:100%}
+@media (hover:hover){a:hover{text-decoration-thickness:2px}.chip:hover,.toggle:hover,.counter button:hover{border-color:var(--pen)}.btn:hover{background:var(--pen-hover)}.sheet.press:hover,.feature:hover{box-shadow:0 1px 0 var(--shade-1),0 12px 28px -12px var(--shade-5)}nav.tabs a:hover{color:var(--ink)}}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--pen)}
+:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+h2{font-size:27px;font-weight:700;line-height:1.25;letter-spacing:-.02em;margin:0;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+h3{margin:0;font-size:16px;font-weight:700;line-height:1.45}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .lede{color:var(--muted);margin:6px 0 0;font-size:14px}
 .meta{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.note-en{font-family:var(--latin);font-style:italic;font-size:15px;letter-spacing:.02em;color:var(--rose)}
-.eyebrow{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
-.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--rose-soft);color:var(--rose);white-space:nowrap}
-.tag.sage{background:var(--sage-soft);color:var(--sage)}
-.glass{background:var(--glass);border:1px solid var(--glass-edge);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;min-width:0}
-.stack{display:grid;gap:12px}
 .note{font-size:12.5px;color:var(--muted);margin:0}
-:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:var(--r-pill);background:var(--pen-soft);color:var(--pen);white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.sheet{background:var(--sheet);border-radius:var(--r-sheet);box-shadow:var(--lift);padding:18px;min-width:0}
+.stack{display:grid;gap:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.go{font-size:13.5px;font-weight:600;color:var(--pen)}
 
-/* 헤더 */
-header.top .wrap{padding-block:14px 4px}
+/* 머리 */
+header.top .wrap{padding-block:14px 6px}
 .appbar{display:flex;align-items:center;gap:10px}
-.appbar svg{width:38px;height:38px;flex:none}
-.apptitle{display:grid;line-height:1.15;flex:1;min-width:0}
-.apptitle b{font-family:var(--serif);font-weight:700;font-size:18px}
-.apptitle span{font-family:var(--latin);font-style:italic;font-size:13px;color:var(--muted)}
-.dpill{font-family:var(--serif);font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px;background:var(--glass-strong);border:1px solid var(--glass-edge);color:var(--rose);font-variant-numeric:tabular-nums;box-shadow:var(--shadow)}
-.hero-big{display:none;gap:8px;padding:26px 0 8px;text-align:center;justify-items:center}
-body[data-tab="home"] .hero-big{display:grid}
-.hero-big .note-en{font-size:16px}
-/* 선반 위 다섯 향수병 (누르면 그 멤버로) */
-.shelf{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;gap:4px;width:min(100%,420px);margin:2px auto 0;padding:0 6px;
-  border-bottom:3px solid var(--ink);position:relative}
-.shelf::after{content:"";position:absolute;left:6%;right:6%;bottom:-9px;height:6px;border-radius:0 0 6px 6px;background:rgba(42,34,54,.10)}
-.shelf a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:var(--ink);font-size:12px;font-weight:700;padding-bottom:4px}
-.shelf a .bottle{width:100%;max-width:64px;height:auto;transition:transform .2s}
-.shelf a:nth-child(2) .bottle,.shelf a:nth-child(4) .bottle{max-width:56px}
-.shelf a:active .bottle{transform:translateY(-4px)}
-.hero-big h1{font-family:var(--latin);font-style:italic;font-weight:600;font-size:64px;line-height:.95;margin:0;letter-spacing:.01em}
-.hero-big h1 em{color:var(--rose)}
-.hero-big p{margin:0;color:var(--muted);font-size:14px;max-width:34ch}
-.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:4px}
-.chips span{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-edge);color:var(--ink)}
+.appbar svg{width:36px;height:36px;flex:none}
+.apptitle{flex:1;min-width:0;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.dpill{font-weight:700;font-size:13px;padding:4px 12px;border-radius:var(--r-pill);background:var(--navy);color:var(--on-navy);font-variant-numeric:tabular-nums}
 
-/* 탭 */
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-top:10px;background:var(--glass-strong);border-block:1px solid var(--glass-edge);
-  -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%)}
+/* 메뉴 (넓은 화면: 위, 폰: 아래) */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border-bottom:1px solid var(--rule)}
 nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
-nav.tabs a{flex:none;display:flex;align-items:center;gap:6px;padding:12px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;border-bottom:2px solid transparent}
-nav.tabs a[aria-current="page"]{color:var(--rose);border-color:var(--rose)}
+nav.tabs a{flex:none;display:flex;align-items:center;gap:6px;padding:12px;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;
+  box-shadow:inset 0 -3px 0 transparent;transition:color .15s,box-shadow .15s}
+nav.tabs a[aria-current="page"]{color:var(--pen);box-shadow:inset 0 -3px 0 var(--pen)}
 nav.tabs svg{width:20px;height:20px;flex:none}
 
-main .wrap{padding-block:20px 40px}
+main .wrap{padding-block:18px 40px}
 section{display:grid;gap:14px}
+.page-head{display:grid;gap:2px;padding-bottom:4px;border-bottom:2px solid var(--ink)}
 
-/* 홈 */
-.dday{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
-  background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0)),var(--rose-soft)}
-.dnum{font-family:var(--serif);font-weight:700;font-size:46px;line-height:1.05;color:var(--rose);font-variant-numeric:tabular-nums}
-.today{display:grid;gap:6px;text-decoration:none;color:var(--ink);text-align:center;justify-items:center;padding-block:22px}
-.today{min-width:0}
-.today b{font-family:var(--serif);font-weight:700;font-size:clamp(17px,5vw,22px);line-height:1.45;max-width:100%;word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
+/* 홈: 링 노트 표지 + 색인 탭 */
+.cover-wrap{position:relative;margin-right:34px}
+.cover{position:relative;background:var(--sheet);border-radius:var(--r-sheet) 2px 2px var(--r-sheet);box-shadow:var(--lift);
+  padding:22px 20px 20px 46px;min-height:248px;display:grid;align-content:space-between;gap:16px;
+  background-image:repeating-linear-gradient(180deg,transparent 0 31px,var(--rule) 31px 32px);background-position:0 14px}
+.cover::before{content:"";position:absolute;left:14px;top:18px;bottom:18px;width:12px;
+  background:radial-gradient(circle at 6px 6px,var(--paper) 4.5px,var(--shade-3) 5px,transparent 5.5px) 0 0/12px 34px repeat-y}
+.cover::after{content:"";position:absolute;left:34px;top:0;bottom:0;width:1px;background:var(--pen);opacity:.35}
+.cover h1{margin:0;font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1;overflow-wrap:break-word;min-width:0}
+.cover .since{margin:6px 0 0;color:var(--muted);font-size:13.5px}
+.dnum{font-size:56px;font-weight:700;line-height:1;letter-spacing:-.04em;color:var(--pen);font-variant-numeric:tabular-nums}
+.dlabel{font-size:13px;color:var(--muted);margin-top:4px}
+.tabs-idx{position:absolute;top:14px;right:-34px;display:grid;gap:4px;width:34px}
+.tabs-idx a{display:grid;place-items:center;min-height:44px;border-radius:0 8px 8px 0;color:var(--ink);text-decoration:none;
+  font-size:12px;font-weight:700;writing-mode:vertical-rl;letter-spacing:.02em;padding:6px 0;box-shadow:var(--lift);transition:transform .15s}
+.tabs-idx a:active{transform:translateX(3px)}
+.t-WONI{background:var(--c-woni)} .t-LIV{background:var(--c-liv);color:var(--on-tab)!important} .t-MINAMI{background:var(--c-minami)}
+.t-MAY{background:var(--c-may)} .t-ZENA{background:var(--c-zena)}
+
+/* 오늘의 한마디: 노트 여백 선 */
+.today{display:grid;gap:4px;text-decoration:none;color:var(--ink);border-left:3px solid var(--pen);padding:16px 18px}
+.today b{font-size:clamp(17px,4.8vw,21px);font-weight:700;line-height:1.45;overflow-wrap:anywhere;text-wrap:balance}
 .today b.long{font-size:clamp(15px,4.2vw,18px)}
-.feature{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:center;padding:14px;border-radius:var(--radius);background:var(--plum);color:var(--on-plum);text-decoration:none;box-shadow:var(--shadow)}
-.feature .eyebrow{color:var(--on-plum-muted)}
-.feature h3{font-family:var(--serif);font-weight:700;font-size:21px;margin:2px 0}
-.feature p{margin:0;font-size:13px;color:var(--on-plum-muted)}
-.feature p b{color:#ff9fbf}
-.cover{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:radial-gradient(circle at 30% 30%,#ffd8c2,#f2a0bd 55%,#b98ad8);display:grid;align-items:end;padding:10px}
-.cover span{position:relative;z-index:1;font-family:var(--latin);font-style:italic;font-weight:600;font-size:24px;color:#fff;line-height:1}
-.cover i{position:absolute;border:1.5px solid rgba(255,255,255,.6);border-radius:50%;left:50%;top:40%;transform:translate(-50%,-50%);aspect-ratio:1}
-.cover i:nth-of-type(1){width:28%}.cover i:nth-of-type(2){width:56%;opacity:.7}.cover i:nth-of-type(3){width:86%;opacity:.4}
-.go{font-size:13px;font-weight:700;color:var(--rose);margin-top:6px;display:inline-block}
-.feature .go{color:#ff9fbf}
+.today small{font-size:12px;color:var(--faint)}
+
+/* 멤버 사진 줄 */
+.photo-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.pcard{display:grid;gap:2px;text-decoration:none;color:var(--ink);min-width:0;text-align:center}
+.pcard img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:50% 14%;border-radius:4px;background:var(--rule);display:block;margin-bottom:4px}
+.pcard b{font-size:13px;font-weight:700;white-space:nowrap}
+.pcard i{display:block;height:3px;border-radius:2px;margin:0 auto 4px;width:60%}
+
+/* 최신 앨범 */
+.feature{display:grid;grid-template-columns:92px minmax(0,1fr);gap:14px;align-items:center;padding:14px;border-radius:var(--r-sheet);
+  background:var(--navy);color:var(--on-navy);text-decoration:none;box-shadow:var(--lift)}
+.disc{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--paper) 0 7%,var(--pen) 7.5% 30%,transparent 30.5%),
+  repeating-radial-gradient(circle,var(--groove-a) 0 2px,var(--groove-b) 2px 4px);
+  display:grid;place-items:center;position:relative}
+.disc span{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:var(--pen);color:var(--on-pen);font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:var(--r-pill);white-space:nowrap}
+.feature small{color:var(--on-navy-muted);font-size:12.5px}
+.feature h3{font-size:20px;margin:2px 0}
+.feature p{margin:0;font-size:13px;color:var(--on-navy-muted);overflow-wrap:anywhere}
+.feature p b{color:var(--on-navy)}
+.feature .go{color:var(--on-navy-link);display:inline-block;margin-top:6px}
+
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.sec-head h3{font-family:var(--serif);font-size:18px}
-.sec-head a{font-size:13px;color:var(--muted);text-decoration:none}
-.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
-.strip a{display:grid;justify-items:center;gap:6px;text-decoration:none;color:var(--ink);font-size:12.5px;font-weight:700}
-.avatar{width:100%;max-width:62px;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:22px;color:var(--rose);
-  background:radial-gradient(circle at 35% 30%,#fff,var(--mist1) 70%);box-shadow:0 0 0 2px var(--glass-edge),0 6px 14px rgba(194,65,110,.18)}
-.avatar.c2{background:radial-gradient(circle at 35% 30%,#fff,var(--mist3) 70%)}
-.avatar.c3{background:radial-gradient(circle at 35% 30%,#fff,var(--mist2) 70%)}
-.avatar.c4{background:radial-gradient(circle at 35% 30%,#fff,var(--mist4) 70%)}
-.avatar img{width:100%;height:100%;object-fit:cover}
+.sec-head h3{font-size:17px}
+.sec-head a{font-size:13px;color:var(--muted);text-decoration:none;padding:4px 0}
 .news{list-style:none;margin:0;padding:0;display:grid}
-.news li{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
-.news li:first-child{border-top:0;padding-top:2px}
+.news li{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--rule);font-size:14px}
+.news li:first-child{border-top:0;padding-top:0}
+.news a{color:var(--ink);overflow-wrap:anywhere}
 .quick{display:grid;gap:8px;text-decoration:none;color:var(--ink)}
-.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#f2a0bd,var(--rose));width:0;transition:width .3s}
+.bar{height:6px;background:var(--rule);border-radius:var(--r-pill);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pen);width:0;transition:transform .3s;transform-origin:left}
 .stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.stat{display:grid;gap:2px;padding:14px 12px;text-decoration:none;color:var(--ink);text-align:center}
-.stat b{font-family:var(--serif);font-weight:700;font-size:28px;line-height:1.1;color:var(--rose)}
-.stat span{font-size:12px;color:var(--muted)}
-.press{transition:transform .15s}.press:active{transform:scale(.98)}
+.stat{display:grid;gap:0;padding:14px 10px;text-decoration:none;color:var(--ink);text-align:left}
+.stat b{font-size:30px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--muted)}
+.press{transition:transform .15s}.press:active{transform:scale(.985)}
 
 /* 멤버 */
-.member-list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
-.member{display:grid;gap:12px}
-.m-top{display:grid;grid-template-columns:92px minmax(0,1fr);gap:14px;align-items:start}
-.photo{position:relative;display:block;width:92px;aspect-ratio:4/5;border-radius:16px;overflow:hidden;cursor:pointer;
-  background:radial-gradient(circle at 35% 25%,#fff,var(--mist1) 80%);box-shadow:inset 0 0 0 1px var(--glass-edge)}
-.photo.c2{background:radial-gradient(circle at 35% 25%,#fff,var(--mist3) 80%)}
-.photo.c3{background:radial-gradient(circle at 35% 25%,#fff,var(--mist2) 80%)}
-.photo.c4{background:radial-gradient(circle at 35% 25%,#fff,var(--mist4) 80%)}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
-.photo .ph{position:absolute;inset:0;display:grid;grid-template-rows:1fr auto;justify-items:center;padding:8px 6px 6px;color:#7c6a7a}
-.photo .ph small{font-size:10.5px;font-weight:700;letter-spacing:.02em}
-.photo .bottle{width:100%;height:100%;filter:drop-shadow(0 4px 6px rgba(59,43,58,.15))}
-.avatar .bottle{width:78%;height:78%}
+.member-list{display:grid;gap:14px}
+.member{display:grid;gap:12px;border-top:6px solid var(--mc,var(--pen));scroll-margin-top:70px}
+.m-top{display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;align-items:start}
+.photo{position:relative;display:block;width:112px;aspect-ratio:3/4;border-radius:4px;overflow:hidden;cursor:pointer;background:var(--rule)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 16%;display:block}
 .photo input{position:absolute;width:1px;height:1px;opacity:0}
-.photo:focus-within{outline:2px solid var(--rose);outline-offset:2px}
+.photo:focus-within{outline:2px solid var(--pen);outline-offset:2px}
 .m-info{display:grid;gap:6px;min-width:0}
 .m-name{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.m-name h3{font-family:var(--serif);font-weight:700;font-size:24px;line-height:1.1}
-.m-name .en{font-family:var(--latin);font-style:italic;font-size:15px;color:var(--muted)}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:0 10px;font-size:13px;margin:0}
+.m-name h3{font-size:24px;line-height:1.1}
+.m-name .en{font-size:13px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 10px;font-size:13px;margin:0}
 .kv dt{color:var(--muted)} .kv dd{margin:0}
-.m-note{font-size:13px;color:var(--muted);margin:0}
+.m-note{font-size:13.5px;color:var(--muted);margin:0}
 .quotes{display:grid;gap:6px}
-.bubble{display:grid;gap:1px;padding:10px 14px;border-radius:16px 16px 16px 4px;background:var(--glass-strong);border:1px solid var(--glass-edge)}
-.bubble b{font-family:var(--serif);font-weight:700;font-size:15px;overflow-wrap:anywhere}
-.bubble span{font-size:12px;color:var(--muted);line-height:1.45}
-.linkbtn{font:inherit;font-size:12px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;justify-self:start}
+.bubble{display:grid;gap:1px;padding:9px 12px;border-left:2px solid var(--rule);background:var(--paper);border-radius:0 var(--r-ctl) var(--r-ctl) 0}
+.bubble b{font-size:15px;overflow-wrap:anywhere}
+.bubble span{font-size:12.5px;color:var(--muted);line-height:1.45}
+.linkbtn{font:inherit;font-size:13px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:6px 0;justify-self:start;min-height:32px}
+.subhead{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.subhead h3{font-size:19px}
 
 /* 앨범 */
 .filters{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--glass-edge);background:var(--glass);color:var(--ink);font:inherit;font-size:13px;min-height:36px;padding:6px 14px;border-radius:999px;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.chip[aria-pressed="true"]{background:var(--rose);color:#fff;border-color:var(--rose)}
-.timeline{list-style:none;margin:0;padding:0;border-left:1.5px solid var(--line);margin-left:6px}
-.timeline li{position:relative;padding:0 0 20px 18px;display:grid;gap:2px}
-.timeline li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--rose)}
-.timeline li.big::before{background:var(--rose);box-shadow:0 0 0 4px var(--rose-soft)}
-.timeline h3{font-family:var(--serif);font-size:17px}
-.tracks{font-size:13px;color:var(--muted)}
-.tracks b{color:var(--rose)}
+.chip{border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:inherit;font-size:13.5px;min-height:40px;padding:6px 14px;border-radius:var(--r-pill);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--navy);color:var(--on-navy);border-color:var(--navy)}
+.timeline{list-style:none;margin:0;padding:0 0 0 2px;display:grid}
+.timeline li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:4px 14px;padding:14px 0;border-top:1px solid var(--rule)}
+.timeline li:first-child{border-top:0}
+.timeline time{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+.timeline .kind{font-size:12px;color:var(--muted)}
+.timeline h3{font-size:17px}
+.timeline li.big h3{color:var(--pen)}
+.tracks{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.tracks b{color:var(--ink)}
 
 /* CU */
-.goods{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.goods{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))}
 .item{display:grid;gap:6px}
-.item h3{font-family:var(--serif);font-size:18px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.toggle{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--glass-edge);background:var(--glass-strong);color:var(--ink);min-height:40px;padding:6px 14px;border-radius:12px;cursor:pointer}
-.toggle[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#fff}
+.item h3{font-size:17px}
+.toggle{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);min-height:44px;padding:6px 14px;border-radius:var(--r-ctl);cursor:pointer}
+.toggle[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--on-pen)}
 .counter{display:flex;align-items:center;gap:12px}
-.counter button{font:inherit;width:46px;height:46px;border-radius:50%;border:1px solid var(--glass-edge);background:var(--glass-strong);color:var(--rose);font-size:22px;cursor:pointer}
-.big-num{font-family:var(--serif);font-weight:700;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.counter button{font:inherit;width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);background:var(--sheet);color:var(--pen);font-size:22px;cursor:pointer}
+.big-num{font-weight:700;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
 .steps{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px}
-.subhead{display:flex;align-items:baseline;gap:10px;margin-top:8px}
-.subhead h3{font-family:var(--serif);font-size:20px}
+.btn{font:inherit;font-weight:700;font-size:15px;min-height:46px;padding:0 22px;border:0;border-radius:var(--r-ctl);background:var(--pen);color:var(--on-pen);cursor:pointer;
+  display:grid;place-items:center;text-decoration:none}
+.btn:disabled{background:var(--disabled);color:var(--on-disabled);cursor:not-allowed}
 
 /* 소통 */
-.offline{margin:0;font-size:13px;color:var(--rose);padding:12px 16px}
-.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:14px;background:var(--line);gap:4px}
-.seg-btn{font:inherit;font-size:14px;font-weight:700;min-height:40px;border:0;border-radius:11px;background:transparent;color:var(--muted);cursor:pointer}
-.seg-btn[aria-pressed="true"]{background:var(--glass-strong);color:var(--rose);box-shadow:0 2px 8px rgba(120,60,100,.12)}
+.offline{margin:0;font-size:13px;color:var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:var(--r-ctl)}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:var(--r-ctl);background:var(--paper);gap:4px}
+.seg-btn{font:inherit;font-size:14px;font-weight:600;min-height:40px;border:0;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer}
+.seg-btn[aria-pressed="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px var(--shade-2)}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .fld{display:grid;gap:4px;min-width:0}
-.fld span{font-size:12px;font-weight:700;color:var(--muted)}
-.fld input,.fld select,.fld textarea{font:inherit;font-size:15px;width:100%;min-height:44px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--glass-strong);color:var(--ink);resize:vertical}
-.fld textarea{min-height:64px}
-.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--rose);outline-offset:0;border-color:transparent}
+.fld span{font-size:12.5px;font-weight:600;color:var(--muted)}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:16px;width:100%;min-height:46px;padding:9px 12px;border-radius:var(--r-ctl);border:1px solid var(--field-edge);background:var(--sheet);color:var(--ink);resize:vertical}
+.fld textarea{min-height:68px}
+.fld input:focus-visible,.fld select:focus-visible,.fld textarea:focus-visible{outline:2px solid var(--pen);outline-offset:0;border-color:transparent}
 .nick{flex:1}
-.submit{font:inherit;font-weight:700;font-size:15px;min-height:44px;padding:0 22px;border:0;border-radius:12px;background:var(--rose);color:#fff;cursor:pointer;align-self:end}
-.submit:disabled{opacity:.5}
 .posts{display:grid;gap:10px}
 .post{display:grid;gap:6px}
-.post.old{opacity:.6}
+.post.old{opacity:.62}
 .post-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .post-head b{font-size:14px}
 .post-head .meta{margin-left:auto}
-.st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px}
-.st.have{background:var(--sage-soft);color:var(--sage)}
-.st.few{background:rgba(255,190,120,.3);color:#b4651c}
-.st.out{background:var(--line);color:var(--muted)}
-.where{font-family:var(--serif);font-weight:700;font-size:16px}
+.st{font-size:12px;font-weight:700;padding:1px 9px;border-radius:var(--r-pill)}
+.st.have{background:var(--ok-soft);color:var(--ok)}
+.st.few{background:var(--warn-soft);color:var(--warn)}
+.st.out{background:var(--paper);color:var(--muted)}
+.where{font-weight:700;font-size:16px}
 .post p{margin:0;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}
 .post .report{justify-self:end}
 .empty{text-align:center;color:var(--muted);font-size:14px;padding:28px 16px}
 body[data-kind="chat"] .stock-only{display:none}
-.pcu{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);padding:14px 16px}
+.pcu{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);padding:14px 16px}
 .pcu b{display:block;font-size:15px}
-.pcu-ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#6c2bd9;color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em}
-.signup-only{display:none}
+.pcu-ico{width:42px;height:42px;border-radius:var(--r-ctl);display:grid;place-items:center;background:var(--cu);color:var(--on-pen);font-weight:700;font-size:14px}
+#authBox .signup-only{display:none}
 #authBox[data-mode="signup"] .signup-only{display:grid}
 body.authed .nick{visibility:hidden}
-.mine{font-size:11px;color:var(--rose);font-weight:700}
 
 /* 수상 */
-.wins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.wins h3{font-family:var(--serif);font-size:18px}
+.story{list-style:none;margin:0;padding:0;display:grid}
+.story li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:2px 14px;padding:12px 0;border-top:1px solid var(--rule)}
+.story li:first-child{border-top:0;padding-top:0}
+.story .when{font-size:12.5px;font-weight:600;color:var(--pen);padding-top:2px}
+.story h3{font-size:16px;margin:0 0 2px}
+.story p{margin:0;font-size:14px;color:var(--muted)}
+.wb-song + .wb-song{border-top:1px solid var(--rule);margin-top:12px;padding-top:12px}
+.wb-song h3{display:flex;align-items:baseline;gap:8px;font-size:17px;margin:0 0 6px}
+.wb-song h3 .meta{font-weight:400}
+.wb-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.wb-list li{display:grid;grid-template-columns:86px minmax(0,1fr) auto;align-items:center;gap:8px;font-size:13.5px}
+.wb-list time{color:var(--muted);font-variant-numeric:tabular-nums}
+.year-h{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px;font-weight:700;font-size:17px}
+.year-h:first-child{margin-top:0}
+.year-h .meta{font-weight:400}
 .awards{list-style:none;margin:0;padding:0}
-.awards li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:12px 0;border-top:1px solid var(--line)}
+.awards li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:12px 0;border-top:1px solid var(--rule)}
 .awards li:first-child{border-top:0;padding-top:0}
 .awards .what{font-size:13px;color:var(--muted)}
 .awards .res{grid-row:1 / span 2;grid-column:2;align-self:center}
-.res.won{background:var(--sage-soft);color:var(--sage)}
-.res.nom{background:var(--line);color:var(--muted)}
-.amb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.amb h3{font-family:var(--serif);font-size:18px}
-
-/* ---- 1.1 디자인 다듬기 ---- */
-.dday{background:var(--glass);position:relative;overflow:hidden;padding-left:24px}
-.dday::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--c-woni) 0 20%,var(--c-liv) 20% 40%,var(--c-minami) 40% 60%,var(--c-may) 60% 80%,var(--c-zena) 80%)}
-.today{border-style:dashed;border-color:rgba(42,34,54,.22)}
-.today .note-en{color:var(--muted)}
-.today small{font-size:11.5px;color:var(--muted)}
-.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
-.chip{-webkit-backdrop-filter:none;backdrop-filter:none}
-.submit{background:var(--ink)}
-.toggle[aria-pressed="true"]{background:var(--sage);border-color:var(--sage)}
-.seg-btn[aria-pressed="true"]{color:var(--ink);box-shadow:0 1px 4px rgba(42,34,54,.14)}
-h2{letter-spacing:-.01em}
-section > div:first-child h2{display:flex;align-items:center;gap:12px}
-section > div:first-child h2::after{content:"";flex:1;height:1px;background:var(--line)}
-.avatar,.photo{box-shadow:inset 0 0 0 1px var(--glass-edge)}
-.bubble{background:var(--bg);border-color:transparent}
-.consent-bar{-webkit-backdrop-filter:none;backdrop-filter:none}
-.photo .add{position:absolute;right:6px;bottom:6px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:17px;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.2)}
-.m-actions{display:flex;flex-wrap:wrap;gap:6px 14px}
-
-/* 수상: 해마다 묶고 최신 해만 펼침 */
-.year-h{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px;font-family:var(--serif);font-weight:700;font-size:17px}
-.year-h:first-child{margin-top:0}
-.year-h .meta{font-family:var(--body);font-weight:400}
-details.older{border-top:1px solid var(--line);margin-top:8px;padding-top:6px}
-details.older summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(--muted);padding:8px 0;list-style-position:inside}
-.res.pend{background:rgba(243,195,94,.22);color:#8a5a00}
+.res.won{background:var(--ok-soft);color:var(--ok)}
+.res.nom{background:var(--paper);color:var(--muted)}
+.res.pend{background:var(--warn-soft);color:var(--warn)}
+details.older{border-top:1px solid var(--rule);margin-top:8px;padding-top:6px}
+details.older summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);padding:10px 0}
 .src{font-size:12px;color:var(--muted);margin:10px 0 0}
-
-/* 리센느 이야기 (서사) */
-.story{list-style:none;margin:0;padding:0 0 0 4px;position:relative}
-.story::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--c-woni),var(--c-liv),var(--c-minami),var(--c-may),var(--c-zena));border-radius:2px;opacity:.55}
-.story li{position:relative;padding:0 0 18px 30px}
-.story li:last-child{padding-bottom:0}
-.story li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ink)}
-.story li:last-child::before{background:var(--ink)}
-.story .when{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
-.story h3{font-family:var(--serif);font-size:17px;margin:2px 0 4px}
-.story p{margin:0;font-size:14px;line-height:1.65}
-
-/* 음악방송 1위 기록표 (곡별로 묶음) */
-.wb-song + .wb-song{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
-.wb-song h3{display:flex;align-items:baseline;gap:8px;font-family:var(--serif);font-size:18px;margin:0 0 6px}
-.wb-song h3 .meta{font-family:var(--body);font-weight:400}
-.wb-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.wb-list li{display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:8px;font-size:13.5px}
-.wb-list time{color:var(--muted);font-variant-numeric:tabular-nums}
-.wb-list .tag{font-size:11px;padding:2px 8px}
-
 .amb-list{list-style:none;margin:0;padding:0}
-.amb-list li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.amb-list li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-top:1px solid var(--rule)}
 .amb-list li:first-child{border-top:0}
 .amb-list b{font-size:15px}
 
-/* 배경화면 만들기 */
-footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12px;color:var(--muted);text-align:center}
+/* 약관·안내 */
+footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:var(--muted);text-align:center}
 .legal{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px}
-.legal a{color:var(--ink);font-size:12.5px;padding:6px 2px}
+.legal a{color:var(--ink);font-size:13px;padding:8px 2px}
 .doc p,.doc li{font-size:14px;margin:0}
-.doc h3{font-family:var(--serif);font-size:17px;margin-top:6px}
+.doc h3{font-size:16px;margin-top:6px}
 .doc-list{margin:0;padding-left:20px;display:grid;gap:4px}
-.consent{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--glass-strong);border:1px solid var(--line)}
-.chk{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;cursor:pointer}
-.chk input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--rose);flex:none}
-.chk a{font-size:12.5px;margin-left:auto;white-space:nowrap}
-.chk.all{font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.danger{color:#b4233c}
-.skip{position:absolute;left:12px;top:-60px;z-index:50;background:var(--rose);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700}
+.consent{display:grid;gap:8px;padding:12px;border-radius:var(--r-ctl);background:var(--paper);border:0}
+.chk{display:flex;align-items:flex-start;gap:8px;font-size:14px;cursor:pointer;min-height:32px}
+.chk input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--pen);flex:none}
+.chk a{font-size:13px;margin-left:auto;white-space:nowrap}
+.chk.all{font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.danger{color:var(--danger)}
+.skip{position:absolute;left:12px;top:-60px;z-index:50;background:var(--pen);color:var(--on-pen);padding:10px 14px;border-radius:var(--r-ctl);font-weight:700}
 .skip:focus{top:12px}
-.consent-bar{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;max-width:560px;margin:0 auto;padding:14px;border-radius:16px;background:var(--glass-strong);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-edge);box-shadow:var(--shadow);display:grid;gap:10px;font-size:13.5px}
+.consent-bar{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;max-width:560px;margin:0 auto;padding:14px;border-radius:var(--r-ctl);
+  background:var(--sheet);border-top:3px solid var(--pen);box-shadow:0 10px 30px var(--shade-4);display:grid;gap:10px;font-size:13.5px}
 .consent-bar p{margin:0}
 .consent-bar .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.consent-bar button{font:inherit;font-weight:700;font-size:14px;min-height:44px;border-radius:12px;border:1px solid var(--rose);background:transparent;color:var(--rose);cursor:pointer}
+.consent-bar button{font:inherit;font-weight:700;font-size:14px;min-height:44px;border-radius:var(--r-ctl);border:1px solid var(--pen);background:transparent;color:var(--pen);cursor:pointer}
+.consent-bar button[data-font="yes"]{background:var(--pen);color:var(--on-pen)}
 @media (min-width:721px){.consent-bar{bottom:16px}}
 
 @media (max-width:719px){
-  /* 폰: 잉크색 떠 있는 아래 메뉴 */
-  nav.tabs{position:fixed;top:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:10px;right:10px;margin:0;border:0;border-radius:22px;
-    background:var(--ink);box-shadow:0 12px 30px rgba(42,34,54,.35);overflow:hidden}
-  nav.tabs::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--strip)}
-  nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:0;overflow:visible;padding:0 4px}
-  nav.tabs a{flex-direction:column;justify-content:center;gap:2px;min-height:60px;padding:6px 0;font-size:10.5px;border-bottom:0;white-space:nowrap;color:#b9aec6}
-  nav.tabs a[aria-current="page"]{color:#fff}
-  nav.tabs a[aria-current="page"] svg{background:rgba(255,255,255,.14);border-radius:10px;padding:3px;width:32px;height:28px}
-  nav.tabs svg{width:23px;height:23px}
-  .consent-bar{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
-  main .wrap{padding-block:14px 24px}
-  footer .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-  .member-list,.goods{grid-template-columns:1fr}
-  .hero-big h1{font-size:54px}
+  nav.tabs{position:fixed;top:auto;bottom:0;left:0;right:0;border-bottom:0;border-top:1px solid var(--rule);padding-bottom:env(safe-area-inset-bottom,0px)}
+  nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;overflow:visible;padding:0}
+  nav.tabs a{flex-direction:column;justify-content:center;gap:2px;min-height:58px;padding:6px 0;font-size:11px;white-space:nowrap;box-shadow:inset 0 3px 0 transparent}
+  nav.tabs a[aria-current="page"]{box-shadow:inset 0 3px 0 var(--pen)}
+  nav.tabs svg{width:22px;height:22px}
+  .consent-bar{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  main .wrap{padding-block:12px 24px}
+  footer .wrap{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .cover h1{font-size:38px}
+  .dnum{font-size:48px}
 }
+@media (max-width:360px){.m-top{grid-template-columns:92px minmax(0,1fr)}.photo{width:92px}.stat b{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-
-/* ==== 1.1 「포토북」 디자인 (2026-11-17) ====
-   흰 종이 위에 사진이 먼저 보이게. 글꼴은 고딕 하나, 강조색은 분홍 하나.
-   그림자·그러데이션·색 띠·기울임 영문 장식은 쓰지 않는다. */
-:root{
-  --bg:#ffffff; --ink:#141414; --muted:#6e6e6e; --line:#ececec;
-  --glass:#f5f4f2; --glass-strong:#ffffff; --glass-edge:transparent;
-  --rose:#e2336b; --rose-soft:#ffe9f0; --sage:#1f7a5c; --sage-soft:#e3f4ec;
-  --plum:#141414; --on-plum:#ffffff; --on-plum-muted:#b5b5b5;
-  --serif:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --latin:var(--serif); --body:var(--serif);
-  --shadow:none; --radius:14px;
-}
-body{font-size:15px;letter-spacing:-.01em}
-.mist,.note-en,.apptitle span{display:none}
-h2{font-size:28px;font-weight:800;letter-spacing:-.03em}
-section > div:first-child h2{display:block}
-section > div:first-child h2::after{display:none}
-.glass{box-shadow:none;border:0}
-.apptitle b{font-size:17px;font-weight:800}
-.dpill{background:var(--ink);color:#fff;border:0;box-shadow:none;font-weight:700}
-
-/* 첫 화면: 멤버 사진 줄 (옆으로 넘김) */
-.hero-big{text-align:left;justify-items:stretch;padding:18px 0 4px;gap:10px}
-.hero-big h1{font-family:var(--body);font-style:normal;font-weight:800;font-size:30px;letter-spacing:-.03em;line-height:1.2}
-.hero-big p{max-width:none}
-.chips{justify-content:flex-start}
-.chips span{background:var(--glass);border:0;font-size:12.5px}
-.photo-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
-.pcard{display:grid;gap:1px;text-decoration:none;color:var(--ink);min-width:0;text-align:center}
-.pcard img{width:100%;aspect-ratio:9/16;object-fit:cover;object-position:50% 12%;border-radius:10px;background:var(--glass);display:block;margin-bottom:6px}
-.pcard b{font-size:13px;font-weight:800;white-space:nowrap}
-.pcard span{font-size:11px;color:var(--muted)}
-
-/* 홈 카드 */
-.dday{background:var(--ink);color:#fff;padding-left:18px}
-.dday::before{display:none}
-.dday .meta{color:#bdbdbd}
-.dnum{color:#fff;font-weight:800;letter-spacing:-.03em}
-.today{border:0;background:var(--glass)}
-.today b{font-weight:700}
-.feature{background:var(--glass);color:var(--ink);box-shadow:none}
-.feature .eyebrow,.feature p{color:var(--muted)}
-.feature p b,.feature .go{color:var(--rose)}
-.feature h3{font-weight:800}
-.cover{background:var(--ink)}
-.cover i{display:none}
-.cover span{font-style:normal;font-weight:800;font-size:18px}
-.sec-head h3,.subhead h3{font-weight:800}
-.avatar{background:var(--glass)!important;box-shadow:none}
-.avatar img{object-position:50% 18%}
-.stat b{color:var(--ink);font-weight:800}
-.bar i{background:var(--rose)}
-.bubble{background:var(--glass)}
-
-/* 멤버 */
-.m-top{grid-template-columns:116px minmax(0,1fr)}
-.photo{width:116px;aspect-ratio:3/4;border-radius:12px;background:var(--glass)!important;box-shadow:none}
-.photo img{object-position:50% 18%}
-.m-name h3{font-weight:800}
-.m-name .en{font-style:normal;font-size:13px}
-.member{border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:18px 0}
-.member-list{gap:0}
-
-/* 앨범·수상 */
-.timeline li::before{border-color:var(--ink)}
-.timeline li.big::before{background:var(--rose);border-color:var(--rose);box-shadow:none}
-.timeline h3,.wins h3,.amb h3,.item h3,.where,.year-h{font-weight:800}
-.chip{background:#fff;border:1px solid var(--line)}
-.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
-.submit{background:var(--ink)}
-.seg{background:var(--glass)}
-.fld input,.fld select,.fld textarea{background:#fff;border-color:#dcdcdc}
-.consent{background:var(--glass);border:0}
-.consent-bar{background:#fff;border:1px solid var(--line);box-shadow:0 -2px 0 var(--ink)}
-
-/* 폰 아래 메뉴: 흰 바탕에 위쪽 선 한 줄 (떠 있지 않음) */
-@media (max-width:719px){
-  nav.tabs{left:0;right:0;bottom:0;border-radius:0;background:#fff;border-top:1px solid var(--line);box-shadow:none;
-    padding-bottom:env(safe-area-inset-bottom,0px)}
-  nav.tabs::before{display:none}
-  nav.tabs a{color:#9b9b9b;min-height:58px}
-  nav.tabs a[aria-current="page"]{color:var(--ink);font-weight:800}
-  nav.tabs a[aria-current="page"] svg{background:none;padding:0;width:23px;height:23px;stroke-width:2.4}
-  .consent-bar{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
-  footer .wrap{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
-  .hero-big h1{font-size:28px}
-}
 </style>
 
 <a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">본문으로 바로 가기</a>
 <div class="consent-bar" id="consentBar" role="region" aria-label="글꼴 불러오기 안내" hidden>
-  <p>이 앱은 <b>추적용 쿠키를 쓰지 않아요.</b> 다만 예쁜 글꼴을 Google 글꼴 서버에서 불러오면 기기의 IP 주소가 Google에 전달될 수 있어요. 기본 글꼴을 골라도 모든 기능을 똑같이 쓸 수 있어요. <a href="#privacy">자세히</a></p>
+  <p>이 앱은 <b>추적용 쿠키를 쓰지 않아요.</b> 다만 글꼴을 Google 글꼴 서버에서 불러오면 기기의 IP 주소가 Google에 전달될 수 있어요. 기본 글꼴을 골라도 모든 기능을 똑같이 쓸 수 있어요. <a href="#privacy">자세히</a></p>
   <div class="btns"><button type="button" data-font="yes">글꼴 불러오기</button><button type="button" data-font="no">기본 글꼴 쓰기</button></div>
 </div>
-<div class="mist" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <header class="top">
   <div class="wrap">
     <div class="appbar">
       <svg viewBox="0 0 64 64" role="img" aria-label="R: 팬노트 로고">
-        <defs>
-          <linearGradient id="lgBottle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8c2"/><stop offset=".55" stop-color="#f08fb2"/><stop offset="1" stop-color="#b98ad8"/></linearGradient>
-        </defs>
-        <rect x="25" y="4" width="14" height="9" rx="3" fill="#3b2b3a"/>
-        <rect x="28" y="12" width="8" height="5" fill="#3b2b3a"/>
-        <rect x="10" y="17" width="44" height="43" rx="14" fill="url(#lgBottle)"/>
-        <rect x="15" y="21" width="8" height="18" rx="4" fill="#fff" opacity=".45"/>
-        <text x="21" y="49" font-family="Cormorant Garamond, Gowun Batang, serif" font-style="italic" font-weight="600" font-size="27" fill="#fff">R</text>
-        <circle cx="41" cy="37" r="2.6" fill="#fff"/><circle cx="41" cy="46" r="2.6" fill="#fff"/>
+        <rect x="6" y="6" width="44" height="52" rx="5" fill="#18203a"/>
+        <rect x="50" y="10" width="8" height="8" rx="2" fill="#f0b93a"/><rect x="50" y="20" width="8" height="8" rx="2" fill="#8f5a72"/>
+        <rect x="50" y="30" width="8" height="8" rx="2" fill="#5fb882"/><rect x="50" y="40" width="8" height="8" rx="2" fill="#d07f45"/>
+        <rect x="50" y="50" width="8" height="6" rx="2" fill="#e8628f"/>
+        <text x="27" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="25" fill="#fff">R:</text>
       </svg>
-      <div class="apptitle"><b>R: 팬노트</b><span>the scent of RESCENE</span></div>
+      <span class="apptitle">R: 팬노트</span>
       <span class="dpill" id="dpill">D+</span>
-    </div>
-    <div class="hero-big">
-      <h1>RESCENE</h1>
-      <div class="photo-row" id="photoRow" aria-label="멤버"></div>
-      <p>멤버, 유행어, 앨범, CU 콜라보, 수상 기록과 데뷔부터 지금까지의 이야기까지 리센느의 향기를 한곳에 모았어요.</p>
-      <div class="chips"><span>2024.03.26 데뷔</span><span>더뮤즈엔터테인먼트</span><span>5인조</span><span>팬덤 리마인</span></div>
     </div>
   </div>
 </header>
@@ -459,33 +311,37 @@ section > div:first-child h2::after{display:none}
 <main id="main" tabindex="-1"><div class="wrap">
 
 <section data-sec="home">
-  <div class="glass dday">
-    <div><span class="note-en">days with Remine</span><div class="dnum" id="dday">D+</div></div>
-    <span class="meta" style="text-align:right">2024.03.26<br>「UhUh」 데뷔</span>
+  <div class="cover-wrap">
+    <div class="cover">
+      <div>
+        <h1 translate="no">RESCENE</h1>
+        <p class="since">2024년 3월 26일 「UhUh」로 데뷔한 다섯 명</p>
+      </div>
+      <div>
+        <div class="dnum" id="dday">D+</div>
+        <div class="dlabel">리마인과 함께한 날</div>
+      </div>
+    </div>
+    <nav class="tabs-idx" id="idxTabs" aria-label="멤버 바로 가기"></nav>
   </div>
 
-  <a class="glass today press" href="#members">
-    <span class="note-en">today's note</span>
+  <a class="sheet today press" href="#members">
     <b id="todayQ"></b>
     <span class="meta" id="todayWho"></span>
     <small>앱을 켤 때마다 다른 한마디가 나와요</small>
   </a>
 
+  <div class="photo-row" id="photoRow" aria-label="멤버"></div>
+
   <a class="feature press" href="#music" id="feature"></a>
 
-  <div class="glass stack">
+  <div class="sheet stack">
     <div class="sec-head"><h3>최신 소식</h3><span class="meta" id="updated"></span></div>
     <ul class="news" id="news"></ul>
   </div>
 
-  <div class="glass stack">
-    <div class="sec-head"><h3>멤버</h3><a href="#members">전체 보기 ›</a></div>
-    <div class="strip" id="memberStrip"></div>
-  </div>
-
-
-  <a class="glass quick press" href="#cu">
-    <div class="sec-head"><span class="eyebrow">CU × 리센느 빵·도시락</span><span class="go" style="margin:0">보러 가기 ›</span></div>
+  <a class="sheet quick press" href="#cu">
+    <div class="sec-head"><span class="meta">CU 리센느 빵과 도시락</span><span class="go">보러 가기</span></div>
     <h3>빵 포토카드 <span id="homePc">0</span> / 27종</h3>
     <div class="bar" aria-hidden="true"><i id="homeBar"></i></div>
   </a>
@@ -494,7 +350,7 @@ section > div:first-child h2::after{display:none}
 </section>
 
 <section data-sec="members" hidden>
-  <div><span class="note-en">five notes</span><h2>멤버</h2><p class="lede">사진은 위키미디어 공용에 자유 이용으로 올라온 사진(K-POPIT, CC BY 4.0)이에요. 사진을 누르면 내 폰의 사진으로 바꿀 수 있고, 바꾼 사진은 이 기기에만 저장돼요.</p></div>
+  <div class="page-head"><h2>멤버</h2><p class="lede">사진은 2026년 11월 3일 「PULSE」 컴백 쇼케이스 때 찍혀 위키미디어 공용에 자유 이용(CC BY 1.0)으로 올라온 사진이에요. 사진을 누르면 내 폰의 사진으로 바꿀 수 있고, 바꾼 사진은 이 기기에만 저장돼요.</p></div>
   <div class="member-list" id="memberList"></div>
   <div class="subhead"><h3>지금 뜨는 유행어</h3></div>
   <div class="quotes" id="trendQuotes"></div>
@@ -504,37 +360,37 @@ section > div:first-child h2::after{display:none}
 </section>
 
 <section data-sec="music" hidden>
-  <div><span class="note-en">discography</span><h2>앨범</h2><p class="lede">분홍 글씨가 타이틀곡이에요.</p></div>
+  <div class="page-head"><h2>앨범</h2><p class="lede">진하게 표시된 곡이 타이틀곡이에요.</p></div>
   <div class="filters" id="musicFilters"></div>
-  <ol class="timeline" id="musicList"></ol>
+  <ol class="timeline sheet" id="musicList"></ol>
 </section>
 
 <section data-sec="cu" hidden>
-  <div><span class="note-en">CU × RESCENE</span><h2>CU 콜라보</h2><p class="lede">CU 전속 모델 리센느와 함께 만든 빵과 도시락이에요. 재고는 포켓CU 앱에서 확인할 수 있어요.</p></div>
+  <div class="page-head"><h2>CU 콜라보</h2><p class="lede">CU 전속 모델 리센느와 함께 만든 빵과 도시락이에요. 재고는 포켓CU 앱에서 확인할 수 있어요.</p></div>
 
-  <div class="subhead"><h3>빵 5종</h3><span class="meta">BAKE 405 · 개당 2,500원</span></div>
-  <div class="glass stack">
+  <div class="subhead"><h3>빵 5종</h3><span class="meta">BAKE 405, 개당 2,500원</span></div>
+  <div class="sheet stack">
     <div class="row"><h3>내 빵 포토카드</h3><span class="meta">27종 중 1장 랜덤</span></div>
     <div class="counter">
-      <button type="button" id="pcMinus" aria-label="한 장 빼기">−</button>
+      <button type="button" id="pcMinus" aria-label="빵 포토카드 한 장 빼기">−</button>
       <div style="flex:1"><span class="big-num" id="pcNum">0</span><span class="meta"> / 27종</span><div class="bar" style="margin-top:8px" aria-hidden="true"><i id="pcBar"></i></div></div>
-      <button type="button" id="pcPlus" aria-label="한 장 더하기">+</button>
+      <button type="button" id="pcPlus" aria-label="빵 포토카드 한 장 더하기">+</button>
     </div>
   </div>
   <div class="goods" id="breadList"></div>
 
   <div class="subhead"><h3>원이 도시락 2종</h3><span class="meta">덕연이 딸 시리즈</span></div>
-  <div class="glass stack">
+  <div class="sheet stack">
     <div class="row"><h3>내 원이 포토카드</h3><span class="meta" id="lunchCardsLabel">15종 중 1장 랜덤</span></div>
     <div class="counter">
-      <button type="button" id="lcMinus" aria-label="한 장 빼기">−</button>
+      <button type="button" id="lcMinus" aria-label="원이 포토카드 한 장 빼기">−</button>
       <div style="flex:1"><span class="big-num" id="lcNum">0</span><span class="meta" id="lcMax"> / 15종</span><div class="bar" style="margin-top:8px" aria-hidden="true"><i id="lcBar"></i></div></div>
-      <button type="button" id="lcPlus" aria-label="한 장 더하기">+</button>
+      <button type="button" id="lcPlus" aria-label="원이 포토카드 한 장 더하기">+</button>
     </div>
   </div>
   <div class="goods" id="lunchList"></div>
 
-  <div class="glass stack">
+  <div class="sheet stack">
     <h3>재고 찾는 법 (포켓CU)</h3>
     <ol class="steps">
       <li>포켓CU 앱을 열어요.</li>
@@ -543,31 +399,31 @@ section > div:first-child h2::after{display:none}
       <li>지도에서 근처 매장별 수량을 확인해요.</li>
     </ol>
     <p class="note">앱 재고와 실제 매대는 차이가 날 수 있어요. 수량이 1~2개면 출발 전에 매장에 전화해 보세요. 도시락은 포켓CU에서 예약 구매도 할 수 있어요.</p>
-    <a class="submit" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership" style="display:grid;place-items:center;text-decoration:none">포켓CU 열기</a>
-    <a class="go" href="#talk" style="margin:0">다른 팬들의 재고 제보 보기 ›</a>
+    <a class="btn" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership">포켓CU 열기</a>
+    <a class="go" href="#talk">다른 팬들의 재고 제보 보기</a>
   </div>
 </section>
 
 <section data-sec="talk" hidden>
-  <div><span class="note-en">share the scent</span><h2>소통</h2><p class="lede">빵이나 도시락이 있는 매장을 제보하고, 리마인끼리 이야기를 나눠요.</p></div>
-  <p class="glass offline" id="talkMode" hidden>아직 서버에 연결되지 않아서 지금 쓰는 글은 내 기기에만 저장돼요. 연결되면 모두에게 보이고 회원가입도 할 수 있어요.</p>
+  <div class="page-head"><h2>소통</h2><p class="lede">빵이나 도시락이 있는 매장을 제보하고, 리마인끼리 이야기를 나눠요.</p></div>
+  <p class="offline" id="talkMode" hidden>아직 서버에 연결되지 않아서 지금 쓰는 글은 내 기기에만 저장돼요. 연결되면 모두에게 보이고 회원가입도 할 수 있어요.</p>
 
-  <a class="glass pcu press" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership">
+  <a class="sheet pcu press" data-pcu href="https://play.google.com/store/apps/details?id=com.bgfcu.membership">
     <span class="pcu-ico" aria-hidden="true">CU</span>
     <span><b>포켓CU에서 공식 재고 보기</b><span class="meta">제보를 보고, 정확한 수량은 포켓CU 재고조회로 확인해요</span></span>
-    <span class="go" style="margin:0">열기 ›</span>
+    <span class="go">열기</span>
   </a>
 
-  <div class="glass stack" id="authBox" hidden>
+  <div class="sheet stack" id="authBox" hidden>
     <div id="authOut">
       <div class="seg" id="authSeg">
         <button type="button" class="seg-btn" data-auth="login" aria-pressed="true">로그인</button>
         <button type="button" class="seg-btn" data-auth="signup" aria-pressed="false">회원가입</button>
       </div>
       <form class="stack" id="authForm" style="margin-top:12px" autocomplete="on">
-        <label class="fld"><span>이메일</span><input id="aEmail" type="email" autocomplete="email" required placeholder="me@example.com"></label>
-        <label class="fld"><span>비밀번호</span><input id="aPass" type="password" autocomplete="current-password" minlength="6" required placeholder="6자 이상"></label>
-        <label class="fld signup-only"><span>닉네임</span><input id="aNick" maxlength="12" placeholder="리마인"></label>
+        <label class="fld"><span>이메일</span><input id="aEmail" name="email" type="email" autocomplete="email" spellcheck="false" required placeholder="me@example.com"></label>
+        <label class="fld"><span>비밀번호</span><input id="aPass" name="password" type="password" autocomplete="current-password" minlength="6" required placeholder="6자 이상"></label>
+        <label class="fld signup-only"><span>닉네임</span><input id="aNick" name="nickname" autocomplete="nickname" spellcheck="false" maxlength="12" placeholder="리마인"></label>
         <fieldset class="consent signup-only" id="consent" style="margin:0">
           <legend class="meta" style="padding:0 4px">약관 동의 (필수만 있어요)</legend>
           <label class="chk all"><input type="checkbox" id="cAll"> 아래 내용에 모두 동의해요</label>
@@ -576,8 +432,8 @@ section > div:first-child h2::after{display:none}
           <label class="chk"><input type="checkbox" class="cReq" id="cPriv"> [필수] 개인정보 수집·이용(이메일, 닉네임)에 동의해요 <a href="#privacy" target="_self">보기</a></label>
           <p class="meta" style="margin:0">광고·홍보 메일은 보내지 않아서 따로 동의받지 않아요. 만 14세 미만은 가입할 수 없어요.</p>
         </fieldset>
-        <button type="submit" class="submit" id="aSubmit">로그인</button>
-        <p class="note" id="authMsg" role="status">글을 쓰려면 로그인해 주세요. 읽기는 누구나 할 수 있어요.</p>
+        <button type="submit" class="btn" id="aSubmit">로그인</button>
+        <p class="note" id="authMsg" role="status" aria-live="polite">글을 쓰려면 로그인해 주세요. 읽기는 누구나 할 수 있어요.</p>
       </form>
     </div>
     <div class="row" id="authIn" hidden>
@@ -585,11 +441,11 @@ section > div:first-child h2::after{display:none}
       <button type="button" class="linkbtn" id="logout">로그아웃</button>
       <button type="button" class="linkbtn danger" id="withdraw">회원 탈퇴</button>
     </div>
-    <p class="note" id="withdrawMsg" role="status" hidden></p>
+    <p class="note" id="withdrawMsg" role="status" aria-live="polite" hidden></p>
   </div>
 
-  <form class="glass stack" id="postForm" autocomplete="off">
-    <div class="seg" role="tablist" aria-label="글 종류">
+  <form class="sheet stack" id="postForm" autocomplete="off">
+    <div class="seg" role="group" aria-label="글 종류">
       <button type="button" class="seg-btn" data-kind="stock" aria-pressed="true">재고 제보</button>
       <button type="button" class="seg-btn" data-kind="chat" aria-pressed="false">수다</button>
     </div>
@@ -600,14 +456,14 @@ section > div:first-child h2::after{display:none}
       <label class="fld" style="grid-column:1/-1"><span>매장 이름</span><input id="fStore" maxlength="30" placeholder="예: CU 영통역점"></label>
     </div>
     <label class="fld"><span>한마디</span><textarea id="fText" maxlength="200" rows="2" placeholder="예: 메론빵 3개 남았어요!"></textarea></label>
-    <div class="row">
+    <div class="row" style="align-items:end">
       <label class="fld nick"><span>닉네임</span><input id="fNick" maxlength="12" placeholder="리마인"></label>
-      <button type="submit" class="submit" id="fSubmit">올리기</button>
+      <button type="submit" class="btn" id="fSubmit">올리기</button>
     </div>
-    <p class="note" id="formMsg" role="status">전화번호, 실명, 주소 같은 개인정보는 올리지 마세요. 신고가 3번 쌓인 글은 자동으로 숨겨져요.</p>
+    <p class="note" id="formMsg" role="status" aria-live="polite">전화번호, 실명, 주소 같은 개인정보는 올리지 마세요. 신고가 3번 쌓인 글은 자동으로 숨겨져요.</p>
   </form>
 
-  <div class="glass stack" style="padding:14px">
+  <div class="sheet stack" style="padding:14px">
     <div class="grid2">
       <label class="fld"><span>동네·매장 검색</span><input id="qArea" type="search" maxlength="20" placeholder="예: 영통"></label>
       <label class="fld"><span>상품</span><select id="qItem"><option value="">모든 상품</option></select></label>
@@ -623,16 +479,16 @@ section > div:first-child h2::after{display:none}
 </section>
 
 <section data-sec="awards" hidden>
-  <div><span class="note-en">milestones</span><h2>수상·활동</h2><p class="lede" id="awLede"></p></div>
-  <div class="glass" id="storyBox" hidden><div class="sec-head" style="margin-bottom:12px"><h3>리센느 이야기</h3><span class="meta">데뷔부터 지금까지</span></div><ol class="story" id="story"></ol></div>
-  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>음악방송 1위</h3><span class="meta" id="winCount"></span></div><div id="wins"></div></div>
-  <div class="glass"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3><span class="meta" id="awUpdated"></span></div><div id="awardList"></div><p class="src" id="awSrc"></p></div>
-  <div class="glass"><div class="sec-head" style="margin-bottom:6px"><h3>홍보대사</h3></div><div id="amb"></div></div>
+  <div class="page-head"><h2>수상과 활동</h2><p class="lede" id="awLede"></p></div>
+  <div class="sheet" id="storyBox" hidden><div class="sec-head" style="margin-bottom:12px"><h3>리센느 이야기</h3><span class="meta">데뷔부터 지금까지</span></div><ol class="story" id="story"></ol></div>
+  <div class="sheet"><div class="sec-head" style="margin-bottom:10px"><h3>음악방송 1위</h3><span class="meta" id="winCount"></span></div><div id="wins"></div></div>
+  <div class="sheet"><div class="sec-head" style="margin-bottom:10px"><h3>시상식</h3><span class="meta" id="awUpdated"></span></div><div id="awardList"></div><p class="src" id="awSrc"></p></div>
+  <div class="sheet"><div class="sec-head" style="margin-bottom:6px"><h3>홍보대사</h3></div><div id="amb"></div></div>
 </section>
 
 <section data-sec="privacy" hidden class="doc">
-  <div><span class="note-en">privacy</span><h2>개인정보처리방침</h2><p class="meta">시행일 2026년 11월 5일</p></div>
-  <div class="glass stack">
+  <div class="page-head"><h2>개인정보처리방침</h2><p class="meta">시행일 2026년 11월 5일</p></div>
+  <div class="sheet stack">
     <h3>1. 받는 정보와 쓰는 곳</h3>
     <p>회원가입할 때 <b>이메일, 비밀번호, 닉네임</b>만 받아요. 이메일과 비밀번호는 로그인에, 닉네임은 소통창 글에 표시하는 데만 써요. 이름, 전화번호, 주소, 위치 정보는 받지 않아요. 비밀번호는 암호화되어 저장되고 운영자도 볼 수 없어요.</p>
     <p>소통창에 쓴 글(상품, 상태, 동네, 매장 이름, 내용, 작성 시각)은 다른 이용자에게 공개돼요. 회원가입을 하지 않아도 앱의 모든 정보를 볼 수 있어요.</p>
@@ -648,7 +504,7 @@ section > div:first-child h2::after{display:none}
     <h3>4. 기기에 저장하는 것 (쿠키 대신)</h3>
     <p>추적용 쿠키는 쓰지 않아요. 로그인 상태, 포토카드 수집 수, 직접 넣은 멤버 사진, 닉네임, 글꼴 선택은 이 기기의 브라우저 저장소에만 저장되고 서버로 보내지 않아요(로그인 정보는 로그인할 때만 서버와 주고받아요). 앱을 지우거나 브라우저 데이터를 지우면 함께 사라져요.</p>
     <p>Google 글꼴은 처음 열 때 묻고, 허락한 경우에만 불러와요. 언제든 바꿀 수 있어요. <span class="meta" id="fontState"></span></p>
-    <div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="chip" data-font="yes">글꼴 불러오기</button><button type="button" class="chip" data-font="no">기본 글꼴 쓰기</button></div>
+    <div class="row" style="gap:8px;flex-wrap:wrap;justify-content:flex-start"><button type="button" class="chip" data-font="yes">글꼴 불러오기</button><button type="button" class="chip" data-font="no">기본 글꼴 쓰기</button></div>
     <h3>5. 만 14세 미만</h3>
     <p>만 14세 미만은 회원가입을 할 수 없어요. 가입할 때 만 14세 이상인지 확인해요. 만 14세 미만이 가입한 사실을 알게 되면 계정을 바로 지워요.</p>
     <h3>6. 내 권리와 삭제 요청</h3>
@@ -661,10 +517,10 @@ section > div:first-child h2::after{display:none}
 </section>
 
 <section data-sec="terms" hidden class="doc">
-  <div><span class="note-en">terms</span><h2>이용약관</h2><p class="meta">시행일 2026년 11월 5일</p></div>
-  <div class="glass stack">
+  <div class="page-head"><h2>이용약관</h2><p class="meta">시행일 2026년 11월 5일</p></div>
+  <div class="sheet stack">
     <h3>1. 서비스 소개</h3>
-    <p>R: 팬노트은 팬이 만든 <b>비공식·무료</b> 앱이에요. 더뮤즈엔터테인먼트, 리센느, BGF리테일(CU)과 관계가 없어요. 유료 결제, 구독, 광고, 숨겨진 요금이 없어요.</p>
+    <p>R: 팬노트는 팬이 만든 <b>비공식·무료</b> 앱이에요. 더뮤즈엔터테인먼트, 리센느, BGF리테일(CU)과 관계가 없어요. 유료 결제, 구독, 광고, 숨겨진 요금이 없어요.</p>
     <h3>2. 정보의 정확성</h3>
     <p>앨범, 수상, 출시일 같은 정보는 기사와 공개 자료를 모아 정리했고, 출처는 '운영자·출처' 페이지에 있어요. '참고'라고 적힌 정보는 공식 확인이 안 된 내용이에요. 재고는 팬 제보라서 실제와 다를 수 있으니, 정확한 수량은 포켓CU에서 확인해 주세요.</p>
     <h3>3. 소통창 이용 규칙</h3>
@@ -684,8 +540,8 @@ section > div:first-child h2::after{display:none}
 </section>
 
 <section data-sec="about" hidden class="doc">
-  <div><span class="note-en">about</span><h2>운영자·출처</h2></div>
-  <div class="glass stack">
+  <div class="page-head"><h2>운영자와 출처</h2></div>
+  <div class="sheet stack">
     <h3>운영자 정보</h3>
     <p>개인 팬이 비영리로 운영해요. 사업자가 아니고, 판매나 수익 활동을 하지 않아요.<br>문의: <a href="https://github.com/doridori5252-wq/rescene-fanbook/issues" target="_blank" rel="noopener">GitHub 문의 게시판</a></p>
     <h3>정보 출처</h3>
@@ -699,26 +555,26 @@ section > div:first-child h2::after{display:none}
     <h3>이미지와 글꼴</h3>
     <ul class="doc-list">
       <li>로고와 앱 아이콘은 이 앱을 위해 새로 그린 그림이에요. 공식 로고는 쓰지 않았어요.</li>
-      <li>멤버 사진: K-POPIT 촬영, <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" target="_blank" rel="noopener">CC BY 4.0</a>, 위키미디어 공용
-        (<a href="https://commons.wikimedia.org/wiki/File:Woni_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">원이</a>,
-        <a href="https://commons.wikimedia.org/wiki/File:Liv_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">리브</a>,
-        <a href="https://commons.wikimedia.org/wiki/File:Minami_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">미나미</a>,
-        <a href="https://commons.wikimedia.org/wiki/File:May_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">메이</a>,
-        <a href="https://commons.wikimedia.org/wiki/File:Zena_of_RESCENE_at_Incheon_Airport,_12_August_2026.png" target="_blank" rel="noopener">제나</a>).
-        크기만 줄였고 다른 수정은 하지 않았어요.</li>
-      <li>글꼴: Noto Sans KR (SIL Open Font License, 무료 사용 가능)</li>
+      <li>멤버 사진: Runtorescene 촬영, 「PULSE」 컴백 쇼케이스(2026.11.03), <a href="https://creativecommons.org/licenses/by/1.0/deed.ko" target="_blank" rel="noopener">CC BY 1.0</a>, 위키미디어 공용
+        (<a href="https://commons.wikimedia.org/wiki/File:RESCENE_Woni_261103.jpg" target="_blank" rel="noopener">원이</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:RESCENE_Liv_261103_(1).jpg" target="_blank" rel="noopener">리브</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:RESCENE_Minami_261103.jpg" target="_blank" rel="noopener">미나미</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:RESCENE_May_261103.jpg" target="_blank" rel="noopener">메이</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:RESCENE_Zena_261103_(2).jpg" target="_blank" rel="noopener">제나</a>).
+        3:4 비율로 자르고 크기를 줄였어요. 다른 수정은 하지 않았어요.</li>
+      <li>글꼴: IBM Plex Sans KR (SIL Open Font License, 무료 사용 가능)</li>
       <li>직접 넣은 멤버 사진은 각자 기기에만 저장되고 배포되지 않아요.</li>
       <li>수상 기록은 위키백과 영어판 'Rescene' 문서(CC BY-SA 4.0)를 매일 확인해 한국어로 옮겨 정리해요.</li>
     </ul>
     <h3>앱 정보</h3>
-    <p>R: 팬노트 1.1 · 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
+    <p>R: 팬노트 1.2, 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
   </div>
 </section>
 
 </div></main>
 
 <footer><div class="wrap">
-  <nav class="legal" aria-label="약관과 정보"><a href="#privacy"><b>개인정보처리방침</b></a><a href="#terms">이용약관</a><a href="#about">운영자·출처</a></nav>
+  <nav class="legal" aria-label="약관과 정보"><a href="#privacy"><b>개인정보처리방침</b></a><a href="#terms">이용약관</a><a href="#about">운영자와 출처</a></nav>
   <span>비공식 팬 앱이에요. 소속사, CU와 관계없어요.</span>
 </div></footer>
 
@@ -728,15 +584,18 @@ const REMOTE="https://doridori5252-wq.github.io/rescene-fanbook/data.json";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
-const tint=i=>["","c2","c3","c4",""][i%5];
 const LAUNCH_PICK=Math.random();
-// 멤버 기본 사진: 위키미디어 공용, K-POPIT 촬영, CC BY 4.0 (출처는 운영자·출처 페이지)
+// 멤버 색 (CU 빵 맛에서 따온 색, 색인 탭·멤버 카드 위 띠에 씀)
+const MC={WONI:"var(--c-woni)",LIV:"var(--c-liv)",MINAMI:"var(--c-minami)",MAY:"var(--c-may)",ZENA:"var(--c-zena)"};
+// 멤버 기본 사진: 위키미디어 공용, Runtorescene 촬영(PULSE 쇼케이스), CC BY 1.0 (출처는 운영자·출처 페이지)
 const photoOf=m=>photos[m.e]||"img/"+m.e.toLowerCase()+".jpg";
+const enName=m=>m.e[0]+m.e.slice(1).toLowerCase();
 
 let D=JSON.parse($("#seed").textContent);
 const cached=ls.get("rescene-data",null);
 if(cached&&cached.updated>=D.updated&&cached.members)D=cached;
 let store=ls.get("rescene-fanbook",{}),photos=ls.get("rescene-photos",{});
+let jumpTo=null;
 
 function dplus(){const s=D.debut.split("-").map(Number),d=new Date();
   return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(s[0],s[1]-1,s[2]))/864e5)+1}
@@ -744,9 +603,9 @@ function dplus(){const s=D.debut.split("-").map(Number),d=new Date();
 function render(){
   const n=dplus().toLocaleString("ko-KR");$("#dday").textContent="D+"+n;$("#dpill").textContent="D+"+n;
   const L=D.latest;
-  $("#feature").innerHTML=`<div class="cover" aria-hidden="true"><span>${esc(L.name)}</span><i></i><i></i><i></i></div>
-    <div style="min-width:0"><span class="eyebrow">최신 앨범 · ${esc(L.date)}</span><h3>${esc(L.label)} ${esc(L.name)}</h3>
-    <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(" · ")}</p><span class="go">전체 앨범 보기 ›</span></div>`;
+  $("#feature").innerHTML=`<div class="disc" aria-hidden="true"><span>${esc(L.label)}</span></div>
+    <div style="min-width:0"><small>최신 앨범, ${esc(L.date)}</small><h3>${esc(L.name)}</h3>
+    <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(", ")}</p><span class="go">전체 앨범 보기</span></div>`;
   const byDate=(a,b)=>String(b.date).localeCompare(String(a.date));
   // 소식: 손으로 넣은 것 + 공식 유튜브 새 영상(매일 자동). 유튜브 주소만 링크로 연다
   const yt=u=>typeof u==="string"&&/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{6,20}$/.test(u);
@@ -757,14 +616,17 @@ function render(){
   $("#todayQ").textContent="“"+all[i][0]+"”";$("#todayQ").classList.toggle("long",all[i][0].length>24);$("#todayWho").textContent=all[i][1];
   const minis=D.music.filter(x=>/미니/.test(x.t)).length;
   $("#stats").innerHTML=[[D.wins.length,"음악방송 1위","#awards"],[minis,"미니앨범","#music"],[D.amb.length,"홍보대사","#awards"]]
-    .map(([v,l,h])=>`<a class="glass stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
+    .map(([v,l,h])=>`<a class="sheet stat press" href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
+  $("#idxTabs").innerHTML=D.members.map(m=>`<a href="#members" class="t-${esc(m.e)}" data-jump="${esc(m.e)}" aria-label="${esc(m.n)} 보기">${esc(m.n)}</a>`).join("");
   renderMembers();renderMusic();renderGoods();renderPc();fillItems();
-  $("#trendQuotes").innerHTML=(D.trends||[]).map(([t,s,d])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}${d?` · ${esc(d)}`:""}</span></div>`).join("");
+  $("#trendQuotes").innerHTML=(D.trends||[]).map(([t,s,d])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}${d?`, ${esc(d)}`:""}</span></div>`).join("");
   $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
   renderAwards();
-  $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pcard"><img src="${photoOf(m)}" alt="${esc(m.n)}" loading="lazy"><b>${esc(m.n)}</b><span>${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span></a>`).join("");
+  $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pcard" data-jump="${esc(m.e)}"><img src="${photoOf(m)}" alt="" width="120" height="160" fetchpriority="high"><i style="background:${MC[m.e]||"var(--pen)"}"></i><b>${esc(m.n)}</b></a>`).join("");
   $("#amb").innerHTML=`<ul class="amb-list">${D.amb.map(([c,dt])=>`<li><b>${esc(c)}</b><span class="meta">${esc(dt)} 위촉</span></li>`).join("")}</ul>`;
 }
+// 색인 탭·사진을 누르면 멤버 화면에서 그 멤버로
+document.addEventListener("click",e=>{const j=e.target.closest("[data-jump]");if(j)jumpTo=j.dataset.jump});
 
 // 수상: 언제나 최신이 맨 위. 가장 최근 해만 펼치고 지난 해는 접어 둬요.
 function renderAwards(){
@@ -775,103 +637,76 @@ function renderAwards(){
   $("#winCount").textContent=wins.length?`모두 ${wins.length}번`:"";
   const st=Array.isArray(D.story)?D.story:[];
   $("#storyBox").hidden=!st.length;
-  $("#story").innerHTML=st.map(c=>`<li><span class="when">${esc(c.when)}</span><h3>${esc(c.h)}</h3><p>${esc(c.t)}</p></li>`).join("");
+  $("#story").innerHTML=st.map(c=>`<li><span class="when">${esc(c.when)}</span><div><h3>${esc(c.h)}</h3><p>${esc(c.t)}</p></div></li>`).join("");
   const w0=wins[0];
-  $("#awLede").textContent=w0?`가장 최근 1위: ${w0.date.replace(/-/g,".")} ${w0.show} 「${w0.song}」. 음악방송 1위 ${wins.length}번.`:"";
+  $("#awLede").textContent=w0?`가장 최근 1위는 ${w0.date.replace(/-/g,".")} ${w0.show} 「${w0.song}」예요. 음악방송 1위 ${wins.length}번.`:"";
   const lab={won:"수상",nom:"후보",pend:"발표 전"},ord={pend:0,won:1,nom:2};
   const aw=D.awards.slice().sort((a,b)=>(+b[0])-(+a[0])||(ord[a[3]]??3)-(ord[b[3]]??3));
   const years=[...new Set(aw.map(a=>String(a[0])))];
   const li=([y,a,c,r])=>`<li><b style="font-size:14px">${esc(a)}</b><span class="what">${esc(c)}</span><span class="tag res ${esc(r)}">${lab[r]||""}</span></li>`;
   const block=y=>{const rows=aw.filter(a=>String(a[0])===y),won=rows.filter(a=>a[3]==="won").length;
-    return `<div class="year-h">${esc(y)}년 <span class="meta">시상식 ${rows.length}곳${won?` · 수상 ${won}곳`:""}</span></div><ul class="awards">${rows.map(li).join("")}</ul>`};
+    return `<div class="year-h">${esc(y)}년 <span class="meta">시상식 ${rows.length}곳${won?`, 수상 ${won}곳`:""}</span></div><ul class="awards">${rows.map(li).join("")}</ul>`};
   $("#awardList").innerHTML=years.length?block(years[0])+(years.length>1?`<details class="older"><summary>지난 기록 보기 (${years.slice(1).join(", ")}년)</summary>${years.slice(1).map(block).join("")}</details>`:""):"";
   $("#awUpdated").textContent=D.updated.replace(/-/g,".")+" 기준";
   $("#awSrc").textContent=D.awardsSource?"출처: "+D.awardsSource+". 매일 자동으로 확인해 새 기록을 넣어요.":"";
 }
 
-// 멤버별 향수병 일러스트. 색은 각 멤버의 CU 빵 맛에서 따왔어요 (얼굴을 그리지 않은 오리지널 그림)
-const ART={
-  WONI:{a:"#fff4d1",b:"#f3c35e",bg:"#fff8e4",shape:"round",note:"옥수수"},
-  LIV:{a:"#f6dce8",b:"#9a5f78",bg:"#f8eaf0",shape:"tall",note:"초코"},
-  MINAMI:{a:"#eafadf",b:"#7fc79a",bg:"#eef9ef",shape:"hex",note:"메론"},
-  MAY:{a:"#ffe6cc",b:"#d28a55",bg:"#fff1e4",shape:"drop",note:"시나몬"},
-  ZENA:{a:"#ffe3ec",b:"#ec6f98",bg:"#ffeef3",shape:"heart",note:"딸기"}
-};
-const SHAPES={
-  round:'<circle cx="40" cy="62" r="29"/>',
-  tall:'<rect x="19" y="23" width="42" height="71" rx="11"/>',
-  hex:'<path d="M40 22 67 37v41L40 93 13 78V37z"/>',
-  drop:'<path d="M40 22c14 16 28 30 28 46a28 28 0 0 1-56 0c0-16 14-30 28-46z"/>',
-  heart:'<path d="M40 92C12 74 7 50 20 38c8-7 16-5 20 3 4-8 12-10 20-3 13 12 8 36-20 54z"/>'
-};
-let artSeq=0;
-function bottle(m){const a=ART[m.e]||ART.WONI,id="b"+m.e+(++artSeq),s=SHAPES[a.shape];
-  return `<svg viewBox="0 0 80 100" class="bottle" aria-hidden="true">
-  <defs><linearGradient id="g${id}" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="${a.a}"/><stop offset="1" stop-color="${a.b}"/></linearGradient>
-  <clipPath id="c${id}">${s}</clipPath></defs>
-  <rect x="32" y="5" width="16" height="10" rx="3.5" fill="#3b2b3a"/><rect x="36" y="14" width="8" height="9" fill="#3b2b3a"/>
-  <g fill="url(#g${id})">${s}</g>
-  <g clip-path="url(#c${id})"><rect x="0" y="70" width="80" height="30" fill="${a.b}" opacity=".35"/><path d="M0 70q10-4 20 0t20 0 20 0 20 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/>
-  <rect x="20" y="32" width="6" height="22" rx="3" fill="#fff" opacity=".55"/></g>
-  <text x="40" y="69" text-anchor="middle" font-family="Gowun Batang, serif" font-weight="700" font-size="22" fill="#fff" stroke="#3b2b3a" stroke-opacity=".18" stroke-width="2" paint-order="stroke">${esc(m.n[0])}</text>
-  <circle cx="66" cy="20" r="2" fill="${a.b}" opacity=".6"/><circle cx="72" cy="30" r="1.3" fill="${a.b}" opacity=".5"/><circle cx="12" cy="24" r="1.6" fill="${a.b}" opacity=".45"/>
-  </svg>`}
 function renderMembers(){
-  $("#memberList").innerHTML=D.members.map((m,i)=>`
-  <article class="glass member">
+  $("#memberList").innerHTML=D.members.map(m=>`
+  <article class="sheet member" id="m-${esc(m.e)}" style="--mc:${MC[m.e]||"var(--pen)"}">
     <div class="m-top">
-      <label class="photo" for="ph-${m.e}" style="background:${(ART[m.e]||ART.WONI).bg}">
-        <img src="${photoOf(m)}" alt="${esc(m.n)} 사진" loading="lazy">
+      <label class="photo" for="ph-${m.e}">
+        <img src="${photoOf(m)}" alt="${esc(m.n)} 사진" width="112" height="149" loading="lazy">
         <input type="file" accept="image/*" id="ph-${m.e}" data-ph="${m.e}">
       </label>
       <div class="m-info">
-        <div class="m-name"><h3>${esc(m.n)}</h3><span class="en">${esc(m.e[0]+m.e.slice(1).toLowerCase())}</span>${m.role?`<span class="tag">${esc(m.role)}</span>`:""}</div>
+        <div class="m-name"><h3>${esc(m.n)}</h3><span class="en" translate="no">${esc(enName(m))}</span>${m.role?`<span class="tag">${esc(m.role)}</span>`:""}</div>
         ${m.info.length?`<dl class="kv">${m.info.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
         <p class="m-note">${esc(m.note)}</p>
-        <div class="m-actions">${photos[m.e]?`<button type="button" class="linkbtn" data-rm="${m.e}">원래 사진으로</button>`:`<label class="linkbtn" for="ph-${m.e}">내 사진으로 바꾸기</label>`}</div>
+        <div>${photos[m.e]?`<button type="button" class="linkbtn" data-rm="${m.e}">원래 사진으로</button>`:`<label class="linkbtn" for="ph-${m.e}">내 사진으로 바꾸기</label>`}</div>
       </div>
     </div>
     <div class="quotes">${m.q.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("")}</div>
   </article>`).join("");
-  $("#memberStrip").innerHTML=D.members.map(m=>`<a href="#members"><span class="avatar" style="background:${(ART[m.e]||ART.WONI).bg}"><img src="${photoOf(m)}" alt="" loading="lazy"></span>${esc(m.n)}</a>`).join("");
 }
 $("#memberList").addEventListener("change",e=>{
   const inp=e.target.closest("[data-ph]");if(!inp||!inp.files[0])return;
   const key=inp.dataset.ph,url=URL.createObjectURL(inp.files[0]),img=new Image();
-  // 배경화면에도 쓰도록 긴 변 1280px까지 저장 (저장소가 꽉 차면 더 작게 다시 시도)
+  // 긴 변 1280px까지 저장 (저장소가 꽉 차면 더 작게 다시 시도)
   const shrink=(max,q)=>{const s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");
     c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",q)};
   img.onload=()=>{URL.revokeObjectURL(url);photos[key]=shrink(1280,.85);
     if(!ls.set("rescene-photos",photos)){photos[key]=shrink(640,.8);
       if(!ls.set("rescene-photos",photos)){delete photos[key];ls.set("rescene-photos",photos);alert("기기 저장 공간이 부족해서 사진을 넣지 못했어요. 다른 멤버 사진을 하나 지우고 다시 해 보세요.")}}
-    renderMembers()};
+    renderMembers();render()};
   img.src=url;
 });
-$("#memberList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];ls.set("rescene-photos",photos);renderMembers()}});
+$("#memberList").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b){delete photos[b.dataset.rm];ls.set("rescene-photos",photos);render()}});
 
 const kinds=[["all","전체"],["album","앨범"],["single","싱글"],["other","OST·콜라보"]];let kind="all";
 function renderMusic(){
   $("#musicFilters").innerHTML=kinds.map(([k,l])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${k===kind}">${l}</button>`).join("");
   $("#musicList").innerHTML=D.music.filter(x=>kind==="all"||x.k===kind).slice().reverse().map(x=>`
-    <li class="${x.big?"big":""}"><span class="meta">${esc(x.d)} · ${esc(x.t)}</span><h3>${esc(x.name)}</h3>
-    ${x.tr.length?`<div class="tracks">${x.tr.map(t=>t[0]==="*"?`<b>${esc(t.slice(1))}</b>`:esc(t)).join(" · ")}</div>`:""}</li>`).join("");
+    <li class="${x.big?"big":""}"><time>${esc(x.d)}</time><div><span class="kind">${esc(x.t)}</span><h3>${esc(x.name)}</h3>
+    ${x.tr.length?`<div class="tracks">${x.tr.map(t=>t[0]==="*"?`<b>${esc(t.slice(1))}</b>`:esc(t)).join(", ")}</div>`:""}</div></li>`).join("");
 }
 $("#musicFilters").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b){kind=b.dataset.k;renderMusic()}});
 
 function goodCard(b,label){const on=!!(store.ate&&store.ate[b.id]);return`
-  <article class="glass item">
-    <div class="row"><span class="tag sage">${esc(b.m)}</span><span class="meta">${esc(b.d)} 출시</span></div>
+  <article class="sheet item">
+    <div class="row"><span class="tag ok">${esc(b.m)}</span><span class="meta">${esc(b.d)} 출시</span></div>
     <h3>${esc(b.name)}</h3><p class="m-note">${esc(b.desc)}</p>
-    <div class="row"><span class="meta">${esc(b.reserve||"2,500원")}</span><button type="button" class="toggle" data-b="${b.id}" aria-pressed="${on}">${on?"✓ "+label:label}</button></div>
+    <div class="row"><span class="meta">${esc(b.reserve||"2,500원")}</span><button type="button" class="toggle" data-b="${b.id}" aria-pressed="${on}">${on?"먹어봤어요 ✓":label}</button></div>
   </article>`}
 function renderGoods(){
   $("#breadList").innerHTML=D.breads.map(b=>goodCard(b,"먹어봤어요")).join("");
   $("#lunchList").innerHTML=(D.lunches||[]).map(b=>goodCard(b,"먹어봤어요")).join("");
 }
 document.querySelector('[data-sec="cu"]').addEventListener("click",e=>{const t=e.target.closest("[data-b]");if(!t)return;store.ate=store.ate||{};store.ate[t.dataset.b]=!store.ate[t.dataset.b];ls.set("rescene-fanbook",store);renderGoods()});
-function renderPc(){const n=store.pc||0,w=(n/27*100)+"%",max=D.lunchCards||15,l=Math.min(store.lc||0,max);
-  $("#pcNum").textContent=n;$("#pcBar").style.width=w;$("#homePc").textContent=n;$("#homeBar").style.width=w;
-  $("#lcNum").textContent=l;$("#lcBar").style.width=(l/max*100)+"%";$("#lcMax").textContent=" / "+max+"종";$("#lunchCardsLabel").textContent=max+"종 중 1장 랜덤"}
+const fill=(el,r)=>{el.style.width="100%";el.style.transform=`scaleX(${Math.max(0,Math.min(1,r))})`};
+function renderPc(){const n=store.pc||0,max=D.lunchCards||15,l=Math.min(store.lc||0,max);
+  $("#pcNum").textContent=n;fill($("#pcBar"),n/27);$("#homePc").textContent=n;fill($("#homeBar"),n/27);
+  $("#lcNum").textContent=l;fill($("#lcBar"),l/max);$("#lcMax").textContent=" / "+max+"종";$("#lunchCardsLabel").textContent=max+"종 중 1장 랜덤"}
 const bump=(k,dv,max)=>{store[k]=Math.max(0,Math.min(max,(store[k]||0)+dv));ls.set("rescene-fanbook",store);renderPc()};
 $("#pcPlus").onclick=()=>bump("pc",1,27);$("#pcMinus").onclick=()=>bump("pc",-1,27);
 $("#lcPlus").onclick=()=>bump("lc",1,D.lunchCards||15);$("#lcMinus").onclick=()=>bump("lc",-1,D.lunchCards||15);
@@ -925,7 +760,7 @@ $("#withdraw").addEventListener("click",async e=>{const b=e.target,m=$("#withdra
   if(b.dataset.confirm!=="1"){b.dataset.confirm="1";b.textContent="한 번 더 누르면 탈퇴돼요";m.hidden=false;m.textContent="탈퇴하면 계정과 내가 쓴 글이 모두 지워지고 되돌릴 수 없어요.";return}
   b.disabled=true;
   try{await sbFetch("rpc/delete_me",{method:"POST",body:"{}"});setSession(null);ls.set("rescene-nick","");m.textContent="탈퇴했어요. 계정과 글을 모두 지웠어요.";await loadPosts()}
-  catch(err){m.textContent="탈퇴하지 못했어요. 다시 로그인한 뒤 해 보거나, 운영자·출처 페이지의 문의처로 삭제를 요청해 주세요."}
+  catch(err){m.textContent="탈퇴하지 못했어요. 다시 로그인한 뒤 해 보거나, 운영자와 출처 페이지의 문의처로 삭제를 요청해 주세요."}
   b.disabled=false;b.dataset.confirm="";b.textContent="회원 탈퇴"});
 // 포켓CU 열기: 안드로이드는 앱을 바로 열고(없으면 스토어), 아이폰은 앱스토어로
 (function(){const ua=navigator.userAgent,play="https://play.google.com/store/apps/details?id=com.bgfcu.membership";
@@ -950,12 +785,12 @@ function renderPosts(){const hidden=ls.get("rescene-reported",[]),q=$("#qArea").
     &&(!qi||p.item===qi)
     &&(!q||[p.area,p.store,p.item,p.body].join(" ").includes(q)));
   $("#posts").innerHTML=list.length?list.map(p=>{const old=p.kind==="stock"&&Date.now()-new Date(p.created_at)>864e5;return`
-  <article class="glass post ${old?"old":""}">
-    <div class="post-head">${p.kind==="stock"?`<span class="st ${esc(p.status)}">${STATUS[p.status]||""}</span>`:`<span class="tag">수다</span>`}<b>${esc(p.nick||"리마인")}</b><span class="meta">${ago(p.created_at)}${old?" · 오래된 제보":""}</span></div>
-    ${p.kind==="stock"?`<div class="where">${esc(p.item||"")}</div><span class="meta">${esc([p.area,p.store].filter(Boolean).join(" · "))}</span>`:""}
+  <article class="sheet post ${old?"old":""}">
+    <div class="post-head">${p.kind==="stock"?`<span class="st ${esc(p.status)}">${STATUS[p.status]||""}</span>`:`<span class="tag">수다</span>`}<b>${esc(p.nick||"리마인")}</b><span class="meta">${ago(p.created_at)}${old?", 오래된 제보":""}</span></div>
+    ${p.kind==="stock"?`<div class="where">${esc(p.item||"")}</div><span class="meta">${esc([p.area,p.store].filter(Boolean).join(", "))}</span>`:""}
     ${p.body?`<p>${esc(p.body)}</p>`:""}
     ${me&&p.user_id===me?`<button type="button" class="linkbtn report" data-del="${esc(p.id)}">내 글 지우기</button>`:`<button type="button" class="linkbtn report" data-report="${esc(p.id)}">신고</button>`}
-  </article>`}).join(""):`<div class="glass empty">${q||qi?"조건에 맞는 글이 없어요. 검색어를 바꿔 보세요.":"아직 글이 없어요. 첫 제보를 남겨 주세요!"}</div>`}
+  </article>`}).join(""):`<div class="sheet empty">${q||qi?"조건에 맞는 글이 없어요. 검색어를 바꿔 보세요.":"아직 글이 없어요. 첫 제보를 남겨 주세요."}</div>`}
 $("#qArea").addEventListener("input",renderPosts);$("#qItem").addEventListener("change",renderPosts);
 function setKind(k){TALK.kind=k;document.body.dataset.kind=k;document.querySelectorAll("#postForm .seg-btn").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kind===k))}
 document.querySelector("#postForm .seg").addEventListener("click",e=>{const b=e.target.closest("[data-kind]");if(b)setKind(b.dataset.kind)});
@@ -963,7 +798,7 @@ $("#talkFilters").addEventListener("click",e=>{const b=e.target.closest("[data-f
   document.querySelectorAll("#talkFilters .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));renderPosts()});
 $("#fNick").value=ls.get("rescene-nick","");
 $("#postForm").addEventListener("submit",async e=>{e.preventDefault();const msg=$("#formMsg");
-  if(sb()&&!session){msg.textContent="글을 쓰려면 위에서 로그인하거나 회원가입해 주세요.";$("#authBox").scrollIntoView({behavior:"smooth",block:"center"});return}
+  if(sb()&&!session){msg.textContent="글을 쓰려면 위에서 로그인하거나 회원가입해 주세요.";$("#authBox").scrollIntoView({block:"center"});return}
   const p={kind:TALK.kind,nick:(session?myNick():$("#fNick").value.trim()).slice(0,12)||"리마인",body:$("#fText").value.trim().slice(0,200)};
   if(p.kind==="stock"){Object.assign(p,{item:$("#fItem").value,status:$("#fStatus").value,area:$("#fArea").value.trim().slice(0,20),store:$("#fStore").value.trim().slice(0,30)});
     if(!p.area&&!p.store){msg.textContent="동네나 매장 이름 중 하나는 적어 주세요.";return}}
@@ -989,7 +824,7 @@ setKind("stock");setAuthMode("login");fillItems();renderAuth();
 
 // 글꼴: 고른 뒤에만 Google 글꼴을 불러와요 (고르기 전과 '기본 글꼴'은 기기 글꼴)
 function loadFonts(){if(document.getElementById("gfont"))return;const l=document.createElement("link");l.id="gfont";l.rel="stylesheet";
-  l.href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap";document.head.appendChild(l)}
+  l.href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap";document.head.appendChild(l)}
 const fontPref=ls.get("rescene-fonts",null);
 if(fontPref==="yes")loadFonts();else if(fontPref===null)$("#consentBar").hidden=false;
 $("#fontState").textContent=fontPref==="yes"?"지금: Google 글꼴 사용 중":"지금: 기본 글꼴 사용 중";
@@ -1000,9 +835,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-font]");if
 const tabs=["home","members","music","cu","talk","awards","privacy","terms","about"];
 function route(){let h=location.hash.slice(1);if(h==="bread")h="cu";const cur=tabs.includes(h)?h:"home";document.body.dataset.tab=cur;
   document.querySelectorAll("[data-sec]").forEach(s=>s.hidden=s.dataset.sec!==cur);
-  document.querySelectorAll("[data-tab]").forEach(a=>a.dataset.tab===cur?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  document.querySelectorAll("nav.tabs [data-tab]").forEach(a=>a.dataset.tab===cur?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   clearInterval(TALK.timer);if(cur==="talk"){loadPosts();TALK.timer=setInterval(()=>{if(!document.hidden)loadPosts()},30000)}}
-addEventListener("hashchange",()=>{route();scrollTo({top:0})});
+addEventListener("hashchange",()=>{route();const t=jumpTo&&document.getElementById("m-"+jumpTo);jumpTo=null;
+  if(t&&document.body.dataset.tab==="members")t.scrollIntoView({block:"start"});else scrollTo({top:0})});
 
 render();route();
 
