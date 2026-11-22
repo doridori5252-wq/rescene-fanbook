@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22",
+  "updated": "2026-11-23",
   "debut": "2024-03-26",
   "board": {
     "url": "https://vdomvyobzkzdzbzspsvl.supabase.co",
@@ -20,21 +20,21 @@
   },
   "news": [
     {
-      "date": "2026.11.21",
-      "text": "새 영상 · 나를 부르는 echo🔊 ꒰ 𝐖𝐢𝐭𝐡 ꒱ #엄지 선배님@EHSBUJ.official",
-      "url": "https://www.youtube.com/watch?v=H2imHSvYzbQ",
+      "date": "2026.11.22",
+      "text": "새 영상 · 🤍",
+      "url": "https://www.youtube.com/watch?v=VDIGT03SjV4",
       "src": "yt"
     },
     {
-      "date": "2026.11.21",
-      "text": "새 영상 · #바다 님에게 빠져들지 Do you? @Bada_bebe",
-      "url": "https://www.youtube.com/watch?v=J2Z4ygM0naI",
+      "date": "2026.11.22",
+      "text": "새 영상 · I LOVE YOU 🎶💓",
+      "url": "https://www.youtube.com/watch?v=rBzWnqIa4pg",
       "src": "yt"
     },
     {
-      "date": "2026.11.21",
-      "text": "새 영상 · 2026 MAMA 🏆❤️",
-      "url": "https://www.youtube.com/watch?v=TUYyp3RMPGA",
+      "date": "2026.11.22",
+      "text": "새 영상 · #LEO, #ANXIN 님에게 빠져들지 Do you? @ALD1.official",
+      "url": "https://www.youtube.com/watch?v=AmmKvOae4CE",
       "src": "yt"
     },
     {
@@ -440,6 +440,12 @@
   ],
   "lunchCards": 15,
   "wins": [
+    {
+      "song": "With",
+      "date": "2026.11.22",
+      "show": "인기가요",
+      "tag": "2주 연속"
+    },
     {
       "song": "With",
       "date": "2026.11.15",
