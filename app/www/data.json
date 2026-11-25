@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "debut": "2024-03-26",
   "board": {
     "url": "https://vdomvyobzkzdzbzspsvl.supabase.co",
@@ -20,21 +20,21 @@
   },
   "news": [
     {
+      "date": "2026.11.25",
+      "text": "새 영상 · 리모와 MZ즈 🖤❤️",
+      "url": "https://www.youtube.com/watch?v=YFc7d_J1uvI",
+      "src": "yt"
+    },
+    {
+      "date": "2026.11.25",
+      "text": "새 영상 · #엄지 선배님에게 빠져들지 Do you? @EHSBUJ.official",
+      "url": "https://www.youtube.com/watch?v=C3CS5PcpJgE",
+      "src": "yt"
+    },
+    {
       "date": "2026.11.24",
       "text": "새 영상 · 🖤센둥이들🖤",
       "url": "https://www.youtube.com/watch?v=r7_e9D30BNI",
-      "src": "yt"
-    },
-    {
-      "date": "2026.11.23",
-      "text": "새 영상 · RESCENE (리센느) 'With' Recording Behind",
-      "url": "https://www.youtube.com/watch?v=iocqXX77eb0",
-      "src": "yt"
-    },
-    {
-      "date": "2026.11.22",
-      "text": "새 영상 · 🤍",
-      "url": "https://www.youtube.com/watch?v=VDIGT03SjV4",
       "src": "yt"
     },
     {
