@@ -301,6 +301,56 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
   conic-gradient(from 210deg,var(--c-woni),var(--c-zena),var(--c-liv),var(--c-minami),var(--c-may),var(--c-woni))}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
 .today{border-left-width:4px}
+
+/* 1.3.1 시안 A「포토카드 바인더」 그대로 — 홈 배치 */
+.hero-a{padding:6px 2px 0}
+.eyebrow{margin:0;font-size:12.5px;font-weight:700;color:var(--pen)}
+.title-a{margin:4px 0 0;font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.since-a{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.since-a b{color:var(--pen)}
+.album-a{display:flex;gap:12px;align-items:center;margin-top:12px;background:var(--sheet);border:1px solid var(--rule);border-radius:18px;padding:12px;color:var(--ink);text-decoration:none}
+.cover-a{width:96px;height:96px;border-radius:12px;flex:none;position:relative;
+  background:conic-gradient(from 210deg,var(--c-woni),var(--c-zena),var(--c-liv),var(--c-minami),var(--c-may),var(--c-woni))}
+.cover-a::after{content:"";position:absolute;inset:34px;border-radius:50%;background:var(--sheet)}
+.al-name{display:block;font-size:18px}
+.al-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.al-trk{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+.al-trk b{color:var(--ink)}
+.sleeves{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.sleeves .pc{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--mc);
+  box-shadow:inset 0 0 0 4px #fff,0 1px 0 var(--rule);text-decoration:none}
+.sleeves .pc img{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:cover;border-radius:7px}
+.sleeves .pc::after{content:"";position:absolute;inset:4px;border-radius:7px;background:linear-gradient(transparent 55%,rgba(0,0,0,.45))}
+.sleeves .pc b{position:absolute;left:10px;bottom:8px;z-index:1;font-size:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.sleeves .pc.empty{background:repeating-linear-gradient(45deg,#fff,#fff 6px,#f1eee8 6px,#f1eee8 12px);box-shadow:inset 0 0 0 1.5px var(--rule)}
+.sleeves .pc.empty::after{display:none}
+.sleeves .pc.empty b{color:var(--muted);text-shadow:none}
+.news-a{margin-top:14px}
+
+/* 1.3.1 시안 A — 음악: 한 장짜리 목록, 왼쪽 멤버 색 네모 */
+.timeline{padding:0;border:1px solid var(--rule);border-radius:16px;overflow:hidden;background:var(--sheet)}
+.timeline li{grid-template-columns:48px minmax(0,1fr);gap:12px;padding:12px;align-items:center;border-top:1px solid var(--rule)}
+.timeline li:first-child{border-top:0}
+.timeline .sw{width:48px;height:48px;border-radius:8px;background:var(--c-woni)}
+.timeline li:nth-child(5n+2) .sw{background:var(--c-zena)}
+.timeline li:nth-child(5n+3) .sw{background:var(--c-minami)}
+.timeline li:nth-child(5n+4) .sw{background:var(--c-liv)}
+.timeline li:nth-child(5n) .sw{background:var(--c-may)}
+.timeline h3{font-size:15px;margin:0}
+.timeline .kind{display:block;font-size:12.5px;margin-top:1px}
+.timeline .kind time{font-size:12.5px;padding:0;color:inherit}
+.timeline .tracks{grid-column:2;font-size:12.5px;color:var(--muted);margin-top:4px}
+.chip{border-radius:999px}
+
+/* 1.3.1 시안 A — 멤버: 왼쪽 색 띠 한 줄 목록 */
+.mlist{display:flex;flex-direction:column;gap:10px;margin:4px 0 18px}
+.mrow{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);cursor:pointer;
+  background:var(--sheet);border:1px solid var(--rule);border-left:6px solid var(--mc);border-radius:16px;padding:12px;min-height:44px}
+.mrow .av{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;background:var(--mc)}
+.mrow b{font-size:16px}
+.mrow .meta.d{display:block;margin-top:2px}
+.mrow:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+.member{scroll-margin-top:72px}
 </style>
 
 <a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">본문으로 바로 가기</a>
@@ -339,18 +389,19 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
 <main id="main" tabindex="-1"><div class="wrap">
 
 <section data-sec="home">
-  <div class="cover-wrap">
-    <div class="cover">
-      <div>
-        <h1 translate="no">RESCENE</h1>
-        <p class="since">2024년 3월 26일 「UhUh」로 데뷔한 다섯 명</p>
-      </div>
-      <div>
-        <div class="dnum" id="dday">D+</div>
-        <div class="dlabel">리마인과 함께한 날</div>
-      </div>
-    </div>
-    <nav class="tabs-idx" id="idxTabs" aria-label="멤버 바로 가기"></nav>
+  <div class="hero-a">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 class="title-a">오늘의 <span translate="no">리센느</span></h1>
+    <p class="since-a">2024년 3월 26일 데뷔 · 리마인과 함께한 <b id="dday">D+</b></p>
+  </div>
+
+  <a class="album-a press" href="#music" id="feature"></a>
+
+  <div class="sleeves" id="photoRow" aria-label="멤버 포토카드"></div>
+
+  <div class="sheet stack news-a">
+    <div class="sec-head"><h3>새 소식</h3><span class="meta" id="updated"></span></div>
+    <ul class="news" id="news"></ul>
   </div>
 
   <a class="sheet today press" href="#members">
@@ -359,15 +410,6 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
     <small>앱을 켤 때마다 다른 한마디가 나와요</small>
   </a>
 
-  <div class="photo-row" id="photoRow" aria-label="멤버"></div>
-
-  <a class="feature press" href="#music" id="feature"></a>
-
-  <div class="sheet stack">
-    <div class="sec-head"><h3>최신 소식</h3><span class="meta" id="updated"></span></div>
-    <ul class="news" id="news"></ul>
-  </div>
-
   <a class="sheet quick press" href="#cu">
     <div class="sec-head"><span class="meta">CU 리센느 빵과 도시락</span><span class="go">보러 가기</span></div>
     <h3>빵 포토카드 <span id="homePc">0</span> / 27종</h3>
@@ -375,10 +417,12 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
   </a>
 
   <div class="stat-row" id="stats"></div>
+  <nav class="tabs-idx" id="idxTabs" hidden aria-hidden="true"></nav>
 </section>
 
 <section data-sec="members" hidden>
   <div class="page-head"><h2>멤버</h2><p class="lede">사진은 2026년 11월 3일 「PULSE」 컴백 쇼케이스 때 찍혀 위키미디어 공용에 자유 이용(CC BY 1.0)으로 올라온 사진이에요. 사진을 누르면 내 폰의 사진으로 바꿀 수 있고, 바꾼 사진은 이 기기에만 저장돼요.</p></div>
+  <div class="mlist" id="mRows" aria-label="멤버 목록"></div>
   <div class="member-list" id="memberList"></div>
   <div class="subhead"><h3>지금 뜨는 유행어</h3></div>
   <div class="quotes" id="trendQuotes"></div>
@@ -595,7 +639,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
       <li>수상 기록은 위키백과 영어판 'Rescene' 문서(CC BY-SA 4.0)를 매일 확인해 한국어로 옮겨 정리해요.</li>
     </ul>
     <h3>앱 정보</h3>
-    <p>리센느 팬노트 1.3, 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
+    <p>리센느 팬노트 1.3.1, 소스 코드: <a href="https://github.com/doridori5252-wq/rescene-fanbook" target="_blank" rel="noopener">GitHub</a></p>
   </div>
 </section>
 
@@ -631,9 +675,10 @@ function dplus(){const s=D.debut.split("-").map(Number),d=new Date();
 function render(){
   const n=dplus().toLocaleString("ko-KR");$("#dday").textContent="D+"+n;$("#dpill").textContent="D+"+n;
   const L=D.latest;
-  $("#feature").innerHTML=`<div class="disc" aria-hidden="true"><span>${esc(L.label)}</span></div>
-    <div style="min-width:0"><small>최신 앨범, ${esc(L.date)}</small><h3>${esc(L.name)}</h3>
-    <p>${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(", ")}</p><span class="go">전체 앨범 보기</span></div>`;
+  $("#eyebrow").textContent="새 앨범 · "+L.date;
+  $("#feature").innerHTML=`<div class="cover-a" aria-hidden="true"></div>
+    <div style="min-width:0"><b class="al-name">${esc(L.name)}</b><div class="al-sub">${esc(L.label)} · 타이틀 ${esc(L.title)}</div>
+    <div class="al-trk">${L.tracks.map(t=>t===L.title?`<b>${esc(t)}</b>`:esc(t)).join(" · ")}</div></div>`;
   const byDate=(a,b)=>String(b.date).localeCompare(String(a.date));
   // 소식: 손으로 넣은 것 + 공식 유튜브 새 영상(매일 자동). 유튜브 주소만 링크로 연다
   const yt=u=>typeof u==="string"&&/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{6,20}$/.test(u);
@@ -650,7 +695,8 @@ function render(){
   $("#trendQuotes").innerHTML=(D.trends||[]).map(([t,s,d])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}${d?`, ${esc(d)}`:""}</span></div>`).join("");
   $("#groupQuotes").innerHTML=D.groupQuotes.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("");
   renderAwards();
-  $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pcard" data-jump="${esc(m.e)}"><img src="${photoOf(m)}" alt="" width="120" height="160" fetchpriority="high"><i style="background:${MC[m.e]||"var(--pen)"}"></i><b>${esc(m.n)}</b></a>`).join("");
+  $("#photoRow").innerHTML=D.members.map(m=>`<a href="#members" class="pc" data-jump="${esc(m.e)}" style="--mc:${MC[m.e]||"var(--pen)"}"><img src="${photoOf(m)}" alt="" width="120" height="160" fetchpriority="high"><b>${esc(m.n)}</b></a>`).join("")
+    +`<a href="#members" class="pc empty"><b>+ 내 카드</b></a>`;
   $("#amb").innerHTML=`<ul class="amb-list">${D.amb.map(([c,dt])=>`<li><b>${esc(c)}</b><span class="meta">${esc(dt)} 위촉</span></li>`).join("")}</ul>`;
 }
 // 색인 탭·사진을 누르면 멤버 화면에서 그 멤버로
@@ -680,6 +726,10 @@ function renderAwards(){
 }
 
 function renderMembers(){
+  const bday=m=>{const r=m.info.find(([k])=>k==="생일");return r?r[1]:""};
+  $("#mRows").innerHTML=D.members.map(m=>`<button type="button" class="mrow" data-go="m-${esc(m.e)}" style="--mc:${MC[m.e]||"var(--pen)"}">
+    <img class="av" src="${photoOf(m)}" alt="" width="52" height="52" loading="lazy">
+    <span><b>${esc(m.n)}</b> <span class="meta" translate="no">${esc(m.e)}${m.role?" · "+esc(m.role):""}</span>${bday(m)?`<span class="meta d">${esc(bday(m))}</span>`:""}</span></button>`).join("");
   $("#memberList").innerHTML=D.members.map(m=>`
   <article class="sheet member" id="m-${esc(m.e)}" style="--mc:${MC[m.e]||"var(--pen)"}">
     <div class="m-top">
@@ -697,6 +747,7 @@ function renderMembers(){
     <div class="quotes">${m.q.map(([t,s])=>`<div class="bubble"><b>“${esc(t)}”</b><span>${esc(s)}</span></div>`).join("")}</div>
   </article>`).join("");
 }
+$("#mRows").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b){const t=document.getElementById(b.dataset.go);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}});
 $("#memberList").addEventListener("change",e=>{
   const inp=e.target.closest("[data-ph]");if(!inp||!inp.files[0])return;
   const key=inp.dataset.ph,url=URL.createObjectURL(inp.files[0]),img=new Image();
@@ -715,7 +766,7 @@ const kinds=[["all","전체"],["album","앨범"],["single","싱글"],["other","O
 function renderMusic(){
   $("#musicFilters").innerHTML=kinds.map(([k,l])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${k===kind}">${l}</button>`).join("");
   $("#musicList").innerHTML=D.music.filter(x=>kind==="all"||x.k===kind).slice().reverse().map(x=>`
-    <li class="${x.big?"big":""}"><time>${esc(x.d)}</time><div><span class="kind">${esc(x.t)}</span><h3>${esc(x.name)}</h3>
+    <li class="${x.big?"big":""}"><i class="sw" aria-hidden="true"></i><div><h3>${esc(x.name)}</h3><span class="kind">${esc(x.t)} · <time>${esc(x.d)}</time></span>
     ${x.tr.length?`<div class="tracks">${x.tr.map(t=>t[0]==="*"?`<b>${esc(t.slice(1))}</b>`:esc(t)).join(", ")}</div>`:""}</div></li>`).join("");
 }
 $("#musicFilters").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b){kind=b.dataset.k;renderMusic()}});
