@@ -273,6 +273,34 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:6px;font-size:12.5px;color:
 }
 @media (max-width:360px){.m-top{grid-template-columns:92px minmax(0,1fr)}.photo{width:92px}.stat b{font-size:24px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* 1.3 새 디자인 「포토카드 바인더」 (2026-11-26, 시안 A): 따뜻한 종이색 바닥에 둥근 흰 낱장,
+   멤버 사진은 흰 테를 두른 포토카드처럼, 멤버 칸은 왼쪽에 멤버 색 띠. 앨범은 남색 대신 흰 낱장에 다섯 색 표지. */
+:root{
+  --paper:#f4f2ee; --sheet:#ffffff; --ink:#1d2030; --muted:#5f6374; --faint:#73778a; --rule:#e3dfd7;
+  --pen:#3247c8; --pen-hover:#2838a6; --pen-soft:#e8ebfa; --field-edge:#d6d1c7;
+  --shade-1:rgba(29,32,48,.05); --shade-3:rgba(29,32,48,.12); --shade-5:rgba(29,32,48,.2);
+  --r-sheet:16px; --lift:0 1px 0 var(--shade-1),0 6px 18px -12px var(--shade-3);
+}
+.sheet{border:1px solid var(--rule)}
+/* 표지: 줄 노트 대신 바인더 한 장 — 링 구멍은 남기고 줄은 지운다 */
+.cover{border-radius:18px;background-image:none;border:1px solid var(--rule)}
+.cover::after{opacity:0}
+.tabs-idx a{border-radius:0 10px 10px 0}
+/* 포토카드: 흰 테 + 얇은 슬리브 선 */
+.pcard img{border-radius:10px;padding:3px;background:#fff;border:1px solid var(--rule);box-shadow:0 2px 6px -3px var(--shade-3)}
+.photo{border-radius:10px;border:4px solid #fff;box-shadow:0 0 0 1px var(--rule),0 4px 12px -6px var(--shade-5)}
+/* 멤버 칸: 왼쪽 멤버 색 띠 */
+.member{border-top:0;border-left:6px solid var(--mc,var(--pen))}
+/* 최신 앨범: 흰 낱장 + 다섯 멤버 색 표지 */
+.feature{background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:18px}
+.feature small,.feature p{color:var(--muted)}
+.feature p b{color:var(--ink)}
+.feature .go{color:var(--pen)}
+.disc{border-radius:12px;background:radial-gradient(circle,var(--sheet) 0 26%,transparent 26.5%),
+  conic-gradient(from 210deg,var(--c-woni),var(--c-zena),var(--c-liv),var(--c-minami),var(--c-may),var(--c-woni))}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
+.today{border-left-width:4px}
 </style>
 
 <a class="skip" href="#main" onclick="event.preventDefault();document.getElementById('main').focus()">본문으로 바로 가기</a>
