@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26",
+  "updated": "2026-11-27",
   "debut": "2024-03-26",
   "board": {
     "url": "https://vdomvyobzkzdzbzspsvl.supabase.co",
@@ -20,6 +20,12 @@
   },
   "news": [
     {
+      "date": "2026.11.26",
+      "text": "새 영상 · 06즈 둘이 ✌️",
+      "url": "https://www.youtube.com/watch?v=N7hYj8c8XiU",
+      "src": "yt"
+    },
+    {
       "date": "2026.11.25",
       "text": "새 영상 · 리모와 MZ즈 🖤❤️",
       "url": "https://www.youtube.com/watch?v=YFc7d_J1uvI",
@@ -29,12 +35,6 @@
       "date": "2026.11.25",
       "text": "새 영상 · #엄지 선배님에게 빠져들지 Do you? @EHSBUJ.official",
       "url": "https://www.youtube.com/watch?v=C3CS5PcpJgE",
-      "src": "yt"
-    },
-    {
-      "date": "2026.11.24",
-      "text": "새 영상 · 🖤센둥이들🖤",
-      "url": "https://www.youtube.com/watch?v=r7_e9D30BNI",
       "src": "yt"
     },
     {
