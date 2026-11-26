@@ -3,7 +3,7 @@
         xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>R: 팬노트</name>
+    <name>리센느 팬노트</name>
     <description>리센느 멤버, 앨범, CU 콜라보 빵, 수상 기록을 모은 비공식 팬 앱 (소속사와 관계없음)</description>
     <author email="doridori5252@gmail.com">온담미디어 (Ondam Media)</author>
     <content src="index.html" />
